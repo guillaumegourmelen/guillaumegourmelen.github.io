@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guillaume Gourmelen — Robotics Researcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #010810;
+      --surface: #040f1e;
+      --border: #0a1a2e;
+      --accent: #00f5ff;
+      --accent2: #ffaa00;
+      --accent3: #ffaa00;
+      --accent4: #f5ff00;
+      --text: #d0e8ff;
+      --muted: #1a3a5c;
+      --mid: #5a8ab0;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* RAIN CANVAS */
+    #robo-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 1;
+    }
+
+    /* NOISE */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.5;
+      mix-blend-mode: overlay;
+    }
+
+    /* SUBTLE AMBIENT GLOW */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .grid-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 700px 400px at 5% 10%, rgba(0,245,255,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 500px 500px at 95% 5%, rgba(255,170,0,0.04) 0%, transparent 55%),
+        radial-gradient(ellipse 600px 300px at 50% 95%, rgba(0,100,255,0.04) 0%, transparent 60%);
+    }
+
+    /* LAYOUT */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 32px;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 20px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(3,0,10,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0,245,255,0.15);
+    }
+
+    .nav-logo {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 20px rgba(0,245,255,0.6);
+    }
+
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+    .nav-links a:hover {
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(0,245,255,0.8);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 0 80px;
+    }
+    .hero-inner { width: 100%; }
+
+    .hero-tag {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-shadow: 0 0 15px rgba(0,245,255,0.7);
+    }
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(0,245,255,0.8);
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(52px, 8vw, 96px);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+      text-shadow: 0 0 40px rgba(0,245,255,0.5), 0 0 80px rgba(0,245,255,0.2);
+    }
+
+    .hero-subtitle {
+      font-size: clamp(14px, 2vw, 17px);
+      color: var(--mid);
+      margin-top: 32px;
+      max-width: 520px;
+      line-height: 1.9;
+    }
+
+    .hero-meta {
+      margin-top: 48px;
+      display: flex;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-meta-item { display: flex; flex-direction: column; gap: 4px; }
+    .hero-meta-label {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .hero-meta-value { font-size: 13px; color: var(--text); }
+    .hero-meta-value a {
+      color: var(--accent);
+      text-decoration: none;
+      text-shadow: 0 0 10px rgba(0,245,255,0.5);
+    }
+
+    .hero-scroll {
+      margin-top: 80px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .hero-scroll-line {
+      width: 60px; height: 1px;
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(0,245,255,0.6);
+      animation: scrollLine 2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%, 100% { width: 60px; opacity: 0.4; }
+      50% { width: 100px; opacity: 1; }
+    }
+
+    /* SECTION */
+    section {
+      padding: 100px 0;
+      border-top: 1px solid rgba(0,245,255,0.08);
+    }
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      margin-bottom: 64px;
+    }
+    .section-num { font-size: 11px; color: var(--accent2); letter-spacing: 0.1em; text-shadow: 0 0 10px rgba(255,170,0,0.5); }
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+    }
+
+    /* ABOUT */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .about-text { color: var(--mid); line-height: 1.9; font-size: 13px; }
+    .about-text p + p { margin-top: 20px; }
+    .about-text strong { color: var(--text); font-weight: 500; }
+
+    .about-skills { display: flex; flex-direction: column; gap: 12px; }
+    .skill-tag {
+      padding: 10px 16px;
+      border: 1px solid rgba(0,245,255,0.12);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: border-color 0.3s, color 0.3s, box-shadow 0.3s, background 0.3s;
+      background: rgba(0,245,255,0.02);
+    }
+    .skill-tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 15px rgba(0,245,255,0.15), inset 0 0 15px rgba(0,245,255,0.05);
+      background: rgba(0,245,255,0.04);
+    }
+    .skill-tag span { color: var(--muted); font-size: 10px; }
+
+    /* PUBLICATIONS */
+    .pub-list { display: flex; flex-direction: column; }
+    .pub-item {
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(0,245,255,0.06);
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 24px;
+      align-items: start;
+      transition: background 0.2s;
+      cursor: default;
+    }
+    .pub-item:hover .pub-title { color: var(--accent); text-shadow: 0 0 20px rgba(0,245,255,0.4); }
+    .pub-title a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+    .pub-title a:hover {
+      color: var(--accent);
+      text-shadow: 0 0 20px rgba(0,245,255,0.4);
+    }
+    .pub-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(0,245,255,0.3);
+      padding-bottom: 1px;
+      transition: border-color 0.2s, text-shadow 0.2s;
+    }
+    .pub-link:hover {
+      border-color: var(--accent);
+      text-shadow: 0 0 10px rgba(0,245,255,0.6);
+    }
+    .pub-year { font-size: 12px; color: var(--muted); padding-top: 4px; }
+    .pub-venue {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 8px;
+      padding: 2px 8px;
+      border: 1px solid rgba(255,170,0,0.4);
+      text-shadow: 0 0 8px rgba(255,170,0,0.5);
+      box-shadow: 0 0 8px rgba(255,170,0,0.1);
+    }
+    .pub-title {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text);
+      margin-bottom: 8px;
+      transition: color 0.2s, text-shadow 0.2s;
+      line-height: 1.3;
+    }
+    .pub-authors { font-size: 12px; color: var(--muted); }
+    .pub-authors strong { color: var(--mid); }
+
+    /* EXPERIENCE */
+    .exp-list { display: flex; flex-direction: column; }
+    .exp-item {
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(0,245,255,0.06);
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 24px;
+    }
+    .exp-period { font-size: 12px; color: var(--muted); padding-top: 4px; line-height: 1.8; }
+    .exp-org {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+      text-shadow: 0 0 8px rgba(0,245,255,0.4);
+    }
+    .exp-role {
+      font-family: 'Fraunces', serif;
+      font-size: 20px;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+    .exp-desc { font-size: 12px; color: var(--mid); line-height: 1.8; max-width: 500px; }
+    .exp-desc strong { color: var(--text); }
+
+    /* CONTACT */
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .contact-text {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 300;
+      line-height: 1.3;
+      color: var(--mid);
+    }
+    .contact-text em { color: var(--accent); font-style: italic; text-shadow: 0 0 20px rgba(0,245,255,0.4); }
+
+    .contact-links { display: flex; flex-direction: column; gap: 12px; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border: 1px solid rgba(0,245,255,0.12);
+      color: var(--mid);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      background: rgba(0,245,255,0.02);
+      transition: border-color 0.3s, color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 20px rgba(0,245,255,0.15), inset 0 0 20px rgba(0,245,255,0.05);
+      background: rgba(0,245,255,0.04);
+    }
+    .contact-link-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-left: auto; }
+
+    /* FOOTER */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid rgba(0,245,255,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    /* ANIMATIONS */
+    .fade-in { opacity: 0; transform: translateY(20px); animation: fadeIn 0.8s ease forwards; }
+    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+    .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .fade-in:nth-child(2) { animation-delay: 0.2s; }
+    .fade-in:nth-child(3) { animation-delay: 0.3s; }
+    .fade-in:nth-child(4) { animation-delay: 0.4s; }
+
+    /* RESPONSIVE */
+    @media (max-width: 680px) {
+      nav { padding: 16px 20px; }
+      .nav-links { gap: 16px; }
+      .container { padding: 0 20px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .pub-item { grid-template-columns: 1fr; gap: 8px; }
+      .exp-item { grid-template-columns: 1fr; gap: 4px; }
+      .contact-inner { grid-template-columns: 1fr; }
+      .hero-meta { gap: 24px; }
+    }
+
+    /* CURSOR ACCENT */
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="robo-canvas"></canvas>
+  <div class="grid-bg"></div>
+
+  <nav>
+    <div class="nav-logo">G. Gourmelen</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#wip">WIP</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-tag fade-in">Robotics Researcher · Tokyo, Japan</div>
+        <h1 class="fade-in">Guillaume<br /><em>Gourmelen</em></h1>
+        <p class="hero-subtitle fade-in">
+          PhD in embodied robotics. I work at the intersection of teleoperation, haptics, and human motor control — building systems that transfer human skill into robotic bodies. Currently developing bimanual avatar teleoperation systems for human-robot interaction research in Tokyo.
+        </p>
+        <div class="hero-meta fade-in">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Current</span>
+            <span class="hero-meta-value">Project Asst. Prof., KMD · Keio University</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Based in</span>
+            <span class="hero-meta-value">Tokyo, Japan 🇯🇵</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Scholar</span>
+            <span class="hero-meta-value"><a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank">Google Scholar ↗</a></span>
+          </div>
+        </div>
+        <div class="hero-scroll">
+          <div class="hero-scroll-line"></div>
+          Scroll to explore
+        </div>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-title">About</h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p>
+            I am a French robotics researcher based in Tokyo, currently serving as <strong>Project Assistant Professor</strong> at the Embodied Media Project (KMD), Keio University, and <strong>Visiting Researcher</strong> at Honda Research Institute Japan (Wako Research Center), where I work on avatar and HRI systems.
+          </p>
+          <p>
+            My research focuses on <strong>teleoperation, embodiment, and human-in-the-loop control</strong> — specifically on how humans can seamlessly transfer motor skills to robotic systems through intuitive interfaces, haptic feedback, and impedance adaptation. At Honda, I develop <strong>bimanual teleoperation</strong> systems for next-generation avatar platforms.
+          </p>
+          <p>
+            I hold a <strong>PhD from the University of Montpellier / LIRMM</strong> (2022), funded by the JST ERATO project. My doctoral work explored control and learning strategies for embodied robotic systems that acquire human motor skills. Having gained significant industry experience in avatar integration at Honda, I am now focused on applied academic research in teleoperation and human motor control — contributing to the <strong>JST Moonshot program</strong> on VR, neurosciences and robotics at KMD.
+          </p>
+          <p>
+            Prior to my current roles, I was a visiting researcher at Waseda University with Prof. Iwata, and I collaborate closely with the Inami Lab at UTokyo — where my work on supernumerary robotic limbs (Co-Limbs) originated.
+          </p>
+          <p>
+            I am fluent in <strong>French, English, and Japanese</strong> (日本語) — and I bring a cross-cultural perspective to both research and collaboration across European and Asian institutions.
+          </p>
+        </div>
+        <div class="about-skills">
+          <div class="skill-tag">Teleoperation Systems <span>Core</span></div>
+          <div class="skill-tag">Haptic Feedback &amp; Control <span>Core</span></div>
+          <div class="skill-tag">Human Impedance Estimation <span>Core</span></div>
+          <div class="skill-tag">Embodied Robotics <span>Core</span></div>
+          <div class="skill-tag">Skill Transfer / Learning from Demo <span>Applied</span></div>
+          <div class="skill-tag">Computer Vision · OpenCV <span>Applied</span></div>
+          <div class="skill-tag">CNN · LSTM · YOLO <span>Applied</span></div>
+          <div class="skill-tag">Supernumerary Robotic Limbs <span>Applied</span></div>
+          <div class="skill-tag">ROS · Python · C++ · Docker <span>Tools</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PUBLICATIONS -->
+    <section id="publications">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Publications</h2>
+      </div>
+      <div class="pub-list">
+
+        <div class="pub-item">
+          <div class="pub-year">2024</div>
+          <div>
+            <div class="pub-venue">ACM SIGGRAPH 2024 — Denver, CO</div>
+            <div class="pub-title"><a href="https://dl.acm.org/doi/10.1145/3641517.3664393" target="_blank">Miruoto: Sports Event Atmosphere Visual Rendering through Real-time Image and Sound Processing</a></div>
+            <div class="pub-authors"><strong>G. Gourmelen</strong>, S. Toriya, E. Miya, N. Shioura, H. Iwata · Waseda University / JST</div>
+            <a href="https://hal.science/hal-05197860v1/document" target="_blank" class="pub-link">PDF via HAL ↗</a>
+          </div>
+        </div>
+
+        <div class="pub-item">
+          <div class="pub-year">2024</div>
+          <div>
+            <div class="pub-venue">RSJ 2024 — Japanese National Conference on Robotics</div>
+            <div class="pub-title">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</div>
+            <div class="pub-authors"><strong>G. Gourmelen</strong>, V. Vimolmongkolporn, Y. Iwasaki, H. Iwata · Waseda University / Iwata Lab</div>
+            <a href="https://cv.hal.science/guillaume-gourmelen" target="_blank" class="pub-link">HAL Profile ↗</a>
+          </div>
+        </div>
+
+        <div class="pub-item">
+          <div class="pub-year">2025</div>
+          <div>
+            <div class="pub-venue">IEEE World Haptics Conference — Suwon, South Korea</div>
+            <div class="pub-title"><a href="https://2025.worldhaptics.org/work-in-progress-papers/" target="_blank">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</a></div>
+            <div class="pub-authors">V. Vimolmongkolporn, <strong>G. Gourmelen</strong>, Y. Iwasaki, H. Iwata · Waseda University / Iwata Lab</div>
+            <a href="https://2025.worldhaptics.org/work-in-progress-papers/" target="_blank" class="pub-link">WHC 2025 Program ↗</a>
+          </div>
+        </div>
+
+        <div class="pub-item">
+          <div class="pub-year">2024</div>
+          <div>
+            <div class="pub-venue">VRSJ 2024 — Japanese National VR Society Conference</div>
+            <div class="pub-title">ミルオト：リアルタイム画像・音声処理システムによるスポーツイベントの雰囲気ビジュアルレンダリング</div>
+            <div class="pub-authors"><strong>G. Gourmelen</strong>, S. Toriya, E. Miya, H. Iwata · Waseda University / Iwata Lab</div>
+            <a href="https://conference.vrsj.org/ac2024/program/doc/2B2-08.pdf" target="_blank" class="pub-link">PDF ↗</a>
+          </div>
+        </div>
+
+        <div class="pub-item">
+          <div class="pub-year">2022</div>
+          <div>
+            <div class="pub-venue">Sensors (MDPI)</div>
+            <div class="pub-title"><a href="https://doi.org/10.3390/s22093379" target="_blank">A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration</a></div>
+            <div class="pub-authors">T. Dang, L. Lapierre, R. Zapata, B. Ropars, <strong>G. Gourmelen</strong> · LIRMM / Université de Montpellier</div>
+            <a href="https://hal.science/hal-03929843v1/document" target="_blank" class="pub-link">PDF via HAL ↗</a>
+          </div>
+        </div>
+
+        <div class="pub-item">
+          <div class="pub-year">2021</div>
+          <div>
+            <div class="pub-venue">IEEE IROS</div>
+            <div class="pub-title"><a href="https://doi.org/10.1109/IROS51168.2021.9636418" target="_blank">Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance</a></div>
+            <div class="pub-authors"><strong>G. Gourmelen</strong>, B. Navarro, A. Cherubini, G. Ganesh · LIRMM</div>
+            <a href="https://hal.science/hal-03324747v1/document" target="_blank" class="pub-link">PDF via HAL ↗</a>
+          </div>
+        </div>
+
+        <div class="pub-item">
+          <div class="pub-year">2019</div>
+          <div>
+            <div class="pub-venue">ACM SIGGRAPH Asia — Emerging Technologies</div>
+            <div class="pub-title"><a href="https://doi.org/10.1145/3355049.3360526" target="_blank">Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms</a></div>
+            <div class="pub-authors"><strong>G. Gourmelen</strong>, A. Verhulst, B. Navarro, T. Sasaki, G. Ganesh, M. Inami · UTokyo / LIRMM</div>
+            <a href="https://hal.science/hal-02407032v1/document" target="_blank" class="pub-link">PDF via HAL ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-title">Experience</h2>
+      </div>
+      <div class="exp-list">
+        <div class="exp-item">
+          <div class="exp-period">Jan 2026 — Present<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">ONGOING</span></div>
+          <div>
+            <div class="exp-org">Keio Media Design · Embodied Media Lab · Tokyo </div>
+            <div class="exp-role">Project Assistant Professor</div>
+            <div class="exp-desc">Leading the robotic and vision research team under Prof. Kouta Minamizawa — contributing to the JST Moonshot program on Robotics, Teleoperation and AI. Current collaboration: Oricafé research project.</div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-period">Apr 2025 — Dec 2025<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">9 MONTHS</span></div>
+          <div>
+            <div class="exp-org">Honda Research Institute Japan · Wako Research Center · Saitama</div>
+            <div class="exp-role">Researcher — Avatar Project, Frontier Robotics Team</div>
+            <div class="exp-desc">Worked with humanoid teleoperation systems for next-generation avatar platforms. Focus on haptic control, intuitive human-robot interfaces bridging human intent and robotic execution.</div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-period">Apr 2023 — Present<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">ONGOING</span></div>
+          <div>
+            <div class="exp-org">Waseda University · Iwata Lab · Tokyo</div>
+            <div class="exp-role">Research Assistant</div>
+            <div class="exp-desc">Haptic teleoperation, control and learning from demonstration for an echocardiography medical robot. Embodied third-person view with AR glasses for bouldering. Air pressure haptic feedback device for wearable robots. Miruoto project: AI for player recognition during live sports events, with accessibility focus for Tokyo Deaflympics 2025.</div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-period">Sep 2022 — Mar 2023<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">7 MONTHS</span></div>
+          <div>
+            <div class="exp-org">Polytech Montpellier · France</div>
+            <div class="exp-role">Lecturer</div>
+            <div class="exp-desc">270 hours of teaching across Robotics, Electronics, Automatics and Computer Sciences.</div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-period">Dec 2018 — Nov 2022<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">4 YEARS</span></div>
+          <div>
+            <div class="exp-org">LIRMM · Université de Montpellier · France</div>
+            <div class="exp-role">PhD Researcher — JST ERATO "Jizai Body"</div>
+            <div class="exp-desc">Thesis: "Embodied robot systems: control and learning for skill-transfer from humans." Admittance control of 7DoF robot arm, teleoperation with 3DoF haptic feedback, human arm impedance estimation during HRI, and human intention prediction via deep learning from movement and visual data.</div>
+          </div>
+        </div>
+
+        <div class="exp-item">
+          <div class="exp-period">Feb · May · Nov 2019<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">3 MONTHS</span></div>
+          <div>
+            <div class="exp-org">Inami-Hiyama Living Lab · University of Tokyo</div>
+            <div class="exp-role">Invited Researcher — JST ERATO Project</div>
+            <div class="exp-desc">Force control development for wearable robotic arm. Collaboration with Prof. Masahiko Inami. Resulted in SIGGRAPH Asia 2019 publication (Co-Limbs).</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK IN PROGRESS -->
+    <section id="wip">
+      <div class="section-header">
+        <span class="section-num">03.5</span>
+        <h2 class="section-title">Work in Progress</h2>
+      </div>
+      <div class="pub-list">
+
+        
+        <div class="pub-item">
+          <div class="pub-year">2025</div>
+          <div>
+            <div class="pub-venue" style="border-color:rgba(0,245,255,0.4);color:var(--accent);text-shadow:0 0 8px rgba(0,245,255,0.4);">In Progress</div>
+            <div class="pub-title">Avatar Teleoperation with Haptic Feedback</div>
+            <div class="pub-authors"><strong>G. Gourmelen</strong> · Keio University / Embodied Media, KMD </div>
+          </div>
+        </div>
+
+                <div class="pub-item">
+          <div class="pub-year">2025</div>
+          <div>
+            <div class="pub-venue" style="border-color:rgba(0,245,255,0.4);color:var(--accent);text-shadow:0 0 8px rgba(0,245,255,0.4);">In Progress</div>
+            <div class="pub-title">Transparent screen Robotic AI Vision</div>
+            <div class="pub-authors"><strong>G. Gourmelen</strong> Keio University / Embodied Media, KMD</div>
+          </div>
+        </div>
+
+        <div class="pub-item">
+          <div class="pub-year">2025</div>
+          <div>
+            <div class="pub-venue" style="border-color:rgba(0,245,255,0.4);color:var(--accent);text-shadow:0 0 8px rgba(0,245,255,0.4);">In Progress</div>
+            <div class="pub-title">Learning from Demonstration for Echocardiography Teleoperation Robot</div>
+            <div class="pub-authors"><strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div>
+          </div>
+        </div>
+
+                <div class="pub-item">
+          <div class="pub-year">2025</div>
+          <div>
+            <div class="pub-venue" style="border-color:rgba(0,245,255,0.4);color:var(--accent);text-shadow:0 0 8px rgba(0,245,255,0.4);">In Progress</div>
+            <div class="pub-title">Hybrid Roller–Jamming Grasping: Active Intake with Post-Capture Stiffening</div>
+            <div class="pub-authors">Yijie REN, <strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div>
+          </div>
+        </div>
+
+                <div class="pub-item">
+          <div class="pub-year">2025</div>
+          <div>
+            <div class="pub-venue" style="border-color:rgba(0,245,255,0.4);color:var(--accent);text-shadow:0 0 8px rgba(0,245,255,0.4);">In Progress</div>
+            <div class="pub-title">Augmented Ascent: Third-Person AR support for Bouldering</div>
+            <div class="pub-authors"><strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div>
+          </div>
+        </div>
+
+
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-title">Contact</h2>
+      </div>
+      <div class="contact-inner">
+        <div class="contact-text">
+          Open to <em>research collaborations</em>, visiting positions, and conversations about teleoperation, haptics, and embodied systems.
+        </div>
+        <div class="contact-links">
+          <a id="email-link" class="contact-link" href="#" onclick="revealEmail(this); return false;">
+            click to reveal email
+            <span class="contact-link-label">Email</span>
+          </a>
+          <a href="https://scholar.google.com/citations?hl=en&user=GC2dxjQAAAAJ" target="_blank" class="contact-link">
+            Google Scholar
+            <span class="contact-link-label">Publications</span>
+          </a>
+          <a href="https://www.linkedin.com/in/guillaume-gourmelen-71b655161/" target="_blank" class="contact-link">
+            LinkedIn
+            <span class="contact-link-label">Profile</span>
+          </a>
+          <a href="https://www.embodiedmedia.org/members" target="_blank" class="contact-link">
+            KMD Embodied Media Lab
+            <span class="contact-link-label">Lab</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Guillaume Gourmelen · Tokyo, Japan</span>
+      <span>Robotics · Teleoperation · Embodiment</span>
+    </footer>
+  </div>
+
+  <script>
+  const canvas = document.getElementById('robo-canvas');
+  const ctx = canvas.getContext('2d');
+
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  let t = 0;
+  const CYAN  = 'rgba(0,245,255,';
+  const AMBER = 'rgba(255,170,0,';
+  const BLUE  = 'rgba(0,100,255,';
+  const WHITE = 'rgba(200,230,255,';
+
+  // --- Projection ---
+  function proj(x, y, z, cx, cy, fov=300) {
+    const s = fov / (fov + z + 100);
+    return { x: cx + x * s, y: cy + y * s, s };
+  }
+
+  // --- Easing ---
+  const ease = x => x < 0.5 ? 2*x*x : 1-Math.pow(-2*x+2,2)/2;
+  const pulse = (speed, phase=0) => Math.sin(t * speed + phase);
+
+  // ---- HUMAN ARM (left side, reaching right) ----
+  function drawHumanArm(cx, cy) {
+    // Natural human motion — slow sinusoidal reach with weight and hesitation
+    // Single slow wave drives the whole arm, secondary joints lag behind naturally
+    const masterPhase = t * 0.11; // very slow primary rhythm
+    const raw = Math.sin(masterPhase);
+    const intent = ease((raw + 1) / 2); // 0→1, eased
+
+    // Micro motions — tremor, breathing, weight shifts
+    const breath   = Math.sin(t * 0.17) * 0.03;
+    const tremor   = Math.sin(t * 1.6) * 0.008 + Math.sin(t * 2.3) * 0.005;
+    const weightY  = Math.cos(t * 0.17) * 3; // arm droops slightly with gravity
+
+    const sx = cx, sy = cy;
+
+    // Shoulder — leads the motion, relaxed arc
+    const shoulderPitch = -0.28 + intent * 0.42 + breath + tremor;
+    const shoulderYaw   = intent * 0.15 + Math.sin(t * 0.13) * 0.04;
+    const upperLen = 85;
+
+    const elbowX = sx + Math.cos(shoulderPitch) * upperLen;
+    const elbowY = sy + Math.sin(shoulderPitch) * upperLen + weightY;
+    const elbowZ = -15 + shoulderYaw * 25;
+
+    // Elbow — lags ~15% behind shoulder, natural joint coupling
+    const laggedIntent = ease((Math.sin(masterPhase - 0.15) + 1) / 2);
+    const forearmLen = 72;
+    const elbowBend = 0.38 - laggedIntent * 0.22 + tremor;
+    const wristX = elbowX + Math.cos(shoulderPitch - elbowBend) * forearmLen;
+    const wristY = elbowY + Math.sin(shoulderPitch - elbowBend) * forearmLen + weightY * 0.3;
+    const wristZ = elbowZ - 8;
+
+    // Wrist — even more lag, small natural rotation
+    const wristRoll = Math.sin(t * 0.19 + 0.8) * 0.08 + tremor;
+    const handLen = 26;
+    const handX = wristX + Math.cos(shoulderPitch - elbowBend - 0.08 + wristRoll) * handLen;
+    const handY = wristY + Math.sin(shoulderPitch - elbowBend - 0.08 + wristRoll) * handLen;
+
+    // Project to 2D
+    const pShoulder = proj(sx - cx, sy - cy, 0, cx, cy);
+    const pElbow    = proj(elbowX - cx, elbowY - cy, elbowZ, cx, cy);
+    const pWrist    = proj(wristX - cx, wristY - cy, wristZ, cx, cy);
+    const pHand     = proj(handX - cx, handY - cy, wristZ - 5, cx, cy);
+
+    // --- Draw upper arm ---
+    ctx.beginPath();
+    ctx.moveTo(pShoulder.x, pShoulder.y);
+    ctx.lineTo(pElbow.x, pElbow.y);
+    ctx.strokeStyle = WHITE + '0.18)';
+    ctx.lineWidth = 9;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    // highlight
+    ctx.beginPath();
+    ctx.moveTo(pShoulder.x - 1, pShoulder.y - 1);
+    ctx.lineTo(pElbow.x - 1, pElbow.y - 1);
+    ctx.strokeStyle = WHITE + '0.06)';
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // --- Forearm ---
+    ctx.beginPath();
+    ctx.moveTo(pElbow.x, pElbow.y);
+    ctx.lineTo(pWrist.x, pWrist.y);
+    ctx.strokeStyle = WHITE + '0.15)';
+    ctx.lineWidth = 7;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // --- Hand ---
+    ctx.beginPath();
+    ctx.moveTo(pWrist.x, pWrist.y);
+    ctx.lineTo(pHand.x, pHand.y);
+    ctx.strokeStyle = WHITE + '0.12)';
+    ctx.lineWidth = 5;
+    ctx.stroke();
+
+    // --- Fingers ---
+    const fingerAngles = [-0.35, -0.12, 0.08, 0.28];
+    const fingerLen = [18, 22, 21, 17];
+    const handAngle = Math.atan2(pHand.y - pWrist.y, pHand.x - pWrist.x);
+    const fingerCurl = 0.2 + laggedIntent * 0.15; // fingers extend when reaching
+
+    fingerAngles.forEach((fa, i) => {
+      const a = handAngle + fa;
+      const len = fingerLen[i] * (0.9 + intent * 0.1);
+      // Proximal phalanx
+      const p1x = pHand.x + Math.cos(a) * len * 0.5;
+      const p1y = pHand.y + Math.sin(a) * len * 0.5;
+      // Distal
+      const p2x = pHand.x + Math.cos(a + fingerCurl * 0.3) * len;
+      const p2y = pHand.y + Math.sin(a + fingerCurl * 0.3) * len;
+
+      ctx.beginPath();
+      ctx.moveTo(pHand.x, pHand.y);
+      ctx.quadraticCurveTo(p1x, p1y, p2x, p2y);
+      ctx.strokeStyle = WHITE + '0.12)';
+      ctx.lineWidth = 2.5 - i * 0.3;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    });
+
+    // Thumb
+    const thumbA = handAngle - 0.55;
+    ctx.beginPath();
+    ctx.moveTo(pWrist.x + 2, pWrist.y + 2);
+    ctx.lineTo(pWrist.x + Math.cos(thumbA)*16, pWrist.y + Math.sin(thumbA)*16);
+    ctx.strokeStyle = WHITE + '0.10)';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Shoulder joint
+    ctx.beginPath();
+    ctx.arc(pShoulder.x, pShoulder.y, 6, 0, Math.PI*2);
+    ctx.strokeStyle = WHITE + '0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Elbow joint
+    ctx.beginPath();
+    ctx.arc(pElbow.x, pElbow.y, 4, 0, Math.PI*2);
+    ctx.strokeStyle = WHITE + '0.15)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // EMG signal label near shoulder
+    ctx.fillStyle = WHITE + '0.14)';
+    ctx.font = '8px DM Mono, monospace';
+    ctx.fillText('EMG', pShoulder.x - 28, pShoulder.y - 12);
+
+    // Intention arrow from fingertip toward robot
+    const arrowAlpha = intent * 0.3;
+    if (arrowAlpha > 0.05) {
+      const ax1 = pHand.x + Math.cos(handAngle) * 20;
+      const ay1 = pHand.y + Math.sin(handAngle) * 20;
+      const ax2 = pHand.x + Math.cos(handAngle) * 45;
+      const ay2 = pHand.y + Math.sin(handAngle) * 45;
+      ctx.beginPath();
+      ctx.moveTo(ax1, ay1);
+      ctx.lineTo(ax2, ay2);
+      ctx.strokeStyle = CYAN + arrowAlpha + ')';
+      ctx.setLineDash([3, 5]);
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // arrowhead
+      ctx.beginPath();
+      ctx.moveTo(ax2, ay2);
+      ctx.lineTo(ax2 - Math.cos(handAngle-0.4)*8, ay2 - Math.sin(handAngle-0.4)*8);
+      ctx.lineTo(ax2 - Math.cos(handAngle+0.4)*8, ay2 - Math.sin(handAngle+0.4)*8);
+      ctx.closePath();
+      ctx.fillStyle = CYAN + arrowAlpha + ')';
+      ctx.fill();
+    }
+
+    return { x: pHand.x, y: pHand.y, intent };
+  }
+
+  // ---- ROBOT ARM (right side, responding to human) ----
+  function drawRobotArm(cx, cy, humanIntent) {
+    // Robot handover — synced loosely with human, but moves with mechanical precision
+    // Slow deliberate phases: wait → reach → hold → withdraw
+    const cycle = (t * 0.11) % (Math.PI * 2); // same pace as human
+    const phase = cycle / (Math.PI * 2);
+
+    // Smooth trapezoidal profile: ramp up, hold, ramp down — not sinusoidal
+    function trapeze(p, ramp=0.25) {
+      if (p < ramp) return ease(p / ramp);
+      if (p < 1 - ramp) return 1.0;
+      return ease((1 - p) / ramp);
+    }
+
+    // Extend in first half, retract in second
+    const extend = phase < 0.5 ? trapeze(phase * 2, 0.3) : trapeze((1 - phase) * 2, 0.3);
+    const holding = phase > 0.32 && phase < 0.68;
+
+    // Micro-corrections during hold — robot actively stabilizing
+    const microR = holding ? Math.sin(t * 2.4) * 0.008 + Math.sin(t * 3.7) * 0.005 : 0;
+
+    const shoulderP = -0.45 + extend * 0.50 + microR;
+    const elbowBend = 0.42 - extend * 0.26 + microR * 0.4;
+    const wristP    = microR * 0.8;
+
+    const link1 = 95, link2 = 80, link3 = 55, link4 = 35;
+
+    // Joint positions
+    const j0x = cx, j0y = cy;
+    const j1x = j0x - Math.cos(shoulderP) * link1;
+    const j1y = j0y + Math.sin(shoulderP) * link1;
+    const j2x = j1x - Math.cos(shoulderP - elbowBend) * link2;
+    const j2y = j1y + Math.sin(shoulderP - elbowBend) * link2;
+    const j3x = j2x - Math.cos(shoulderP - elbowBend - 0.15 + wristP) * link3;
+    const j3y = j2y + Math.sin(shoulderP - elbowBend - 0.15 + wristP) * link3;
+    const j4x = j3x - Math.cos(shoulderP - elbowBend - 0.1) * link4;
+    const j4y = j3y + Math.sin(shoulderP - elbowBend - 0.1) * link4;
+
+    const joints = [[j0x,j0y],[j1x,j1y],[j2x,j2y],[j3x,j3y],[j4x,j4y]];
+    const sizes  = [8, 7, 6, 5, 4];
+
+    // Base box
+    ctx.beginPath();
+    ctx.rect(j0x - 22, j0y, 44, 14);
+    ctx.strokeStyle = CYAN + '0.2)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.fillStyle = CYAN + '0.03)';
+    ctx.fill();
+
+    // Links
+    for (let i = 0; i < joints.length - 1; i++) {
+      const [ax, ay] = joints[i];
+      const [bx, by] = joints[i+1];
+
+      // Main link
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(bx, by);
+      ctx.strokeStyle = CYAN + (0.15 - i*0.02) + ')';
+      ctx.lineWidth = 8 - i * 1.2;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Wireframe overlay
+      ctx.beginPath();
+      ctx.setLineDash([5, 7]);
+      ctx.moveTo(ax, ay); ctx.lineTo(bx, by);
+      ctx.strokeStyle = CYAN + '0.05)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Joint
+      ctx.beginPath();
+      ctx.arc(ax, ay, sizes[i], 0, Math.PI*2);
+      ctx.strokeStyle = CYAN + '0.3)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.fillStyle = CYAN + '0.05)';
+      ctx.fill();
+
+      // Amber center
+      ctx.beginPath();
+      ctx.arc(ax, ay, 2.5, 0, Math.PI*2);
+      ctx.fillStyle = AMBER + '0.7)';
+      ctx.fill();
+
+      // DOF arc
+      ctx.beginPath();
+      ctx.arc(ax, ay, sizes[i]+5, -0.8, -0.8 + extend * 1.2);
+      ctx.strokeStyle = AMBER + '0.2)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Joint label
+      ctx.fillStyle = CYAN + '0.18)';
+      ctx.font = '8px DM Mono, monospace';
+      ctx.fillText('J'+i, ax + sizes[i]+3, ay - 3);
+    }
+
+    // End effector
+    const [ex, ey] = joints[joints.length-1];
+    ctx.beginPath();
+    ctx.arc(ex, ey, 6, 0, Math.PI*2);
+    ctx.strokeStyle = AMBER + '0.8)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(ex, ey, 2.5, 0, Math.PI*2);
+    ctx.fillStyle = AMBER + '1.0)';
+    ctx.fill();
+
+    // XYZ tool frame at end effector
+    const toolAngle = Math.atan2(ey - joints[3][1], ex - joints[3][0]);
+    const frameLen = 22;
+    const axes = [
+      { angle: toolAngle,               color: AMBER, label: 'X' },
+      { angle: toolAngle - Math.PI/2,   color: CYAN,  label: 'Y' },
+      { angle: toolAngle - Math.PI*0.7, color: BLUE,  label: 'Z' },
+    ];
+    axes.forEach(({ angle, color, label }) => {
+      const len = label === 'Z' ? frameLen * 0.7 : frameLen;
+      const tx = ex + Math.cos(angle) * len;
+      const ty = ey + Math.sin(angle) * len;
+      ctx.beginPath();
+      ctx.moveTo(ex, ey);
+      ctx.lineTo(tx, ty);
+      ctx.strokeStyle = color + '0.7)';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+      // Arrowhead
+      ctx.beginPath();
+      ctx.moveTo(tx, ty);
+      ctx.lineTo(tx - Math.cos(angle - 0.4) * 6, ty - Math.sin(angle - 0.4) * 6);
+      ctx.lineTo(tx - Math.cos(angle + 0.4) * 6, ty - Math.sin(angle + 0.4) * 6);
+      ctx.closePath();
+      ctx.fillStyle = color + '0.7)';
+      ctx.fill();
+      // Label
+      ctx.fillStyle = color + '0.6)';
+      ctx.font = '9px DM Mono, monospace';
+      ctx.fillText(label, tx + Math.cos(angle) * 5 - 3, ty + Math.sin(angle) * 5 + 3);
+    });
+    // Origin dot
+    ctx.beginPath();
+    ctx.arc(ex, ey, 3, 0, Math.PI*2);
+    ctx.fillStyle = WHITE + '0.6)';
+    ctx.fill();
+
+    // TCP trail
+    if (!drawRobotArm.trail) drawRobotArm.trail = [];
+    drawRobotArm.trail.push({x: ex, y: ey});
+    if (drawRobotArm.trail.length > 70) drawRobotArm.trail.shift();
+    drawRobotArm.trail.forEach((p, i) => {
+      const a = (i / drawRobotArm.trail.length) * 0.15;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, 1.5, 0, Math.PI*2);
+      ctx.fillStyle = AMBER + a + ')';
+      ctx.fill();
+    });
+
+    // Status
+    ctx.fillStyle = CYAN + '0.18)';
+    ctx.font = '9px DM Mono, monospace';
+    ctx.fillText('MODE: TELE-OP', cx - 30, cy - 120);
+    const phaseLabel = phase < 0.25 ? 'WAIT' : phase < 0.5 ? 'EXTEND' : phase < 0.65 ? 'HOLD' : 'RETRACT';
+    ctx.fillStyle = AMBER + '0.3)';
+    ctx.fillText('PHASE: ' + phaseLabel, cx - 30, cy - 108);
+
+    return { x: ex, y: ey };
+  }
+
+  // ---- INTERACTION LINK between human hand and robot EE ----
+  function drawInteractionLink(hx, hy, rx, ry, intent) {
+    if (intent < 0.05) return;
+    const alpha = intent * 0.25;
+    const midX = (hx + rx) / 2;
+    const midY = (hy + ry) / 2 - 20 * intent;
+
+    // Curved interaction beam
+    ctx.beginPath();
+    ctx.moveTo(hx, hy);
+    ctx.quadraticCurveTo(midX, midY, rx, ry);
+    ctx.strokeStyle = CYAN + (alpha * 0.8) + ')';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 6]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Data packets flowing along the curve
+    const numPackets = 3;
+    for (let i = 0; i < numPackets; i++) {
+      const tPkt = ((t * 0.6 + i / numPackets) % 1);
+      const px = (1-tPkt)*(1-tPkt)*hx + 2*(1-tPkt)*tPkt*midX + tPkt*tPkt*rx;
+      const py = (1-tPkt)*(1-tPkt)*hy + 2*(1-tPkt)*tPkt*midY + tPkt*tPkt*ry;
+      ctx.beginPath();
+      ctx.arc(px, py, 2.5, 0, Math.PI*2);
+      ctx.fillStyle = CYAN + (intent * 0.7) + ')';
+      ctx.fill();
+    }
+
+    // Haptic feedback packets flowing back (robot→human)
+    for (let i = 0; i < 2; i++) {
+      const tPkt = ((t * 0.45 + i / 2 + 0.5) % 1);
+      const px = (1-tPkt)*(1-tPkt)*rx + 2*(1-tPkt)*tPkt*midX + tPkt*tPkt*hx;
+      const py = (1-tPkt)*(1-tPkt)*ry + 2*(1-tPkt)*tPkt*midY + tPkt*tPkt*hy;
+      ctx.beginPath();
+      ctx.arc(px, py, 2, 0, Math.PI*2);
+      ctx.fillStyle = AMBER + (intent * 0.5) + ')';
+      ctx.fill();
+    }
+
+    // Label
+    if (intent > 0.3) {
+      ctx.fillStyle = CYAN + (intent * 0.3) + ')';
+      ctx.font = '8px DM Mono, monospace';
+      ctx.fillText('haptic feedback ←', midX - 35, midY - 10);
+      ctx.fillText('→ motor cmd', midX - 20, midY + 4);
+    }
+  }
+
+  // --- Telemetry ---
+  function drawTelemetry(x, y, w, label, color, freq, phase) {
+    ctx.beginPath();
+    for (let i=0; i<80; i++) {
+      const val = Math.sin((i+t*12)*freq*0.25)*18 + Math.sin((i+t*7)*(freq*1.6)*0.25+phase)*8;
+      const px = x+(i/80)*w;
+      i===0 ? ctx.moveTo(px, y+val) : ctx.lineTo(px, y+val);
+    }
+    ctx.strokeStyle = color+'0.35)'; ctx.lineWidth=1; ctx.stroke();
+    ctx.fillStyle = color+'0.22)'; ctx.font='9px DM Mono, monospace';
+    ctx.fillText(label, x, y-14);
+    ctx.fillStyle = color+'0.45)';
+    ctx.fillText((Math.sin(t*3.1+phase)*18).toFixed(2)+'Nm', x+w-48, y-14);
+  }
+
+  function drawGrid() {
+    ctx.strokeStyle = CYAN+'0.022)'; ctx.lineWidth=1;
+    for (let x=0; x<canvas.width; x+=48) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
+    for (let y=0; y<canvas.height; y+=48) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
+  }
+
+  function drawFrame(x, y) {
+    [['X',0,AMBER],['Y',-Math.PI/2,CYAN],['Z',-Math.PI/4,BLUE]].forEach(([l,a,c]) => {
+      const len = l==='Z'?18:28;
+      ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x+Math.cos(a)*len, y+Math.sin(a)*len);
+      ctx.strokeStyle=c+'0.45)'; ctx.lineWidth=1.5; ctx.stroke();
+      ctx.fillStyle=c+'0.5)'; ctx.font='10px DM Mono, monospace';
+      ctx.fillText(l, x+Math.cos(a)*(len+5)-3, y+Math.sin(a)*(len+5)+4);
+    });
+    ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2);
+    ctx.fillStyle=WHITE+'0.5)'; ctx.fill();
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawGrid();
+
+    const centerY = canvas.height * 0.48;
+    const humanCX = canvas.width * 0.22;
+    const robotCX = canvas.width * 0.78;
+
+    const hand = drawHumanArm(humanCX, centerY);
+    const ee   = drawRobotArm(robotCX, centerY, hand.intent);
+    drawInteractionLink(hand.x, hand.y, ee.x, ee.y, hand.intent);
+
+    const ty = canvas.height - 55;
+    drawTelemetry(canvas.width*0.28, ty, canvas.width*0.44, 'τ_J1', CYAN, 1, 0);
+    drawTelemetry(canvas.width*0.28, ty+22, canvas.width*0.44, 'τ_J2', AMBER, 1.4, 1.2);
+
+    drawFrame(55, canvas.height-48);
+    t += 0.009;
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // Email obfuscation — split so bots can't scrape
+  function revealEmail(el) {
+    const u = 'guillaume.gourmelen';
+    const d = ['keio', 'jp'].join('.');
+    const email = u + '@' + d;
+    el.href = 'mailto:' + email;
+    el.childNodes[0].textContent = email + ' ';
+  }
+  </script></body>
+</html>
