@@ -9,16 +9,16 @@
   <style>
     :root {
       --bg: #f7f9fc; --surface: #ffffff; --border: #dde6f0;
-      --accent: #0099aa; --accent2: #c97800; --accent3: #c97800; --accent4: #6a8f00;
+      --accent: #0099aa; --accent2: #c97800;
       --text: #0d1f30; --muted: #8aaabf; --mid: #3d6880;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; line-height: 1.7; overflow-x: hidden; }
-    #robo-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 1; }
+    #robo-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
     body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 2; opacity: 0.4; mix-blend-mode: multiply; }
     .grid-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .grid-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 700px 400px at 5% 10%, rgba(0,180,200,0.05) 0%, transparent 60%), radial-gradient(ellipse 500px 500px at 95% 5%, rgba(220,140,0,0.04) 0%, transparent 55%), radial-gradient(ellipse 600px 300px at 50% 95%, rgba(0,100,180,0.04) 0%, transparent 60%); }
+    .grid-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 700px 400px at 5% 10%, rgba(0,180,200,0.05) 0%, transparent 60%), radial-gradient(ellipse 500px 500px at 95% 5%, rgba(220,140,0,0.04) 0%, transparent 55%); }
     .container { max-width: 960px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 3; }
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; background: rgba(247,249,252,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(0,153,170,0.15); box-shadow: 0 1px 24px rgba(13,31,48,0.06); }
     .nav-logo { font-family: 'Fraunces', serif; font-size: 16px; color: var(--accent); letter-spacing: 0.05em; }
@@ -53,55 +53,51 @@
     .skill-tag:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,153,170,0.04); }
     .skill-tag span { color: var(--muted); font-size: 10px; }
 
+    /* ─── NEWS compact ───────────────────────────────────────────── */
+    section.news-section { padding: 56px 0; }
+    section.news-section .section-header { margin-bottom: 16px; }
+    .news-list { display: flex; flex-direction: column; }
+    .news-item { display: grid; grid-template-columns: 96px 32px 1fr; gap: 0 14px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--border); transition: background 0.2s; }
+    .news-item:hover { background: rgba(0,153,170,0.03); }
+    .news-date { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+    .news-type-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .news-type-dot.chair  { background: var(--accent2); }
+    .news-type-dot.talk   { background: #2d8a4e; }
+    .news-type-dot.award  { background: #d4006a; }
+    .news-type-dot.review { background: var(--accent); }
+    .news-type-dot.media  { background: #6d4fc4; }
+    .news-type-dot.misc   { background: var(--muted); }
+    .news-content { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; min-width: 0; }
+    .news-tag { display: inline-block; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 1px 6px; border: 1px solid currentColor; flex-shrink: 0; }
+    .news-tag.chair  { color: var(--accent2); border-color: rgba(201,120,0,0.4); }
+    .news-tag.talk   { color: #2d8a4e;        border-color: rgba(45,138,78,0.35); }
+    .news-tag.award  { color: #d4006a;        border-color: rgba(212,0,106,0.35); }
+    .news-tag.review { color: var(--accent);  border-color: rgba(0,153,170,0.4); }
+    .news-tag.media  { color: #6d4fc4;        border-color: rgba(109,79,196,0.35); }
+    .news-tag.misc   { color: var(--mid);     border-color: rgba(61,104,128,0.3); }
+    .news-headline { font-size: 12px; color: var(--text); }
+    .news-sub { font-size: 11px; color: var(--muted); margin-left: auto; white-space: nowrap; }
+    .news-sub a { color: var(--accent); text-decoration: none; }
+
     /* ─── PUBLICATIONS ─────────────────────────────────────────── */
     .pub-list { display: flex; flex-direction: column; }
-    .pub-item {
-      padding: 28px 0;
-      border-bottom: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: 96px 80px 1fr;
-      gap: 20px;
-      align-items: start;
-      cursor: default;
-    }
+    .pub-item { padding: 28px 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 96px 80px 1fr; gap: 20px; align-items: start; }
     .pub-item:hover .pub-title { color: var(--accent); }
     .pub-title a { color: inherit; text-decoration: none; transition: color 0.2s; }
-    .pub-title a:hover { color: var(--accent); }
-    .pub-link { display: inline-block; margin-top: 8px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,153,170,0.35); padding-bottom: 1px; transition: border-color 0.2s; }
-    .pub-link:hover { border-color: var(--accent); }
+    .pub-link { display: inline-block; margin-top: 8px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,153,170,0.35); padding-bottom: 1px; }
     .pub-year { font-size: 12px; color: var(--muted); padding-top: 4px; }
     .pub-venue-badge { display: inline-block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent2); margin-bottom: 8px; padding: 2px 8px; border: 1px solid rgba(201,120,0,0.35); }
     .pub-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 300; color: var(--text); margin-bottom: 8px; transition: color 0.2s; line-height: 1.3; }
     .pub-authors { font-size: 12px; color: var(--muted); }
     .pub-authors strong { color: var(--mid); }
 
-    /* Paper thumbnail */
-    .pub-thumb {
-      width: 96px; height: 72px;
-      border: 1px solid var(--border);
-      background: #eef3f7;
-      flex-shrink: 0;
-      overflow: hidden;
-      position: relative;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .pub-item:hover .pub-thumb {
-      border-color: rgba(0,153,170,0.4);
-      box-shadow: 0 2px 12px rgba(0,153,170,0.1);
-    }
-    .pub-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    /* Placeholder state */
-    .pub-thumb-placeholder {
-      width: 100%; height: 100%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 5px;
-    }
+    /* ── Thumbnail: img on top (z:1), placeholder behind (z:0) ── */
+    .pub-thumb { width: 96px; height: 72px; border: 1px solid var(--border); background: #eef3f7; flex-shrink: 0; overflow: hidden; position: relative; transition: border-color 0.3s, box-shadow 0.3s; }
+    .pub-item:hover .pub-thumb { border-color: rgba(0,153,170,0.4); box-shadow: 0 2px 12px rgba(0,153,170,0.1); }
+    .pub-thumb > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 1; }
+    .pub-thumb-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; z-index: 0; }
     .pub-thumb-placeholder svg { opacity: 0.25; }
-    .pub-thumb-placeholder span {
-      font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--muted); text-align: center; padding: 0 6px; line-height: 1.4;
-    }
+    .pub-thumb-placeholder span { font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 0 6px; line-height: 1.4; }
 
     /* ─── EXPERIENCE ─────────────────────────────────────────────── */
     .exp-list { display: flex; flex-direction: column; }
@@ -113,99 +109,46 @@
     .exp-desc strong { color: var(--text); }
 
     /* ─── PROJECTS ───────────────────────────────────────────────── */
-    .project-card {
-      border: 1px solid var(--border);
-      background: var(--surface);
-      margin-bottom: 64px;
-      overflow: hidden;
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
+    .project-card { border: 1px solid var(--border); background: var(--surface); margin-bottom: 64px; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
     .project-card:hover { border-color: rgba(0,153,170,0.3); box-shadow: 0 4px 32px rgba(0,153,170,0.08); }
-
-    .project-header {
-      padding: 32px 36px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: flex-start;
-      gap: 28px;
-    }
-    .project-tag {
-      font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
-      padding: 3px 10px; border: 1px solid rgba(201,120,0,0.4);
-      color: var(--accent2);
-      white-space: nowrap; flex-shrink: 0; margin-top: 6px;
-    }
+    .project-header { padding: 32px 36px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 28px; }
+    .project-tag { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 10px; border: 1px solid rgba(201,120,0,0.4); color: var(--accent2); white-space: nowrap; flex-shrink: 0; margin-top: 6px; }
     .project-title-block { flex: 1; }
-    .project-title {
-      font-family: 'Fraunces', serif; font-size: clamp(22px, 3vw, 32px);
-      font-weight: 300; line-height: 1.2; margin-bottom: 10px; color: var(--text);
-    }
+    .project-title { font-family: 'Fraunces', serif; font-size: clamp(22px, 3vw, 32px); font-weight: 300; line-height: 1.2; margin-bottom: 10px; color: var(--text); }
     .project-title em { font-style: italic; color: var(--accent); }
     .project-subtitle { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; }
-
-    /* Video embed */
-    .project-video {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      background: #e8f0f5;
-      border-bottom: 1px solid var(--border);
-    }
-    .project-video iframe {
-      position: absolute; inset: 0; width: 100%; height: 100%; border: none;
-    }
-    .project-video-placeholder {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 16px;
-      background: linear-gradient(135deg, #eef3f7 0%, #f7f9fc 100%);
-      cursor: pointer;
-    }
-    .project-video-placeholder svg { opacity: 0.5; }
-    .project-video-placeholder span {
-      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--mid);
-    }
-
-    /* Video grid for multiple videos */
-    .project-video-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      border-bottom: 1px solid var(--border);
-    }
-    .project-video-grid .project-video {
-      border-bottom: none;
-      border-right: 1px solid var(--border);
-    }
+    .project-video { position: relative; width: 100%; padding-bottom: 56.25%; background: #e8f0f5; border-bottom: 1px solid var(--border); }
+    .project-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    .project-video-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; background: linear-gradient(135deg, #eef3f7 0%, #f7f9fc 100%); cursor: pointer; transition: background 0.2s; }
+    .project-video-placeholder:hover { background: linear-gradient(135deg, #e4edf5 0%, #eef3f7 100%); }
+    .project-video-placeholder svg { opacity: 0.5; transition: opacity 0.2s; }
+    .project-video-placeholder:hover svg { opacity: 0.8; }
+    .project-video-placeholder span { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); }
+    .project-video-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
+    .project-video-grid .project-video { border-bottom: none; border-right: 1px solid var(--border); }
     .project-video-grid .project-video:last-child { border-right: none; }
-    @media (max-width: 640px) {
-      .project-video-grid { grid-template-columns: 1fr; }
-      .project-video-grid .project-video { border-right: none; border-bottom: 1px solid var(--border); }
-    }
-
-    /* Process body */
     .project-body { padding: 36px; }
-
-    .project-meta-row {
-      display: flex; gap: 40px; flex-wrap: wrap;
-      padding-top: 32px; border-top: 1px solid var(--border);
-    }
+    .project-meta-row { display: flex; gap: 40px; flex-wrap: wrap; padding-top: 32px; border-top: 1px solid var(--border); }
     .project-meta-col { display: flex; flex-direction: column; gap: 4px; }
     .project-meta-col dt { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
     .project-meta-col dd { font-size: 12px; color: var(--mid); }
     .project-meta-col dd a { color: var(--accent); text-decoration: none; }
-    .project-pub-ref {
-      margin-top: 24px; padding: 16px 20px;
-      border: 1px solid rgba(201,120,0,0.2);
-      background: rgba(201,120,0,0.03);
-      font-size: 12px; color: var(--mid); line-height: 1.7;
-    }
+    .project-pub-ref { margin-top: 24px; padding: 16px 20px; border: 1px solid rgba(201,120,0,0.2); background: rgba(201,120,0,0.03); font-size: 12px; color: var(--mid); line-height: 1.7; }
     .project-pub-ref span { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent2); display: block; margin-bottom: 4px; }
 
     /* ─── CONTACT ─────────────────────────────────────────────────── */
-    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
-    .contact-text { font-family: 'Fraunces', serif; font-size: clamp(24px, 3vw, 36px); font-weight: 300; line-height: 1.3; color: var(--mid); }
-    .contact-text em { color: var(--accent); font-style: italic; }
+    .contact-grid { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; }
+    .contact-photo-col { display: flex; flex-direction: column; gap: 16px; }
+    .contact-photo-frame { width: 220px; height: 260px; border: 1px solid var(--border); overflow: hidden; position: relative; background: #e8f0f5; }
+    .contact-photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+    .contact-photo-frame:hover img { transform: scale(1.03); }
+    .contact-photo-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--muted); }
+    .contact-photo-placeholder svg { opacity: 0.4; }
+    .contact-photo-placeholder span { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; text-align: center; padding: 0 12px; }
+    .contact-photo-caption { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .contact-right { display: flex; flex-direction: column; gap: 28px; }
+    .contact-blurb { font-family: 'Fraunces', serif; font-size: clamp(20px, 2.5vw, 30px); font-weight: 300; line-height: 1.35; color: var(--mid); }
+    .contact-blurb em { color: var(--accent); font-style: italic; }
     .contact-links { display: flex; flex-direction: column; gap: 12px; }
     .contact-link { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border: 1px solid var(--border); color: var(--mid); text-decoration: none; font-size: 12px; letter-spacing: 0.08em; background: var(--surface); transition: border-color 0.3s, color 0.3s, box-shadow 0.3s; }
     .contact-link:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 2px 16px rgba(0,153,170,0.1); }
@@ -213,78 +156,7 @@
     footer { padding: 32px 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 11px; }
     .fade-in { opacity: 0; transform: translateY(20px); animation: fadeIn 0.8s ease forwards; }
     @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-    .fade-in:nth-child(1) { animation-delay: 0.1s; } .fade-in:nth-child(2) { animation-delay: 0.2s; }
-    .fade-in:nth-child(3) { animation-delay: 0.3s; } .fade-in:nth-child(4) { animation-delay: 0.4s; }
-
-    /* ─── NEWS ───────────────────────────────────────────────────── */
-    .news-list { display: flex; flex-direction: column; gap: 0; }
-    .news-item {
-      display: grid;
-      grid-template-columns: 120px 48px 1fr;
-      gap: 0 20px;
-      align-items: start;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-      transition: background 0.2s;
-    }
-    .news-item:hover { background: rgba(0,153,170,0.03); }
-    .news-date { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; padding-top: 3px; line-height: 1.5; }
-    .news-type-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
-    .news-type-dot.review { background: var(--accent); }
-    .news-type-dot.chair  { background: var(--accent2); }
-    .news-type-dot.award  { background: #d4006a; }
-    .news-type-dot.talk   { background: #2d8a4e; }
-    .news-type-dot.media  { background: #6d4fc4; }
-    .news-type-dot.misc   { background: var(--muted); }
-    .news-content { flex: 1; }
-    .news-tag {
-      display: inline-block; font-size: 9px; letter-spacing: 0.14em;
-      text-transform: uppercase; padding: 1px 7px;
-      margin-bottom: 5px; border: 1px solid currentColor;
-    }
-    .news-tag.review { color: var(--accent);  border-color: rgba(0,153,170,0.4); }
-    .news-tag.chair  { color: var(--accent2); border-color: rgba(201,120,0,0.4); }
-    .news-tag.award  { color: #d4006a;        border-color: rgba(212,0,106,0.35); }
-    .news-tag.talk   { color: #2d8a4e;        border-color: rgba(45,138,78,0.35); }
-    .news-tag.media  { color: #6d4fc4;        border-color: rgba(109,79,196,0.35); }
-    .news-tag.misc   { color: var(--mid);     border-color: rgba(61,104,128,0.3); }
-    .news-headline { font-size: 13px; color: var(--text); line-height: 1.6; }
-    .news-sub { font-size: 11px; color: var(--muted); margin-top: 3px; }
-    .news-sub a { color: var(--accent); text-decoration: none; }
-    .news-legend { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 36px; }
-    .news-legend-item { display: flex; align-items: center; gap: 7px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-    .news-legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-
-    /* ─── CONTACT WITH PHOTO ─────────────────────────────────────── */
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: 56px;
-      align-items: start;
-    }
-    .contact-photo-col { display: flex; flex-direction: column; gap: 16px; }
-    .contact-photo-frame {
-      width: 220px; height: 260px;
-      border: 1px solid var(--border);
-      overflow: hidden; position: relative;
-      background: #e8f0f5;
-    }
-    .contact-photo-frame img {
-      width: 100%; height: 100%; object-fit: cover;
-      display: block; transition: transform 0.4s;
-    }
-    .contact-photo-frame:hover img { transform: scale(1.03); }
-    .contact-photo-placeholder {
-      width: 100%; height: 100%;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 12px; color: var(--muted);
-    }
-    .contact-photo-placeholder svg { opacity: 0.4; }
-    .contact-photo-placeholder span { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; text-align: center; padding: 0 12px; }
-    .contact-photo-caption { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-    .contact-right { display: flex; flex-direction: column; gap: 28px; }
-    .contact-blurb { font-family: 'Fraunces', serif; font-size: clamp(20px, 2.5vw, 30px); font-weight: 300; line-height: 1.35; color: var(--mid); }
-    .contact-blurb em { color: var(--accent); font-style: italic; }
+    .fade-in:nth-child(1){animation-delay:0.1s}.fade-in:nth-child(2){animation-delay:0.2s}.fade-in:nth-child(3){animation-delay:0.3s}.fade-in:nth-child(4){animation-delay:0.4s}
 
     @media (max-width: 780px) {
       nav { padding: 16px 20px; } .nav-links { gap: 14px; } .container { padding: 0 20px; }
@@ -292,13 +164,13 @@
       .pub-item { grid-template-columns: 72px 1fr; gap: 12px; }
       .pub-item .pub-year { display: none; }
       .exp-item { grid-template-columns: 1fr; gap: 4px; }
-      .contact-inner { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; }
       .contact-photo-frame { width: 100%; height: 220px; }
       .hero-meta { gap: 24px; }
       .project-header { flex-direction: column; gap: 12px; }
-      .process-step { grid-template-columns: 44px 1fr; }
-      .news-item { grid-template-columns: 90px 36px 1fr; }
+      .news-item { grid-template-columns: 76px 28px 1fr; }
+      .project-video-grid { grid-template-columns: 1fr; }
+      .project-video-grid .project-video { border-right: none; border-bottom: 1px solid var(--border); }
     }
     ::selection { background: var(--accent); color: #fff; }
   </style>
@@ -311,9 +183,9 @@
     <div class="nav-logo">G. Gourmelen</div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
+      <li><a href="#news">News</a></li>
       <li><a href="#publications">Publications</a></li>
       <li><a href="#projects">Projects</a></li>
-      <li><a href="#news">News</a></li>
       <li><a href="#experience">Experience</a></li>
       <li><a href="#wip">WIP</a></li>
       <li><a href="#contact">Contact</a></li>
@@ -344,7 +216,7 @@
           <p>My research focuses on <strong>teleoperation, embodiment, and human-in-the-loop control</strong> — specifically on how humans can seamlessly transfer motor skills to robotic systems through intuitive interfaces, haptic feedback, and impedance adaptation. At Honda, I developed <strong>bimanual teleoperation</strong> systems for next-generation avatar platforms.</p>
           <p>I hold a <strong>PhD from the University of Montpellier / LIRMM</strong> (2022), funded by the JST ERATO project. I am now focused on applied academic research in teleoperation and human motor control — contributing to the <strong>JST Moonshot program</strong> on VR, neurosciences and robotics at KMD.</p>
           <p>I collaborate closely with the Inami Lab at UTokyo — where my work on supernumerary robotic limbs (Co-Limbs) originated.</p>
-          <p>I am fluent in <strong>French, English, and Japanese</strong> (日本語) — and I bring a cross-cultural perspective to both research and collaboration across European and Asian institutions.</p>
+          <p>I am fluent in <strong>French, English, and Japanese</strong> (日本語)</p>
         </div>
         <div class="about-skills">
           <div class="skill-tag">Teleoperation Systems <span>Core</span></div>
@@ -361,24 +233,65 @@
       </div>
     </section>
 
+    <!-- ─── NEWS compact ──────────────────────────────────────────── -->
+    <section id="news" class="news-section">
+      <div class="section-header"><span class="section-num">01.5</span><h2 class="section-title">News</h2></div>
+      <div class="news-list">
+        <!-- Copy a news-item block and change the type class + text to add entries -->
+        <!-- Types: chair / talk / award / review / media / misc -->
+
+        <div class="news-item">
+          <div class="news-date">Mar 2026</div>
+          <div class="news-type-dot chair"></div>
+          <div class="news-content">
+            <span class="news-tag chair">Chair</span>
+            <span class="news-headline">Session Chair — Augmented Human 2026 · Human–Robot Communication &amp; Control</span>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Nov 2025</div>
+          <div class="news-type-dot talk"></div>
+          <div class="news-content">
+            <span class="news-tag talk">Demo</span>
+            <span class="news-headline">Miruoto deployed live — Tokyo Deaflympics 2025 Championship Finals</span>
+            <span class="news-sub">Tokyo, Japan</span>
+          </div>
+        </div>
+
+        <div class="news-item">
+          <div class="news-date">Aug 2024</div>
+          <div class="news-type-dot talk"></div>
+          <div class="news-content">
+            <span class="news-tag talk">Presentation</span>
+            <span class="news-headline">Miruoto at ACM SIGGRAPH 2024 — Denver, CO</span>
+            <span class="news-sub"><a href="https://dl.acm.org/doi/10.1145/3641517.3664393" target="_blank">ACM DL ↗</a></span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- ─── PUBLICATIONS ──────────────────────────────────────────── -->
     <section id="publications">
       <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Publications</h2></div>
       <div class="pub-list">
 
-        <!-- HOW TO ADD PAPER PHOTOS:
-             Replace the <div class="pub-thumb-placeholder"> block with:
-             <img src="assets/img/paper-messpa.jpg" alt="MESSPa" />
-             Recommended size: 192×144px (2×) or any 4:3 crop.
+        <!--
+          PHOTO STRUCTURE (correct, no double-render bug):
+          <div class="pub-thumb">
+            <img src="assets/img/photo.png" alt="Alt text" onerror="this.style.display='none'">
+            <div class="pub-thumb-placeholder">
+              SVG fallback (hidden behind img via z-index)
+            </div>
+          </div>
         -->
 
         <!-- WHC 2025 -->
         <div class="pub-item">
           <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg>
-              <img src="assets/img/messpa.png" alt="MESSPA Project Photo" style="width:100%; height:auto;">
-            </div>
+            <img src="assets/img/messpa.png" alt="MESSPa" onerror="this.style.display='none'">
+            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>messpa.png</span></div>
           </div>
           <div class="pub-year">2025</div>
           <div>
@@ -392,14 +305,12 @@
         <!-- RSJ 2024 -->
         <div class="pub-item">
           <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg>
-              <img src="assets/img/messpa.png" alt="MESSPA Project Photo" style="width:100%; height:auto;">
-            </div>
+            <img src="assets/img/messpa.png" alt="MESSPa RSJ" onerror="this.style.display='none'">
+            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>messpa.png</span></div>
           </div>
           <div class="pub-year">2024</div>
           <div>
-            <div class="pub-venue-badge">RSJ 2024 — Robotics National Conf. Japan </div>
+            <div class="pub-venue-badge">RSJ 2024 — Robotics National Conf. Japan</div>
             <div class="pub-title">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</div>
             <div class="pub-authors"><strong>G. Gourmelen</strong>, V. Vimolmongkolporn, Y. Iwasaki, H. Iwata · Waseda University / Iwata Lab</div>
             <a href="https://cv.hal.science/guillaume-gourmelen" target="_blank" class="pub-link">HAL Profile ↗</a>
@@ -409,10 +320,8 @@
         <!-- SIGGRAPH 2024 -->
         <div class="pub-item">
           <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg>
-              <img src="assets/img/miruoto.png" alt="Miruoto Project Photo" style="width:100%; height:auto;">
-            </div>
+            <img src="assets/img/miruoto.png" alt="Miruoto" onerror="this.style.display='none'">
+            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>miruoto.png</span></div>
           </div>
           <div class="pub-year">2024</div>
           <div>
@@ -426,10 +335,8 @@
         <!-- VRSJ 2024 -->
         <div class="pub-item">
           <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg>
-              <img src="assets/img/miruoto.png" alt="Miruoto Project Photo" style="width:100%; height:auto;">
-            </div>
+            <img src="assets/img/miruoto.png" alt="Miruoto VRSJ" onerror="this.style.display='none'">
+            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>miruoto.png</span></div>
           </div>
           <div class="pub-year">2024</div>
           <div>
@@ -443,10 +350,8 @@
         <!-- Sensors 2022 -->
         <div class="pub-item">
           <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg>
-              <span>Add photo<br/>assets/img/<br/>auv.png</span>
-            </div>
+            <img src="assets/img/auv.png" alt="AUV" onerror="this.style.display='none'">
+            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>auv.png</span></div>
           </div>
           <div class="pub-year">2022</div>
           <div>
@@ -460,10 +365,8 @@
         <!-- IROS 2021 -->
         <div class="pub-item">
           <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg>
-              <img src="assets/img/iros2021.png" alt="IROS2021 Project Photo" style="width:100%; height:auto;">
-            </div>
+            <img src="assets/img/iros2021.png" alt="IROS 2021" onerror="this.style.display='none'">
+            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>iros2021.png</span></div>
           </div>
           <div class="pub-year">2021</div>
           <div>
@@ -477,10 +380,8 @@
         <!-- SIGGRAPH Asia 2019 -->
         <div class="pub-item">
           <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg>
-              <img src="assets/img/colimbs.png" alt="Co-Limbs Project Photo" style="width:100%; height:auto;">
-            </div>
+            <img src="assets/img/colimbs.png" alt="Co-Limbs" onerror="this.style.display='none'">
+            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>colimbs.png</span></div>
           </div>
           <div class="pub-year">2019</div>
           <div>
@@ -498,50 +399,39 @@
     <section id="projects">
       <div class="section-header"><span class="section-num">02.5</span><h2 class="section-title">Featured Projects</h2></div>
 
-      <!-- MIRUOTO ─────────────────────────────────────────────────── -->
+      <!-- MIRUOTO -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-tag">ACM SIGGRAPH 2024</div>
           <div class="project-title-block">
             <div class="project-title"><em>Miruoto</em> — Seeing Sound at the Stadium</div>
-            <div class="project-subtitle">Real-time AI visual rendering of sports atmosphere · Waseda University / JST · 2022–2024</div>
+            <div class="project-subtitle">Real-time AI visual rendering of sports atmosphere · Waseda University / JST · 2022–2025</div>
           </div>
         </div>
-
-        <!-- Videos — replace MIRUOTO_VIDEO_URL_1 and _2 with your embed URLs -->
         <div class="project-video-grid">
           <div class="project-video">
             <div class="project-video-placeholder" onclick="loadVideo(this,'MIRUOTO_VIDEO_URL_1')">
-              <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
-                <circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/>
-                <polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/>
-              </svg>
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/></svg>
               <span>Live at the Deaflympics Finals</span>
               <span style="font-size:9px;color:var(--muted)">Real-time system · Nov 2025</span>
             </div>
           </div>
           <div class="project-video">
             <div class="project-video-placeholder" onclick="loadVideo(this,'MIRUOTO_VIDEO_URL_2')">
-              <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
-                <circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/>
-                <polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/>
-              </svg>
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/></svg>
               <span>Project Overview</span>
               <span style="font-size:9px;color:var(--muted)">ACM SIGGRAPH 2024</span>
             </div>
           </div>
         </div>
-
         <div class="project-body">
           <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:680px;margin-bottom:28px;">
             <strong style="color:var(--text)">Miruoto</strong> (ミルオト — "seeing sound") is a real-time AI system that makes the atmosphere of live sports events visible for Deaf and hard-of-hearing spectators — translating crowd noise and player motion into an affective visual rendering. Presented as an <strong style="color:var(--text)">Emerging Technologies demo at ACM SIGGRAPH 2024</strong> in Denver, the system was subsequently deployed <strong style="color:var(--text)">live during the championship finals of the Tokyo Deaflympics 2025</strong> (November 2025), running in real time on venue screens alongside the match.
           </p>
-
           <div class="project-pub-ref">
             <span>Publication</span>
             G. Gourmelen, S. Toriya, E. Miya, N. Shioura, H. Iwata. "Miruoto: Sports Event Atmosphere Visual Rendering through Real-time Image and Sound Processing." ACM SIGGRAPH 2024 — Emerging Technologies. <a href="https://dl.acm.org/doi/10.1145/3641517.3664393" style="color:var(--accent);text-decoration:none;">doi:10.1145/3641517.3664393 ↗</a> · <a href="https://hal.science/hal-05197860v1/document" style="color:var(--accent);text-decoration:none;">PDF ↗</a> · <a href="https://miruoto.jp" target="_blank" style="color:var(--accent);text-decoration:none;">miruoto.jp ↗</a>
           </div>
-
           <div class="project-meta-row" style="margin-top:28px">
             <dl class="project-meta-col"><dt>Institution</dt><dd>Waseda University · Iwata Lab</dd></dl>
             <dl class="project-meta-col"><dt>Track</dt><dd>ACM SIGGRAPH Emerging Tech</dd></dl>
@@ -550,9 +440,9 @@
             <dl class="project-meta-col"><dt>Deployed</dt><dd>Tokyo Deaflympics 2025</dd></dl>
           </div>
         </div>
-      </div><!-- /project-card miruoto -->
+      </div>
 
-      <!-- ─── IROS 2021 — IMPEDANCE ESTIMATION ──────────────────────── -->
+      <!-- IROS 2021 -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-tag">IEEE IROS 2021</div>
@@ -561,38 +451,31 @@
             <div class="project-subtitle">Human guided trajectory &amp; impedance estimation during HRI · LIRMM / Université de Montpellier · 2021</div>
           </div>
         </div>
-
         <div class="project-video">
           <div class="project-video-placeholder" onclick="loadVideo(this,'https://www.youtube.com/embed/bMBCkF2lrp8')">
-            <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
-              <circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/>
-              <polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/>
-            </svg>
+            <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/></svg>
             <span>Project Video</span>
             <span style="font-size:9px;color:var(--muted)">IEEE IROS 2021</span>
           </div>
         </div>
-
         <div class="project-body">
           <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:680px;margin-bottom:28px;">
             This work addresses a core challenge in teleoperation: <strong style="color:var(--text)">transferring not just position but physical interaction quality</strong> from a human to a robotic system. The system estimates the human operator's <strong style="color:var(--text)">arm impedance</strong> (stiffness and damping) online during task execution, then adapts the robot's impedance to match — so the robot replicates not only the trajectory but the <em>compliance strategy</em> the human chose for a given task. A 7-DoF robot arm was controlled via a 3-DoF haptic device, with real-time impedance adaptation demonstrated on physical assistance tasks.
           </p>
-
           <div class="project-pub-ref">
             <span>Publication</span>
             G. Gourmelen, B. Navarro, A. Cherubini, G. Ganesh. "Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance." IEEE IROS 2021. <a href="https://doi.org/10.1109/IROS51168.2021.9636418" style="color:var(--accent);text-decoration:none;">doi:10.1109/IROS51168.2021.9636418 ↗</a> · <a href="https://hal.science/hal-03324747v1/document" style="color:var(--accent);text-decoration:none;">PDF ↗</a>
           </div>
-
           <div class="project-meta-row" style="margin-top:28px">
             <dl class="project-meta-col"><dt>Institution</dt><dd>LIRMM · Université de Montpellier</dd></dl>
             <dl class="project-meta-col"><dt>Funding</dt><dd>JST ERATO Jizai Body</dd></dl>
-            <dl class="project-meta-col"><dt>Role</dt><dd>Researcher</dd></dl>
+            <dl class="project-meta-col"><dt>Role</dt><dd>Lead Researcher</dd></dl>
             <dl class="project-meta-col"><dt>Robot</dt><dd>7-DoF arm · 3-DoF haptic</dd></dl>
           </div>
         </div>
-      </div><!-- /iros -->
+      </div>
 
-      <!-- ─── CO-LIMBS — SIGGRAPH ASIA 2019 ─────────────────────────── -->
+      <!-- CO-LIMBS -->
       <div class="project-card">
         <div class="project-header">
           <div class="project-tag">ACM SIGGRAPH Asia 2019</div>
@@ -601,90 +484,30 @@
             <div class="project-subtitle">Supernumerary robotic limbs with intuitive shared control · UTokyo / LIRMM JST ERATO · 2019</div>
           </div>
         </div>
-
         <div class="project-video">
           <div class="project-video-placeholder" onclick="loadVideo(this,'https://www.youtube.com/embed/cb1HsKfddYY')">
-            <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
-              <circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/>
-              <polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/>
-            </svg>
+            <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/></svg>
             <span>Project Video</span>
             <span style="font-size:9px;color:var(--muted)">ACM SIGGRAPH Asia 2019</span>
           </div>
         </div>
-
         <div class="project-body">
           <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:680px;margin-bottom:28px;">
             Co-Limbs is a <strong style="color:var(--text)">wearable supernumerary robotic arm</strong> designed to be worn and controlled intuitively — without dedicated hand controllers or explicit command inputs. The system decodes the wearer's <strong style="color:var(--text)">intent from shoulder and wrist kinematics</strong>, activating a library of shared-control motion primitives (reach, grasp, hold) that blend human guidance with robotic force and precision. Developed during a research visit to the Inami Lab at the University of Tokyo, demonstrated live at <strong style="color:var(--text)">ACM SIGGRAPH Asia 2019</strong> Emerging Technologies (Brisbane). This work formed a core chapter of the doctoral thesis.
           </p>
-
           <div class="project-pub-ref">
             <span>Publication</span>
             G. Gourmelen, A. Verhulst, B. Navarro, T. Sasaki, G. Ganesh, M. Inami. "Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms." ACM SIGGRAPH Asia 2019 — Emerging Technologies. <a href="https://doi.org/10.1145/3355049.3360526" style="color:var(--accent);text-decoration:none;">doi:10.1145/3355049.3360526 ↗</a> · <a href="https://hal.science/hal-02407032v1/document" style="color:var(--accent);text-decoration:none;">PDF ↗</a>
           </div>
-
           <div class="project-meta-row" style="margin-top:28px">
             <dl class="project-meta-col"><dt>Institution</dt><dd>UTokyo Inami Lab / LIRMM</dd></dl>
             <dl class="project-meta-col"><dt>Funding</dt><dd>JST ERATO Jizai Body</dd></dl>
-            <dl class="project-meta-col"><dt>Role</dt><dd>Researcher</dd></dl>
+            <dl class="project-meta-col"><dt>Role</dt><dd>Lead Researcher</dd></dl>
             <dl class="project-meta-col"><dt>Track</dt><dd>SIGGRAPH Asia Emerging Tech</dd></dl>
           </div>
         </div>
-      </div><!-- /co-limbs -->
-
-    </section>
-
-    <!-- ─── NEWS ──────────────────────────────────────────────────── -->
-    <section id="news">
-      <div class="section-header"><span class="section-num">02.8</span><h2 class="section-title">News</h2></div>
-
-      <!-- Legend -->
-      <div class="news-legend">
-        <div class="news-legend-item"><div class="news-legend-dot" style="background:var(--accent2)"></div>Chair / AE</div>
-        <div class="news-legend-item"><div class="news-legend-dot" style="background:#d4006a"></div>Award</div>
-        <div class="news-legend-item"><div class="news-legend-dot" style="background:#2d8a4e"></div>Talk / Demo</div>
-        <div class="news-legend-item"><div class="news-legend-dot" style="background:#6d4fc4"></div>Media</div>
-        <div class="news-legend-item"><div class="news-legend-dot" style="background:var(--mid)"></div>Misc</div>
       </div>
 
-      <div class="news-list">
-
-        <!-- ── ADD YOUR NEWS ITEMS HERE ──────────────────────────────
-             Copy a <div class="news-item"> block and edit it.
-             Types: review / chair / award / talk / media / misc
-        ─────────────────────────────────────────────────────────── -->
-
-        <div class="news-item">
-          <div class="news-date">Mar 2026</div>
-          <div class="news-type-dot chair"></div>
-          <div class="news-content">
-            <div class="news-tag chair">Chair</div>
-            <div class="news-headline">Session Chair — Augmented Human 2026</div>
-            <div class="news-sub">Session: Human–Robot Communication &amp; Control · AH 2026</div>
-          </div>
-        </div>
-
-        <div class="news-item">
-          <div class="news-date">Nov 2025</div>
-          <div class="news-type-dot talk"></div>
-          <div class="news-content">
-            <div class="news-tag talk">Demo</div>
-            <div class="news-headline">Miruoto deployed live — Tokyo Deaflympics 2025 Championship Finals</div>
-            <div class="news-sub">Real-time AI atmosphere rendering running during the finals match · Tokyo, Japan</div>
-          </div>
-        </div>
-
-        <div class="news-item">
-          <div class="news-date">Aug 2024</div>
-          <div class="news-type-dot talk"></div>
-          <div class="news-content">
-            <div class="news-tag talk">Presentation</div>
-            <div class="news-headline">Miruoto presented at ACM SIGGRAPH 2024 — Denver, CO</div>
-            <div class="news-sub"><a href="https://dl.acm.org/doi/10.1145/3641517.3664393" target="_blank">ACM DL ↗</a></div>
-          </div>
-        </div>
-
-      </div>
     </section>
 
     <!-- ─── EXPERIENCE ────────────────────────────────────────────── -->
@@ -708,7 +531,7 @@
           </div>
         </div>
         <div class="exp-item">
-          <div class="exp-period">Apr 2023 — Mar 2025<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">ONGOING</span></div>
+          <div class="exp-period">Apr 2023 — Mar 2025<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">2 YEARS</span></div>
           <div>
             <div class="exp-org">Waseda University · Iwata Lab · Tokyo</div>
             <div class="exp-role">Research Associate</div>
@@ -747,67 +570,32 @@
       <div class="section-header"><span class="section-num">03.5</span><h2 class="section-title">Work in Progress</h2></div>
       <div class="pub-list">
         <div class="pub-item">
-          <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg>
-              <span>In Progress</span>
-            </div>
-          </div>
+          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
           <div class="pub-year">2025</div>
           <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress</div><div class="pub-title">Avatar Teleoperation with Haptic Feedback</div><div class="pub-authors"><strong>G. Gourmelen</strong> · Keio University / Embodied Media, KMD</div></div>
         </div>
-
         <div class="pub-item">
-          <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg>
-              <span>In Progress</span>
-            </div>
-          </div>
+          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
           <div class="pub-year">2025</div>
-          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress (Under review UIST 2026)</div><div class="pub-title">Body Sublimation: Designing State-Changing Extended Hand for Embodied Out-of-Reach Interaction</div><div class="pub-authors">M. Ohta, R. Ban, H. Nii, <strong>G. Gourmelen</strong>, T. Narumi, M. Sousa, T .Yoshida, K. Minamizawa · Keio University / Embodied Media, KMD</div></div>
+          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">Under Review · UIST 2026</div><div class="pub-title">Body Sublimation: Designing State-Changing Extended Hand for Embodied Out-of-Reach Interaction</div><div class="pub-authors">M. Ohta, R. Ban, H. Nii, <strong>G. Gourmelen</strong>, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa · Keio University / Embodied Media, KMD</div></div>
         </div>
-
         <div class="pub-item">
-          <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg>
-              <span>In Progress</span>
-            </div>
-          </div>
+          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
           <div class="pub-year">2025</div>
           <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress</div><div class="pub-title">Transparent Screen Robotic AI Vision</div><div class="pub-authors"><strong>G. Gourmelen</strong> · Keio University / Embodied Media, KMD</div></div>
         </div>
-    
         <div class="pub-item">
-          <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg>
-              <span>In Progress</span>
-            </div>
-          </div>
+          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
           <div class="pub-year">2025</div>
           <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress</div><div class="pub-title">Learning from Demonstration for Echocardiography Teleoperation Robot</div><div class="pub-authors"><strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div></div>
         </div>
-
         <div class="pub-item">
-          <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg>
-              <span>In Progress</span>
-            </div>
-          </div>
+          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
           <div class="pub-year">2025</div>
-          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress (Under review IROS 2026)</div><div class="pub-title">Hybrid Roller–Jamming Grasping: Active Intake with Post-Capture Stiffening</div><div class="pub-authors">Y. Ren, <strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div></div>
+          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">Under Review · IROS 2026</div><div class="pub-title">Hybrid Roller–Jamming Grasping: Active Intake with Post-Capture Stiffening</div><div class="pub-authors">Y. Ren, <strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div></div>
         </div>
-
         <div class="pub-item">
-          <div class="pub-thumb">
-            <div class="pub-thumb-placeholder">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg>
-              <span>In Progress</span>
-            </div>
-          </div>
+          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
           <div class="pub-year">2025</div>
           <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress</div><div class="pub-title">Augmented Ascent: Third-Person AR Support for Bouldering</div><div class="pub-authors"><strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div></div>
         </div>
@@ -818,30 +606,16 @@
     <section id="contact">
       <div class="section-header"><span class="section-num">05</span><h2 class="section-title">Contact</h2></div>
       <div class="contact-grid">
-
-        <!-- Photo column -->
         <div class="contact-photo-col">
           <div class="contact-photo-frame">
-            <!--
-              ── HOW TO ADD YOUR PHOTO ───────────────────────────────
-              1. Add your photo to your GitHub repo, e.g.:
-                 /assets/img/gourmelen.jpg   (or .png / .webp)
-              2. Replace the <div class="contact-photo-placeholder"> block
-                 below with this single line:
-                 <img src="assets/img/gourmelen.jpg" alt="Guillaume Gourmelen" />
-              ─────────────────────────────────────────────────────── -->
+            <!-- Replace the div below with: <img src="assets/img/gourmelen.jpg" alt="Guillaume Gourmelen" /> -->
             <div class="contact-photo-placeholder">
-              <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
-                <circle cx="26" cy="20" r="10" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/>
-                <path d="M6 46 C6 34 46 34 46 46" stroke="rgba(0,130,150,0.5)" stroke-width="1.5" fill="none"/>
-              </svg>
-              <span>Put your photo at<br/><code style="color:var(--accent);font-size:9px;">assets/img/gourmelen.jpg</code><br/>then swap in an &lt;img&gt; tag</span>
+              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="20" r="10" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><path d="M6 46 C6 34 46 34 46 46" stroke="rgba(0,130,150,0.5)" stroke-width="1.5" fill="none"/></svg>
+              <span>Add photo at<br/><code style="color:var(--accent);font-size:9px;">assets/img/gourmelen.jpg</code></span>
             </div>
           </div>
           <div class="contact-photo-caption">Guillaume Gourmelen · Tokyo, 2025</div>
         </div>
-
-        <!-- Right column: text + links -->
         <div class="contact-right">
           <div class="contact-blurb">Open to <em>research collaborations</em>, visiting positions, and conversations about teleoperation, haptics, and embodied systems.</div>
           <div class="contact-links">
@@ -851,7 +625,6 @@
             <a href="https://www.embodiedmedia.org/members" target="_blank" class="contact-link">KMD Embodied Media Lab<span class="contact-link-label">Lab</span></a>
           </div>
         </div>
-
       </div>
     </section>
 
@@ -862,196 +635,93 @@
   </div>
 
   <script>
-  /* ─── Canvas animation (unchanged) ──────────────────────────────── */
-  const canvas = document.getElementById('robo-canvas');
-  const ctx = canvas.getContext('2d');
-  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-  resize(); window.addEventListener('resize', resize);
-  let t = 0;
-  const CYAN='rgba(0,130,150,', AMBER='rgba(180,100,0,', BLUE='rgba(0,80,180,', WHITE='rgba(60,100,130,';
+  const canvas=document.getElementById('robo-canvas'),ctx=canvas.getContext('2d');
+  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  let t=0;
+  const CYAN='rgba(0,130,150,',AMBER='rgba(180,100,0,',BLUE='rgba(0,80,180,',WHITE='rgba(60,100,130,';
   function proj(x,y,z,cx,cy,fov=300){const s=fov/(fov+z+100);return{x:cx+x*s,y:cy+y*s,s};}
   const ease=x=>x<0.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
-  const pulse=(speed,phase=0)=>Math.sin(t*speed+phase);
-
   function drawHumanArm(cx,cy){
-    const masterPhase=t*0.11, raw=Math.sin(masterPhase);
-    const intent=ease((raw+1)/2);
-    const breath=Math.sin(t*0.17)*0.03, tremor=Math.sin(t*1.6)*0.008+Math.sin(t*2.3)*0.005;
-    const weightY=Math.cos(t*0.17)*3;
-    const sx=cx,sy=cy;
-    const shoulderPitch=-0.28+intent*0.42+breath+tremor;
-    const shoulderYaw=intent*0.15+Math.sin(t*0.13)*0.04;
-    const upperLen=85;
-    const elbowX=sx+Math.cos(shoulderPitch)*upperLen, elbowY=sy+Math.sin(shoulderPitch)*upperLen+weightY;
-    const elbowZ=-15+shoulderYaw*25;
-    const laggedIntent=ease((Math.sin(masterPhase-0.15)+1)/2);
-    const forearmLen=72, elbowBend=0.38-laggedIntent*0.22+tremor;
-    const wristX=elbowX+Math.cos(shoulderPitch-elbowBend)*forearmLen;
-    const wristY=elbowY+Math.sin(shoulderPitch-elbowBend)*forearmLen+weightY*0.3;
-    const wristZ=elbowZ-8;
-    const wristRoll=Math.sin(t*0.19+0.8)*0.08+tremor, handLen=26;
-    const handX=wristX+Math.cos(shoulderPitch-elbowBend-0.08+wristRoll)*handLen;
-    const handY=wristY+Math.sin(shoulderPitch-elbowBend-0.08+wristRoll)*handLen;
-    const pS=proj(sx-cx,sy-cy,0,cx,cy), pE=proj(elbowX-cx,elbowY-cy,elbowZ,cx,cy);
-    const pW=proj(wristX-cx,wristY-cy,wristZ,cx,cy), pH=proj(handX-cx,handY-cy,wristZ-5,cx,cy);
+    const mp=t*0.11,raw=Math.sin(mp),intent=ease((raw+1)/2);
+    const br=Math.sin(t*0.17)*0.03,tr=Math.sin(t*1.6)*0.008+Math.sin(t*2.3)*0.005,wy=Math.cos(t*0.17)*3;
+    const sp=-0.28+intent*0.42+br+tr,sy2=intent*0.15+Math.sin(t*0.13)*0.04,ul=85;
+    const ex=cx+Math.cos(sp)*ul,ey=cy+Math.sin(sp)*ul+wy,ez=-15+sy2*25;
+    const li=ease((Math.sin(mp-0.15)+1)/2),fl=72,eb=0.38-li*0.22+tr;
+    const wx=ex+Math.cos(sp-eb)*fl,wy2=ey+Math.sin(sp-eb)*fl+wy*0.3,wz=ez-8;
+    const wr=Math.sin(t*0.19+0.8)*0.08+tr,hl=26;
+    const hx=wx+Math.cos(sp-eb-0.08+wr)*hl,hy=wy2+Math.sin(sp-eb-0.08+wr)*hl;
+    const pS=proj(0,0,0,cx,cy),pE=proj(ex-cx,ey-cy,ez,cx,cy),pW=proj(wx-cx,wy2-cy,wz,cx,cy),pH=proj(hx-cx,hy-cy,wz-5,cx,cy);
     ctx.beginPath();ctx.moveTo(pS.x,pS.y);ctx.lineTo(pE.x,pE.y);ctx.strokeStyle=WHITE+'0.18)';ctx.lineWidth=9;ctx.lineCap='round';ctx.stroke();
-    ctx.beginPath();ctx.moveTo(pS.x-1,pS.y-1);ctx.lineTo(pE.x-1,pE.y-1);ctx.strokeStyle=WHITE+'0.06)';ctx.lineWidth=4;ctx.stroke();
     ctx.beginPath();ctx.moveTo(pE.x,pE.y);ctx.lineTo(pW.x,pW.y);ctx.strokeStyle=WHITE+'0.15)';ctx.lineWidth=7;ctx.lineCap='round';ctx.stroke();
     ctx.beginPath();ctx.moveTo(pW.x,pW.y);ctx.lineTo(pH.x,pH.y);ctx.strokeStyle=WHITE+'0.12)';ctx.lineWidth=5;ctx.stroke();
-    const fingerAngles=[-0.35,-0.12,0.08,0.28], fingerLen=[18,22,21,17];
-    const handAngle=Math.atan2(pH.y-pW.y,pH.x-pW.x);
-    const fingerCurl=0.2+laggedIntent*0.15;
-    fingerAngles.forEach((fa,i)=>{
-      const a=handAngle+fa, len=fingerLen[i]*(0.9+intent*0.1);
-      const p1x=pH.x+Math.cos(a)*len*0.5, p1y=pH.y+Math.sin(a)*len*0.5;
-      const p2x=pH.x+Math.cos(a+fingerCurl*0.3)*len, p2y=pH.y+Math.sin(a+fingerCurl*0.3)*len;
-      ctx.beginPath();ctx.moveTo(pH.x,pH.y);ctx.quadraticCurveTo(p1x,p1y,p2x,p2y);
-      ctx.strokeStyle=WHITE+'0.12)';ctx.lineWidth=2.5-i*0.3;ctx.lineCap='round';ctx.stroke();
-    });
-    const thumbA=handAngle-0.55;
-    ctx.beginPath();ctx.moveTo(pW.x+2,pW.y+2);ctx.lineTo(pW.x+Math.cos(thumbA)*16,pW.y+Math.sin(thumbA)*16);
-    ctx.strokeStyle=WHITE+'0.10)';ctx.lineWidth=3;ctx.lineCap='round';ctx.stroke();
+    const ha=Math.atan2(pH.y-pW.y,pH.x-pW.x),fc=0.2+li*0.15;
+    [-0.35,-0.12,0.08,0.28].forEach((fa,i)=>{const a=ha+fa,len=[18,22,21,17][i]*(0.9+intent*0.1);const p1x=pH.x+Math.cos(a)*len*0.5,p1y=pH.y+Math.sin(a)*len*0.5,p2x=pH.x+Math.cos(a+fc*0.3)*len,p2y=pH.y+Math.sin(a+fc*0.3)*len;ctx.beginPath();ctx.moveTo(pH.x,pH.y);ctx.quadraticCurveTo(p1x,p1y,p2x,p2y);ctx.strokeStyle=WHITE+'0.12)';ctx.lineWidth=2.5-i*0.3;ctx.lineCap='round';ctx.stroke();});
     ctx.beginPath();ctx.arc(pS.x,pS.y,6,0,Math.PI*2);ctx.strokeStyle=WHITE+'0.2)';ctx.lineWidth=1;ctx.stroke();
-    ctx.beginPath();ctx.arc(pE.x,pE.y,4,0,Math.PI*2);ctx.strokeStyle=WHITE+'0.15)';ctx.lineWidth=1;ctx.stroke();
-    ctx.fillStyle=WHITE+'0.14)';ctx.font='8px DM Mono, monospace';ctx.fillText('EMG',pS.x-28,pS.y-12);
-    const arrowAlpha=intent*0.3;
-    if(arrowAlpha>0.05){
-      const ax1=pH.x+Math.cos(handAngle)*20,ay1=pH.y+Math.sin(handAngle)*20;
-      const ax2=pH.x+Math.cos(handAngle)*45,ay2=pH.y+Math.sin(handAngle)*45;
-      ctx.beginPath();ctx.moveTo(ax1,ay1);ctx.lineTo(ax2,ay2);
-      ctx.strokeStyle=CYAN+arrowAlpha+')';ctx.setLineDash([3,5]);ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);
-      ctx.beginPath();ctx.moveTo(ax2,ay2);
-      ctx.lineTo(ax2-Math.cos(handAngle-0.4)*8,ay2-Math.sin(handAngle-0.4)*8);
-      ctx.lineTo(ax2-Math.cos(handAngle+0.4)*8,ay2-Math.sin(handAngle+0.4)*8);
-      ctx.closePath();ctx.fillStyle=CYAN+arrowAlpha+')';ctx.fill();
-    }
+    const aa=intent*0.3;if(aa>0.05){const ax1=pH.x+Math.cos(ha)*20,ay1=pH.y+Math.sin(ha)*20,ax2=pH.x+Math.cos(ha)*45,ay2=pH.y+Math.sin(ha)*45;ctx.beginPath();ctx.moveTo(ax1,ay1);ctx.lineTo(ax2,ay2);ctx.strokeStyle=CYAN+aa+')';ctx.setLineDash([3,5]);ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);}
     return{x:pH.x,y:pH.y,intent};
   }
-
-  function drawRobotArm(cx,cy,humanIntent){
-    const cycle=(t*0.11)%(Math.PI*2), phase=cycle/(Math.PI*2);
-    function trapeze(p,ramp=0.25){if(p<ramp)return ease(p/ramp);if(p<1-ramp)return 1.0;return ease((1-p)/ramp);}
-    const extend=phase<0.5?trapeze(phase*2,0.3):trapeze((1-phase)*2,0.3);
-    const holding=phase>0.32&&phase<0.68;
-    const microR=holding?Math.sin(t*2.4)*0.008+Math.sin(t*3.7)*0.005:0;
-    const shoulderP=-0.45+extend*0.50+microR;
-    const elbowBend=0.42-extend*0.26+microR*0.4;
-    const wristP=microR*0.8;
-    const link1=95,link2=80,link3=55,link4=35;
-    const j0x=cx,j0y=cy;
-    const j1x=j0x-Math.cos(shoulderP)*link1,j1y=j0y+Math.sin(shoulderP)*link1;
-    const j2x=j1x-Math.cos(shoulderP-elbowBend)*link2,j2y=j1y+Math.sin(shoulderP-elbowBend)*link2;
-    const j3x=j2x-Math.cos(shoulderP-elbowBend-0.15+wristP)*link3,j3y=j2y+Math.sin(shoulderP-elbowBend-0.15+wristP)*link3;
-    const j4x=j3x-Math.cos(shoulderP-elbowBend-0.1)*link4,j4y=j3y+Math.sin(shoulderP-elbowBend-0.1)*link4;
-    const joints=[[j0x,j0y],[j1x,j1y],[j2x,j2y],[j3x,j3y],[j4x,j4y]];
-    const sizes=[8,7,6,5,4];
+  function drawRobotArm(cx,cy){
+    const cycle=(t*0.11)%(Math.PI*2),phase=cycle/(Math.PI*2);
+    function trap(p,r=0.25){if(p<r)return ease(p/r);if(p<1-r)return 1;return ease((1-p)/r);}
+    const ext=phase<0.5?trap(phase*2,0.3):trap((1-phase)*2,0.3),hold=phase>0.32&&phase<0.68;
+    const mr=hold?Math.sin(t*2.4)*0.008+Math.sin(t*3.7)*0.005:0;
+    const sp=-0.45+ext*0.50+mr,eb=0.42-ext*0.26+mr*0.4,wp=mr*0.8;
+    const j0x=cx,j0y=cy,j1x=j0x-Math.cos(sp)*95,j1y=j0y+Math.sin(sp)*95;
+    const j2x=j1x-Math.cos(sp-eb)*80,j2y=j1y+Math.sin(sp-eb)*80;
+    const j3x=j2x-Math.cos(sp-eb-0.15+wp)*55,j3y=j2y+Math.sin(sp-eb-0.15+wp)*55;
+    const j4x=j3x-Math.cos(sp-eb-0.1)*35,j4y=j3y+Math.sin(sp-eb-0.1)*35;
+    const joints=[[j0x,j0y],[j1x,j1y],[j2x,j2y],[j3x,j3y],[j4x,j4y]],sizes=[8,7,6,5,4];
     ctx.beginPath();ctx.rect(j0x-22,j0y,44,14);ctx.strokeStyle=CYAN+'0.2)';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle=CYAN+'0.03)';ctx.fill();
     for(let i=0;i<joints.length-1;i++){
       const[ax,ay]=joints[i],[bx,by]=joints[i+1];
       ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.strokeStyle=CYAN+(0.15-i*0.02)+')';ctx.lineWidth=8-i*1.2;ctx.lineCap='round';ctx.stroke();
-      ctx.beginPath();ctx.setLineDash([5,7]);ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.strokeStyle=CYAN+'0.05)';ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);
       ctx.beginPath();ctx.arc(ax,ay,sizes[i],0,Math.PI*2);ctx.strokeStyle=CYAN+'0.3)';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle=CYAN+'0.05)';ctx.fill();
       ctx.beginPath();ctx.arc(ax,ay,2.5,0,Math.PI*2);ctx.fillStyle=AMBER+'0.7)';ctx.fill();
-      ctx.beginPath();ctx.arc(ax,ay,sizes[i]+5,-0.8,-0.8+extend*1.2);ctx.strokeStyle=AMBER+'0.2)';ctx.lineWidth=1;ctx.stroke();
-      ctx.fillStyle=CYAN+'0.18)';ctx.font='8px DM Mono, monospace';ctx.fillText('J'+i,ax+sizes[i]+3,ay-3);
     }
-    const[ex,ey]=joints[joints.length-1];
+    const[ex,ey]=joints[4];
     ctx.beginPath();ctx.arc(ex,ey,6,0,Math.PI*2);ctx.strokeStyle=AMBER+'0.8)';ctx.lineWidth=2;ctx.stroke();
     ctx.beginPath();ctx.arc(ex,ey,2.5,0,Math.PI*2);ctx.fillStyle=AMBER+'1.0)';ctx.fill();
-    const toolAngle=Math.atan2(ey-joints[3][1],ex-joints[3][0])+wristP*0.5;
-    const frameLen=22;
-    [{angle:toolAngle,color:AMBER,label:'X'},{angle:toolAngle-Math.PI/2,color:CYAN,label:'Y'},{angle:toolAngle-Math.PI*0.7,color:BLUE,label:'Z'}].forEach(({angle,color,label})=>{
-      const len=label==='Z'?frameLen*0.7:frameLen;
-      const tx=ex+Math.cos(angle)*len,ty=ey+Math.sin(angle)*len;
-      ctx.beginPath();ctx.moveTo(ex,ey);ctx.lineTo(tx,ty);ctx.strokeStyle=color+'0.7)';ctx.lineWidth=2;ctx.lineCap='round';ctx.stroke();
-      ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(tx-Math.cos(angle-0.4)*6,ty-Math.sin(angle-0.4)*6);ctx.lineTo(tx-Math.cos(angle+0.4)*6,ty-Math.sin(angle+0.4)*6);ctx.closePath();ctx.fillStyle=color+'0.7)';ctx.fill();
-      ctx.fillStyle=color+'0.6)';ctx.font='9px DM Mono, monospace';ctx.fillText(label,tx+Math.cos(angle)*5-3,ty+Math.sin(angle)*5+3);
-    });
-    ctx.beginPath();ctx.arc(ex,ey,3,0,Math.PI*2);ctx.fillStyle=WHITE+'0.6)';ctx.fill();
     if(!drawRobotArm.trail)drawRobotArm.trail=[];
-    drawRobotArm.trail.push({x:ex,y:ey});
-    if(drawRobotArm.trail.length>70)drawRobotArm.trail.shift();
-    drawRobotArm.trail.forEach((p,i)=>{const a=(i/drawRobotArm.trail.length)*0.15;ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fillStyle=AMBER+a+')';ctx.fill();});
-    ctx.fillStyle=CYAN+'0.18)';ctx.font='9px DM Mono, monospace';ctx.fillText('MODE: TELE-OP',cx-30,cy-120);
-    const phaseLabel=phase<0.25?'WAIT':phase<0.5?'EXTEND':phase<0.65?'HOLD':'RETRACT';
-    ctx.fillStyle=AMBER+'0.3)';ctx.fillText('PHASE: '+phaseLabel,cx-30,cy-108);
+    drawRobotArm.trail.push({x:ex,y:ey});if(drawRobotArm.trail.length>70)drawRobotArm.trail.shift();
+    drawRobotArm.trail.forEach((p,i)=>{const a=(i/drawRobotArm.trail.length)*0.12;ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fillStyle=AMBER+a+')';ctx.fill();});
+    ctx.fillStyle=CYAN+'0.18)';ctx.font='9px DM Mono,monospace';ctx.fillText('MODE: TELE-OP',cx-30,cy-120);
+    ctx.fillStyle=AMBER+'0.3)';ctx.fillText('PHASE: '+(phase<0.25?'WAIT':phase<0.5?'EXTEND':phase<0.65?'HOLD':'RETRACT'),cx-30,cy-108);
     return{x:ex,y:ey};
   }
-
   function drawInteractionLink(hx,hy,rx,ry,intent){
     if(intent<0.05)return;
-    const alpha=intent*0.25, midX=(hx+rx)/2, midY=(hy+ry)/2-20*intent;
-    ctx.beginPath();ctx.moveTo(hx,hy);ctx.quadraticCurveTo(midX,midY,rx,ry);
-    ctx.strokeStyle=CYAN+(alpha*0.8)+')';ctx.lineWidth=1.5;ctx.setLineDash([4,6]);ctx.stroke();ctx.setLineDash([]);
-    for(let i=0;i<3;i++){const tP=((t*0.6+i/3)%1);const px=(1-tP)*(1-tP)*hx+2*(1-tP)*tP*midX+tP*tP*rx;const py=(1-tP)*(1-tP)*hy+2*(1-tP)*tP*midY+tP*tP*ry;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fillStyle=CYAN+(intent*0.7)+')';ctx.fill();}
-    for(let i=0;i<2;i++){const tP=((t*0.45+i/2+0.5)%1);const px=(1-tP)*(1-tP)*rx+2*(1-tP)*tP*midX+tP*tP*hx;const py=(1-tP)*(1-tP)*ry+2*(1-tP)*tP*midY+tP*tP*hy;ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fillStyle=AMBER+(intent*0.5)+')';ctx.fill();}
-    if(intent>0.3){ctx.fillStyle=CYAN+(intent*0.3)+')';ctx.font='8px DM Mono, monospace';ctx.fillText('haptic feedback ←',midX-35,midY-10);ctx.fillText('→ motor cmd',midX-20,midY+4);}
+    const alpha=intent*0.25,midX=(hx+rx)/2,midY=(hy+ry)/2-20*intent;
+    ctx.beginPath();ctx.moveTo(hx,hy);ctx.quadraticCurveTo(midX,midY,rx,ry);ctx.strokeStyle=CYAN+(alpha*0.8)+')';ctx.lineWidth=1.5;ctx.setLineDash([4,6]);ctx.stroke();ctx.setLineDash([]);
+    for(let i=0;i<3;i++){const tP=((t*0.6+i/3)%1),px=(1-tP)*(1-tP)*hx+2*(1-tP)*tP*midX+tP*tP*rx,py=(1-tP)*(1-tP)*hy+2*(1-tP)*tP*midY+tP*tP*ry;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fillStyle=CYAN+(intent*0.7)+')';ctx.fill();}
   }
-
   function drawTelemetry(x,y,w,label,color,freq,phase){
-    ctx.beginPath();
-    for(let i=0;i<80;i++){const val=Math.sin((i+t*12)*freq*0.25)*18+Math.sin((i+t*7)*(freq*1.6)*0.25+phase)*8;const px=x+(i/80)*w;i===0?ctx.moveTo(px,y+val):ctx.lineTo(px,y+val);}
+    ctx.beginPath();for(let i=0;i<80;i++){const val=Math.sin((i+t*12)*freq*0.25)*18+Math.sin((i+t*7)*(freq*1.6)*0.25+phase)*8,px=x+(i/80)*w;i===0?ctx.moveTo(px,y+val):ctx.lineTo(px,y+val);}
     ctx.strokeStyle=color+'0.35)';ctx.lineWidth=1;ctx.stroke();
-    ctx.fillStyle=color+'0.22)';ctx.font='9px DM Mono, monospace';ctx.fillText(label,x,y-14);
+    ctx.fillStyle=color+'0.22)';ctx.font='9px DM Mono,monospace';ctx.fillText(label,x,y-14);
     ctx.fillStyle=color+'0.45)';ctx.fillText((Math.sin(t*3.1+phase)*18).toFixed(2)+'Nm',x+w-48,y-14);
   }
-
-  function drawGrid(){
-    ctx.strokeStyle=CYAN+'0.06)';ctx.lineWidth=1;
-    for(let x=0;x<canvas.width;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}
-    for(let y=0;y<canvas.height;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}
-  }
-
-  function drawFrame(x,y){
-    [['X',0,AMBER],['Y',-Math.PI/2,CYAN],['Z',-Math.PI/4,BLUE]].forEach(([l,a,c])=>{
-      const len=l==='Z'?18:28;
-      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+Math.cos(a)*len,y+Math.sin(a)*len);ctx.strokeStyle=c+'0.45)';ctx.lineWidth=1.5;ctx.stroke();
-      ctx.fillStyle=c+'0.5)';ctx.font='10px DM Mono, monospace';ctx.fillText(l,x+Math.cos(a)*(len+5)-3,y+Math.sin(a)*(len+5)+4);
-    });
-    ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=WHITE+'0.5)';ctx.fill();
-  }
-
+  function drawGrid(){ctx.strokeStyle=CYAN+'0.06)';ctx.lineWidth=1;for(let x=0;x<canvas.width;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}for(let y=0;y<canvas.height;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}}
   function animate(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    drawGrid();
-    const centerY=canvas.height*0.48, humanCX=canvas.width*0.22, robotCX=canvas.width*0.78;
-    const hand=drawHumanArm(humanCX,centerY);
-    const ee=drawRobotArm(robotCX,centerY,hand.intent);
+    ctx.clearRect(0,0,canvas.width,canvas.height);drawGrid();
+    const cY=canvas.height*0.48,hCX=canvas.width*0.22,rCX=canvas.width*0.78;
+    const hand=drawHumanArm(hCX,cY),ee=drawRobotArm(rCX,cY);
     drawInteractionLink(hand.x,hand.y,ee.x,ee.y,hand.intent);
     const ty=canvas.height-55;
     drawTelemetry(canvas.width*0.28,ty,canvas.width*0.44,'τ_J1',CYAN,1,0);
     drawTelemetry(canvas.width*0.28,ty+22,canvas.width*0.44,'τ_J2',AMBER,1.4,1.2);
-    drawFrame(55,canvas.height-48);
-    t+=0.009;
-    requestAnimationFrame(animate);
+    t+=0.009;requestAnimationFrame(animate);
   }
   animate();
 
-  /* ─── Email reveal ────────────────────────────────────────────── */
-  function revealEmail(el){
-    const u='guillaume', d=['keio','jp'].join('.');
-    const email=u+'@'+d; el.href='mailto:'+email; el.childNodes[0].textContent=email+' ';
-  }
+  function revealEmail(el){const u='guillaume',d=['keio','jp'].join('.');const email=u+'@'+d;el.href='mailto:'+email;el.childNodes[0].textContent=email+' ';}
 
-  /* ─── Video loader — set your embed URLs as the second argument ── */
-  // Replace 'MIRUOTO_VIDEO_URL_1' and 'MIRUOTO_VIDEO_URL_2' in the HTML above
-  // with your actual YouTube / Vimeo embed URLs, e.g.:
-  //   onclick="loadVideo(this,'https://www.youtube.com/embed/YOUR_ID')"
-  //   onclick="loadVideo(this,'https://player.vimeo.com/video/YOUR_ID')"
-
-  function loadVideo(el, url) {
-    const wrap = el.parentElement;
-    if (url && !url.startsWith('MIRUOTO')) {
-      wrap.innerHTML = `<iframe src="${url}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  function loadVideo(el,url){
+    const wrap=el.parentElement;
+    if(url&&!url.startsWith('MIRUOTO')){
+      wrap.innerHTML=`<iframe src="${url}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
     } else {
-      wrap.innerHTML = `
-        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#eef3f7;gap:14px;padding:24px;text-align:center;">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="16,11 16,29 31,20" fill="rgba(0,130,150,0.5)"/></svg>
-          <p style="font-family:'DM Mono',monospace;font-size:11px;color:#3d6880;max-width:280px;line-height:1.7;">
-            Paste your embed URL in the <code style="color:#0099aa;">onclick</code> attribute.<br/>
-            <a href="https://miruoto.jp" target="_blank" style="color:#0099aa;text-decoration:none;">miruoto.jp ↗</a>
-          </p>
-        </div>`;
+      wrap.innerHTML=`<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#eef3f7;gap:14px;padding:24px;text-align:center;"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="16,11 16,29 31,20" fill="rgba(0,130,150,0.5)"/></svg><p style="font-family:'DM Mono',monospace;font-size:11px;color:#3d6880;max-width:280px;line-height:1.7;">Replace MIRUOTO_VIDEO_URL_1 / _2 with your YouTube embed URL.<br/><a href="https://miruoto.jp" target="_blank" style="color:#0099aa;text-decoration:none;">miruoto.jp ↗</a></p></div>`;
     }
   }
   </script>
