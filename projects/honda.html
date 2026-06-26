@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bimanual Avatar Teleoperation — Guillaume Gourmelen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet"/>
+<style>
+/* ═══ VARIABLES ═══════════════════════════════════════════════ */
+:root{
+  --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
+  --accent:#c97800;--accent2:#c97800;
+  --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
+
+/* ═══ NAV ══════════════════════════════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.06);box-shadow:0 1px 24px rgba(13,31,48,0.06);}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:#0099aa;letter-spacing:0.05em;text-decoration:none;}
+.nav-links{display:flex;gap:24px;list-style:none;flex-wrap:wrap;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-back{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+.nav-back:hover{color:var(--accent);}
+.nav-back::before{content:'←';}
+
+/* ═══ LAYOUT ═══════════════════════════════════════════════════ */
+.container{max-width:960px;margin:0 auto;padding:0 32px;position:relative;}
+section{padding:64px 0;border-top:1px solid var(--border);}
+.section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:36px;}
+.section-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent2);}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(22px,3vw,32px);font-weight:300;letter-spacing:-0.01em;color:var(--text);}
+footer{padding:28px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;}
+footer a{color:var(--accent);text-decoration:none;}
+::selection{background:var(--accent);color:#fff;}
+
+/* ═══ OVERVIEW LAYOUT — lead image beside intro text ═══════════
+   Lead image sits next to the overview text on desktop, stacks above
+   on mobile. If gallery-loader.js finds no image, a soft placeholder
+   (tinted with --accent) stays in its place — layout never breaks.
+   ════════════════════════════════════════════════════════════ */
+.overview-layout{display:grid;grid-template-columns:280px 1fr;gap:32px;align-items:start;}
+.overview-lead{
+  position:relative;aspect-ratio:4/3;overflow:hidden;flex-shrink:0;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 14%,var(--bg)),var(--bg));
+  border:1px solid var(--border);
+}
+.overview-lead.has-image{background:none;border-color:transparent;}
+.overview-lead-placeholder{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;color:var(--accent);opacity:0.45;
+}
+.overview-lead-placeholder span{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);opacity:1;}
+.overview-lead.has-image .overview-lead-placeholder{display:none;}
+.overview-text{min-width:0;}
+@media(max-width:700px){
+  .overview-layout{grid-template-columns:1fr;}
+  .overview-lead{aspect-ratio:16/9;}
+}
+
+/* ═══ TOP CAPTION BAR (replaces old full-bleed hero) ════════════ */
+.project-topbar{
+  margin-top:72px;padding:14px 0;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.project-topbar-title{font-family:'Fraunces',serif;font-size:15px;color:var(--text);}
+.project-topbar-tag{
+  font-size:9px;letter-spacing:0.15em;text-transform:uppercase;
+  padding:3px 9px;border:1px solid var(--accent);color:var(--accent);
+}
+
+/* ═══ META STRIP ══════════════════════════════════════════════ */
+.meta-strip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:40px;
+}
+.meta-cell{
+  background:var(--surface);
+  padding:18px 20px;
+  display:flex;flex-direction:column;gap:5px;
+}
+.meta-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);}
+.meta-value{font-size:12px;color:var(--text);}
+.meta-value a{color:var(--accent);text-decoration:none;}
+
+/* ═══ CONTENT SECTIONS ════════════════════════════════════════ */
+.prose{font-size:13px;color:var(--mid);line-height:1.95;max-width:680px;}
+.prose+.prose{margin-top:18px;}
+.prose strong{color:var(--text);font-weight:500;}
+.prose a{color:var(--accent);}
+
+.highlight-box{
+  margin-top:28px;padding:20px 24px;
+  border-left:3px solid var(--accent);
+  background:rgba(0,153,170,0.04);
+  font-size:13px;color:var(--mid);line-height:1.9;
+}
+.highlight-box strong{color:var(--text);}
+
+/* ── Video embed ── */
+.video-wrap{
+  position:relative;width:100%;padding-bottom:56.25%;
+  background:#0d1f30;margin-top:32px;
+}
+.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.video-placeholder{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#1e0c06 0%,#2e1208 100%);
+  cursor:pointer;transition:opacity 0.2s;
+}
+.video-placeholder:hover{opacity:0.85;}
+.play-btn{
+  width:60px;height:60px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.4);
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color 0.2s,transform 0.2s;
+}
+.video-placeholder:hover .play-btn{border-color:rgba(255,255,255,0.8);transform:scale(1.08);}
+.play-btn svg{margin-left:4px;}
+.video-label{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
+
+/* ── Video grid (2 col) ── */
+.video-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:32px;}
+.video-grid .video-wrap{margin-top:0;}
+
+/* ── Image gallery (auto-populated by gallery-loader.js) ── */
+.auto-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:3px;margin-top:32px;}
+.gallery-item{
+  aspect-ratio:4/3;overflow:hidden;
+  background:var(--border);position:relative;
+}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s;}
+.gallery-item:hover img{transform:scale(1.05);}
+
+/* ── Publication reference box ── */
+.pub-ref{
+  margin-top:28px;padding:18px 22px;
+  border:1px solid rgba(201,120,0,0.25);
+  background:rgba(201,120,0,0.03);
+  font-size:12px;color:var(--mid);line-height:1.8;
+}
+.pub-ref-label{
+  font-size:9px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--accent2);display:block;margin-bottom:6px;
+}
+.pub-ref a{color:var(--accent);text-decoration:none;}
+
+/* ── Tags ── */
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
+.tag{
+  font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  padding:4px 10px;border:1px solid var(--border);color:var(--mid);
+}
+
+/* ── Nav between projects ── */
+.project-nav{
+  display:grid;grid-template-columns:1fr 1fr;gap:3px;
+  margin-top:64px;
+}
+.project-nav-link{
+  padding:20px 22px;background:var(--surface);border:1px solid var(--border);
+  text-decoration:none;display:flex;flex-direction:column;gap:6px;
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
+.project-nav-link:hover{border-color:var(--accent);box-shadow:0 2px 16px rgba(0,153,170,0.08);}
+.project-nav-dir{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);}
+.project-nav-title{font-family:'Fraunces',serif;font-size:16px;font-weight:300;color:var(--text);}
+.project-nav-link.next{text-align:right;}
+.project-nav-link.next .project-nav-dir::after{content:' →';}
+.project-nav-link.prev .project-nav-dir::before{content:'← ';}
+
+/* ═══ RESPONSIVE ════════════════════════════════════════════== */
+@media(max-width:700px){
+  nav{padding:14px 16px;flex-wrap:wrap;gap:8px;}
+  .nav-links{gap:12px;}
+  .container{padding:0 16px;}
+  .meta-strip{grid-template-columns:1fr 1fr;}
+  .video-grid{grid-template-columns:1fr;}
+  .auto-gallery{grid-template-columns:1fr 1fr;}
+  .project-hero-media{padding-bottom:68%;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">G. Gourmelen</a>
+  <a class="nav-back" href="../index.html#research">All Projects</a>
+</nav>
+
+<div class="project-topbar container">
+  <span class="project-topbar-title">Bimanual Avatar Teleoperation</span>
+  <span class="project-topbar-tag">Honda Research Institute Japan · Frontier Robotics · 2025</span>
+</div>
+
+<div class="container">
+
+  <!-- META STRIP -->
+  <div class="meta-strip">
+    <div class="meta-cell"><span class="meta-label">Institution</span><span class="meta-value">Honda Research Institute Japan · Wako, Saitama</span></div>
+    <div class="meta-cell"><span class="meta-label">Period</span><span class="meta-value">Apr – Dec 2025</span></div>
+    <div class="meta-cell"><span class="meta-label">Role</span><span class="meta-value">Permanent Researcher — Avatar Project</span></div>
+    <div class="meta-cell"><span class="meta-label">Venue</span><span class="meta-value">Honda Research Institute Japan · Frontier Robotics · 2025</span></div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section>
+    <div class="section-header">
+      <span class="section-label">Overview</span>
+      <h1 class="section-title">Bimanual Avatar Teleoperation</h1>
+    </div>
+    <div class="overview-layout">
+      <div class="overview-lead" data-role="lead" data-prefix="honda" data-alt="Bimanual Avatar Teleoperation">
+        <div class="overview-lead-placeholder">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="3" y="3" width="26" height="26" rx="2" stroke="currentColor" stroke-width="1.2"/><line x1="9" y1="16" x2="23" y2="16" stroke="currentColor" stroke-width="1.2"/><line x1="16" y1="9" x2="16" y2="23" stroke="currentColor" stroke-width="1.2"/></svg>
+          <span>Image coming soon</span>
+        </div>
+      </div>
+      <div class="overview-text">
+        <p class="prose">At Honda Research Institute Japan, I worked within the <strong>Frontier Robotics — Avatar Project</strong> team — the same team that built ASIMO — as a Permanent Researcher on the Avatar Robot program: a remotely-operated robot intended to let a user perform tasks and handle objects from a distance, with a realistic sense of physical presence.</p>
+<p class="prose">My day-to-day work involved hands-on testing of the avatar system: teleoperation tests, grasping experiments with the robot's multi-fingered hand, testing embodiment settings, and investigating control issues to improve the overall system. The platform includes a wire-driven hand designed to handle tasks ranging from pinching small objects to firm grasping — the latest version of which Honda is showing publicly at the Humanoids Summit 2026.</p>
+<p class="prose">I held a permanent researcher position and left the role in December 2025 following legal and financial issues arising from the employer's handling of the work visa process — a failure to meet the required procedural steps on their side that created significant personal and administrative consequences. I cannot disclose technical specifics of the work beyond what Honda has made public.</p>
+<div class="highlight-box"><strong>Note:</strong> Research conducted under standard industry confidentiality agreements. For public information on the Avatar Robot program, see the official links below.</div>
+        <div class="tag-row"><span class="tag" style="border-color:color-mix(in srgb,#c97800 40%,transparent);color:#c97800;">Bimanual Teleoperation</span><span class="tag" style="border-color:color-mix(in srgb,#c97800 40%,transparent);color:#c97800;">Avatar Robotics</span><span class="tag" style="border-color:color-mix(in srgb,#c97800 40%,transparent);color:#c97800;">Grasping</span><span class="tag" style="border-color:color-mix(in srgb,#c97800 40%,transparent);color:#c97800;">Embodiment Testing</span><span class="tag" style="border-color:color-mix(in srgb,#c97800 40%,transparent);color:#c97800;">Human-Robot Interface</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section>
+    <div class="section-header"><span class="section-label">Gallery</span><h2 class="section-title">Images</h2></div>
+    <div class="auto-gallery" data-prefix="honda" data-skip-lead="true" data-max="12"></div>
+  </section>
+
+  <!-- PUBLICATION REFERENCE -->
+  <section>
+    <div class="section-header"><span class="section-label">Publication</span><h2 class="section-title">Sources</h2></div>
+    <div class="pub-ref">
+      <span class="pub-ref-label">Sources</span>
+      Research conducted at Honda Research Institute Japan, Wako Research Center, Saitama, Japan. Permanent Researcher position, April–December 2025. Under industry confidentiality — no project-specific publication. Public information on the Avatar Robot and multi-fingered hand: <a href="https://global.honda/en/tech/Avatar_robot/" target="_blank">Honda Avatar Robot — official technology page ↗</a> · <a href="https://global.honda/en/RandD/field/hgrx/honda-multi-fingered-hand/humanoids-summit.html" target="_blank">Multi-Fingered Hand at Humanoids Summit 2026 ↗</a>
+    </div>
+  </section>
+
+  <!-- PROJECT NAV -->
+  <div class="project-nav">
+    <a href="trajectory-learning.html" class="project-nav-link prev">
+      <span class="project-nav-dir">Previous project</span>
+      <span class="project-nav-title">Trajectory Learning</span>
+    </a>
+    <a href="miruoto.html" class="project-nav-link next">
+      <span class="project-nav-dir">Next project</span>
+      <span class="project-nav-title">Miruoto</span>
+    </a>
+  </div>
+
+  <footer>
+    <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
+    <span>Robotics · Teleoperation · Embodiment</span>
+  </footer>
+
+</div><!-- end .container -->
+
+<script src="../assets/js/videos.js"></script>
+<script src="../assets/js/video-loader.js"></script>
+</body>
+</html>

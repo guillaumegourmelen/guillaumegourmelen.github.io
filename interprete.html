@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Interprétariat Français-Japonais — Guillaume Gourmelen · Tech &amp; Robotique</title>
+<meta name="description" content="Guillaume Gourmelen propose des services d'interprétation consécutive français-japonais pour le secteur de la tech et de la robotique. JLPT N1, 13 ans de japonais, formation APEF Aoyama, expérience terrain à Waseda et Honda."/>
+<meta property="og:title" content="Interprétariat Français-Japonais — Guillaume Gourmelen"/>
+<meta property="og:description" content="Interprétation consécutive FR-JP spécialisée tech et robotique. JLPT N1, formation APEF. Basé à Tokyo."/>
+<meta property="og:image" content="https://guillaumegourmelen.github.io/assets/img/gourmelen.jpg"/>
+<meta property="og:url" content="https://guillaumegourmelen.github.io/interprete.html"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d1f30'/><text x='16' y='22' text-anchor='middle' font-family='serif' font-size='16' font-weight='300' fill='%230099aa'>GG</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap&subset=latin" rel="stylesheet"/>
+<style>
+/* ═══ VARIABLES ════════════════════════════════════════════════ */
+:root{
+  --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
+  --accent:#0099aa;--accent2:#c97800;
+  --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
+  --shadow:rgba(13,31,48,0.07);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--surface:#161b22;--border:#21262d;
+    --accent:#22c2d4;--accent2:#e09a30;
+    --text:#e6edf3;--muted:#4a6070;--mid:#8baabb;
+    --shadow:rgba(0,0,0,0.35);
+  }
+  nav{background:rgba(13,17,23,0.93);}
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
+::selection{background:var(--accent);color:#fff;}
+
+/* ═══ NAV ══════════════════════════════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,153,170,0.15);box-shadow:0 1px 24px var(--shadow);}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:var(--accent);letter-spacing:0.05em;text-decoration:none;}
+.nav-back{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+.nav-back:hover{color:var(--accent);}
+.nav-back::before{content:'←';}
+.nav-cta{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:7px 16px;background:var(--accent);color:#fff;text-decoration:none;transition:opacity 0.2s;}
+.nav-cta:hover{opacity:0.85;}
+
+/* ═══ LAYOUT ═══════════════════════════════════════════════════ */
+.container{max-width:960px;margin:0 auto;padding:0 32px;}
+section{padding:72px 0;border-top:1px solid var(--border);}
+.section-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent2);margin-bottom:12px;display:block;}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(26px,4vw,40px);font-weight:300;letter-spacing:-0.01em;color:var(--text);margin-bottom:32px;}
+
+/* ═══ HERO ══════════════════════════════════════════════════════
+   Problem-first: lead with what companies need, not what I do.
+   ═══════════════════════════════════════════════════════════ */
+.c-hero{
+  min-height:100vh;display:flex;align-items:center;
+  padding:120px 0 80px;
+  position:relative;overflow:hidden;
+}
+/* Subtle accent gradient behind hero */
+.c-hero::before{
+  content:'';position:absolute;
+  top:-20%;right:-10%;width:600px;height:600px;
+  background:radial-gradient(ellipse,rgba(0,153,170,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.c-hero-inner{width:100%;display:grid;grid-template-columns:1fr 380px;gap:64px;align-items:center;}
+
+/* Left: headline + problems */
+.c-hero-label{
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:24px;
+  display:flex;align-items:center;gap:12px;
+}
+.c-hero-label::before{content:'';display:block;width:32px;height:1px;background:var(--accent);}
+.c-hero h1{
+  font-family:'Fraunces',serif;
+  font-size:clamp(36px,5vw,62px);font-weight:300;
+  line-height:1.1;letter-spacing:-0.02em;
+  margin-bottom:28px;color:var(--text);
+}
+.c-hero h1 em{font-style:italic;color:var(--accent);}
+.c-hero-sub{
+  font-size:14px;color:var(--mid);line-height:1.9;
+  max-width:480px;margin-bottom:36px;
+}
+.c-hero-sub strong{color:var(--text);font-weight:500;}
+
+/* Problem checklist */
+.problem-list{display:flex;flex-direction:column;gap:10px;margin-bottom:40px;}
+.problem-item{
+  display:flex;align-items:flex-start;gap:12px;
+  font-size:13px;color:var(--mid);line-height:1.6;
+}
+.problem-check{
+  width:18px;height:18px;flex-shrink:0;margin-top:2px;
+  border:1px solid var(--accent);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+}
+.problem-check svg{color:var(--accent);}
+
+/* CTA buttons */
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-primary{
+  padding:13px 28px;background:var(--accent);color:#fff;
+  text-decoration:none;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  transition:opacity 0.2s,box-shadow 0.2s;
+  box-shadow:0 4px 20px rgba(0,153,170,0.25);
+}
+.btn-primary:hover{opacity:0.88;box-shadow:0 6px 28px rgba(0,153,170,0.35);}
+.btn-secondary{
+  padding:13px 28px;border:1px solid var(--border);color:var(--mid);
+  text-decoration:none;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  transition:border-color 0.2s,color 0.2s;background:var(--surface);
+}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+
+/* Right: credential card */
+.credential-card{
+  border:1px solid var(--border);background:var(--surface);
+  padding:28px;display:flex;flex-direction:column;gap:0;
+  box-shadow:0 4px 32px var(--shadow);
+}
+.cred-photo{
+  width:100%;aspect-ratio:4/3;
+  overflow:hidden;background:#e8f0f5;
+  margin-bottom:24px;position:relative;
+}
+.cred-photo img{
+  width:100%;height:100%;object-fit:cover;
+  object-position:center top;display:block;
+}
+.cred-photo-ph{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:8px;
+}
+.cred-photo-ph svg{opacity:0.3;}
+.cred-photo-ph span{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+.cred-name{font-family:'Fraunces',serif;font-size:20px;font-weight:300;color:var(--text);margin-bottom:4px;}
+.cred-title{font-size:11px;color:var(--muted);letter-spacing:0.05em;margin-bottom:20px;}
+.cred-badges{display:flex;flex-direction:column;gap:8px;}
+.cred-badge{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;background:var(--bg);border:1px solid var(--border);
+  font-size:11px;color:var(--mid);
+}
+.cred-badge-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.cred-badge-dot.keio{background:#0099aa;}
+.cred-badge-dot.honda{background:#c97800;}
+.cred-badge-dot.waseda{background:#8b1a2a;}
+.cred-badge-dot.lirmm{background:#2d6080;}
+
+/* ═══ WHAT I OFFER — service tiers ════════════════════════════ */
+.services-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;}
+.service-card{
+  background:var(--surface);border:1px solid var(--border);
+  padding:28px 24px;
+  display:flex;flex-direction:column;gap:16px;
+  transition:border-color 0.3s,box-shadow 0.3s;
+  position:relative;overflow:hidden;
+}
+.service-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--service-color,var(--accent));
+}
+.service-card:hover{border-color:var(--service-color,var(--accent));box-shadow:0 4px 28px var(--shadow);}
+.service-icon{
+  width:40px;height:40px;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg);
+}
+.service-tag{
+  font-size:9px;letter-spacing:0.15em;text-transform:uppercase;
+  color:var(--service-color,var(--accent));
+}
+.service-name{font-family:'Fraunces',serif;font-size:19px;font-weight:300;color:var(--text);line-height:1.3;}
+.service-desc{font-size:12px;color:var(--mid);line-height:1.85;}
+.service-includes{margin-top:4px;}
+.service-includes li{
+  font-size:11px;color:var(--muted);
+  padding:6px 0;border-bottom:1px solid var(--border);
+  list-style:none;display:flex;align-items:baseline;gap:8px;
+}
+.service-includes li::before{content:'→';color:var(--service-color,var(--accent));font-size:10px;flex-shrink:0;}
+.service-includes li:last-child{border-bottom:none;}
+.service-duration{
+  margin-top:auto;padding-top:16px;border-top:1px solid var(--border);
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.service-duration strong{color:var(--text);font-size:12px;letter-spacing:0;}
+
+/* ═══ EXPERTISE AREAS ══════════════════════════════════════════ */
+.expertise-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+.expertise-item{
+  padding:24px;background:var(--surface);border:1px solid var(--border);
+  display:grid;grid-template-columns:48px 1fr;gap:16px;align-items:start;
+  transition:border-color 0.3s;
+}
+.expertise-item:hover{border-color:rgba(0,153,170,0.3);}
+.expertise-icon{
+  width:48px;height:48px;border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  background:var(--bg);flex-shrink:0;
+}
+.expertise-name{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--text);margin-bottom:6px;}
+.expertise-desc{font-size:12px;color:var(--mid);line-height:1.8;}
+.expertise-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.expertise-tag{
+  font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
+  padding:2px 8px;border:1px solid var(--border);color:var(--muted);
+}
+
+/* ═══ PROOF / TRACK RECORD ═════════════════════════════════════ */
+.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-bottom:48px;}
+.proof-card{
+  padding:20px;background:var(--surface);border:1px solid var(--border);
+  display:flex;flex-direction:column;gap:6px;
+}
+.proof-org{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);}
+.proof-what{font-family:'Fraunces',serif;font-size:15px;font-weight:300;color:var(--text);line-height:1.3;}
+.proof-outcome{font-size:11px;color:var(--mid);line-height:1.7;margin-top:4px;}
+.proof-tag{
+  display:inline-block;margin-top:8px;
+  font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  padding:2px 8px;border:1px solid rgba(0,153,170,0.3);color:var(--accent);
+  align-self:flex-start;
+}
+
+/* ═══ FOR WHOM ══════════════════════════════════════════════════ */
+.forwhom-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:3px;}
+.forwhom-item{
+  padding:22px 24px;background:var(--surface);border:1px solid var(--border);
+  display:flex;gap:16px;align-items:flex-start;
+  transition:border-color 0.3s;
+}
+.forwhom-item:hover{border-color:rgba(0,153,170,0.3);}
+.forwhom-num{
+  font-family:'Fraunces',serif;font-size:28px;font-weight:300;
+  color:var(--border);line-height:1;flex-shrink:0;width:32px;
+}
+.forwhom-title{font-family:'Fraunces',serif;font-size:16px;font-weight:300;color:var(--text);margin-bottom:6px;}
+.forwhom-desc{font-size:12px;color:var(--mid);line-height:1.8;}
+
+/* ═══ JAPAN BRIDGE ══════════════════════════════════════════════ */
+.japan-block{
+  padding:36px 40px;
+  border:1px solid var(--border);
+  background:var(--surface);
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+}
+.japan-title{font-family:'Fraunces',serif;font-size:clamp(22px,3vw,32px);font-weight:300;color:var(--text);line-height:1.3;margin-bottom:16px;}
+.japan-title em{font-style:italic;color:var(--accent);}
+.japan-desc{font-size:13px;color:var(--mid);line-height:1.9;}
+.japan-desc strong{color:var(--text);}
+.japan-facts{display:flex;flex-direction:column;gap:12px;}
+.japan-fact{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 16px;border:1px solid var(--border);background:var(--bg);
+}
+.japan-fact-icon{font-size:18px;flex-shrink:0;}
+.japan-fact-text{font-size:12px;color:var(--mid);line-height:1.7;}
+.japan-fact-text strong{color:var(--text);display:block;margin-bottom:2px;font-size:11px;letter-spacing:0.05em;}
+
+/* ═══ CONTACT FORM ══════════════════════════════════════════════ */
+.contact-block{
+  display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;
+}
+.contact-left{}
+.contact-left h3{font-family:'Fraunces',serif;font-size:clamp(20px,3vw,30px);font-weight:300;color:var(--text);line-height:1.3;margin-bottom:16px;}
+.contact-left h3 em{font-style:italic;color:var(--accent);}
+.contact-left p{font-size:13px;color:var(--mid);line-height:1.9;margin-bottom:24px;}
+.contact-channels{display:flex;flex-direction:column;gap:10px;}
+.contact-channel{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;border:1px solid var(--border);
+  color:var(--mid);text-decoration:none;font-size:12px;
+  background:var(--surface);
+  transition:border-color 0.3s,color 0.3s,box-shadow 0.3s;
+}
+.contact-channel:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 2px 16px rgba(0,153,170,0.1);}
+.contact-channel-label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-left:auto;}
+
+/* Inquiry form */
+.inquiry-form{display:flex;flex-direction:column;gap:14px;}
+.form-field{display:flex;flex-direction:column;gap:6px;}
+.form-label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);}
+.form-input,.form-select,.form-textarea{
+  width:100%;padding:11px 14px;
+  border:1px solid var(--border);
+  background:var(--surface);color:var(--text);
+  font-family:'DM Mono',monospace;font-size:12px;
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+  appearance:none;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(0,153,170,0.08);
+}
+.form-textarea{resize:vertical;min-height:120px;line-height:1.7;}
+.form-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238aaabf'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
+.form-submit{
+  padding:13px 28px;background:var(--accent);color:#fff;border:none;
+  font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+  cursor:pointer;transition:opacity 0.2s,box-shadow 0.2s;
+  box-shadow:0 4px 20px rgba(0,153,170,0.25);align-self:flex-start;
+}
+.form-submit:hover{opacity:0.88;}
+.form-note{font-size:11px;color:var(--muted);line-height:1.7;margin-top:4px;}
+
+/* ═══ FOOTER ═════════════════════════════════════════════════== */
+footer{padding:28px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;}
+footer a{color:var(--accent);text-decoration:none;}
+
+/* ═══ RESPONSIVE ════════════════════════════════════════════════ */
+@media(max-width:860px){
+  .c-hero-inner{grid-template-columns:1fr;}
+  .credential-card{display:none;}
+  .services-grid{grid-template-columns:1fr;}
+  .expertise-grid{grid-template-columns:1fr;}
+  .proof-grid{grid-template-columns:1fr 1fr;}
+  .forwhom-grid{grid-template-columns:1fr;}
+  .japan-block{grid-template-columns:1fr;}
+  .contact-block{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  nav{padding:12px 16px;}
+  .container{padding:0 16px;}
+  .proof-grid{grid-template-columns:1fr;}
+  .cta-row{flex-direction:column;}
+  .btn-primary,.btn-secondary{text-align:center;}
+}
+@media print{
+  nav,#back-top,.cta-row,.inquiry-form,.form-submit{display:none!important;}
+  *{color:#000!important;background:#fff!important;}
+  section{padding:20px 0;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">G. Gourmelen</a>
+  <a class="nav-back" href="index.html">Site recherche</a>
+  <a class="nav-cta" href="#contact">Me contacter</a>
+</nav>
+
+<div class="container">
+
+<!-- ═══ HERO ═══════════════════════════════════════════════════ -->
+<div class="c-hero">
+  <div class="c-hero-inner">
+
+    <div>
+      <div class="c-hero-label">Interprétariat Français-Japonais · Tokyo</div>
+      <h1>Le japonais technique,<br/><em>sans perte en route.</em></h1>
+      <p class="c-hero-sub">
+        J'assure l'interprétation consécutive français-japonais pour des réunions, négociations et échanges techniques dans la tech et la robotique — un domaine où je travaille moi-même au quotidien, en japonais, depuis plus de trois ans au Japon.
+      </p>
+
+      <!-- Situations où la personne se reconnaît -->
+      <div class="problem-list">
+        <div class="problem-item">
+          <div class="problem-check"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><polyline points="1.5,4.5 3.5,7 7.5,2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span>Vous devez faire passer du vocabulaire technique précis (robotique, ingénierie, R&amp;D) entre une équipe française et un partenaire japonais</span>
+        </div>
+        <div class="problem-item">
+          <div class="problem-check"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><polyline points="1.5,4.5 3.5,7 7.5,2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span>Une réunion, une visite de laboratoire ou une négociation nécessite un interprète qui comprenne réellement le sujet technique discuté</span>
+        </div>
+        <div class="problem-item">
+          <div class="problem-check"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><polyline points="1.5,4.5 3.5,7 7.5,2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span>Vous cherchez quelqu'un capable d'interpréter dans les deux sens (français↔japonais) en format consécutif, sur un sujet pointu</span>
+        </div>
+        <div class="problem-item">
+          <div class="problem-check"><svg width="9" height="9" viewBox="0 0 9 9" fill="none"><polyline points="1.5,4.5 3.5,7 7.5,2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <span>Vous voulez un pont culturel et linguistique, pas seulement une traduction mot à mot — quelqu'un qui connaît les deux mondes</span>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a href="#contact" class="btn-primary">Décrire votre besoin</a>
+        <a href="index.html#publications" class="btn-secondary">Voir mon parcours recherche</a>
+      </div>
+    </div>
+
+    <!-- Carte de crédibilité -->
+    <div class="credential-card">
+      <div class="cred-photo">
+        <div class="cred-photo-ph">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="14" r="7" stroke="rgba(0,130,150,0.4)" stroke-width="1.5"/><path d="M4 38C4 28 36 28 36 38" stroke="rgba(0,130,150,0.4)" stroke-width="1.5" fill="none"/></svg>
+          <span>assets/img/gourmelen.jpg</span>
+        </div>
+        <img src="assets/img/gourmelen.jpg" alt="Guillaume Gourmelen" onerror="this.style.display='none'"/>
+      </div>
+      <div class="cred-name">Guillaume Gourmelen</div>
+      <div class="cred-title">PhD · Professeur Assistant Associé · Tokyo</div>
+      <div class="cred-badges">
+        <div class="cred-badge"><div class="cred-badge-dot keio"></div>JLPT N1 — 13 ans d'étude du japonais</div>
+        <div class="cred-badge"><div class="cred-badge-dot honda"></div>Formation interprétariat APEF Aoyama — niveau 基礎科, 1,5 an</div>
+        <div class="cred-badge"><div class="cred-badge-dot waseda"></div>Waseda University Iwata Lab — travail en japonais, 2023–25</div>
+        <div class="cred-badge"><div class="cred-badge-dot lirmm"></div>Honda Research Institute Japan — travail en japonais, 2025</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ WHAT I OFFER ════════════════════════════════════════════
+     Three tiers: fast advice → embedded project → long advisory.
+     Companies need to know what they're buying before they reach out.
+     ═══════════════════════════════════════════════════════════ -->
+<section id="services">
+  <span class="section-label">Mes services</span>
+  <h2 class="section-title">Trois façons de travailler ensemble</h2>
+
+  <div class="services-grid">
+
+    <!-- Tier 1: Réunion ponctuelle -->
+    <div class="service-card" style="--service-color:#0099aa;">
+      <div class="service-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#0099aa" stroke-width="1.2"/><line x1="10" y1="5" x2="10" y2="10" stroke="#0099aa" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="13" r="1" fill="#0099aa"/></svg>
+      </div>
+      <span class="service-tag">Mission ponctuelle</span>
+      <div class="service-name">Réunion &amp; Visite</div>
+      <p class="service-desc">Interprétation consécutive français↔japonais pour une réunion, un appel, une visite de laboratoire ou d'usine. Idéal pour un besoin précis et délimité dans le temps.</p>
+      <ul class="service-includes">
+        <li>Réunions d'affaires et négociations</li>
+        <li>Visites de laboratoires de recherche ou de sites industriels</li>
+        <li>Appels visio (Zoom, Teams) en consécutif</li>
+        <li>Préparation terminologique en amont si besoin</li>
+        <li>Sur site à Tokyo ou à distance</li>
+      </ul>
+      <div class="service-duration">
+        <span>Durée</span>
+        <strong>1 heure – 1 journée</strong>
+      </div>
+    </div>
+
+    <!-- Tier 2: Accompagnement projet -->
+    <div class="service-card" style="--service-color:#c97800;">
+      <div class="service-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="1.5" stroke="#c97800" stroke-width="1.2"/><line x1="6" y1="10" x2="14" y2="10" stroke="#c97800" stroke-width="1.2"/><line x1="10" y1="6" x2="10" y2="14" stroke="#c97800" stroke-width="1.2"/></svg>
+      </div>
+      <span class="service-tag" style="color:#c97800;">Accompagnement</span>
+      <div class="service-name">Suivi de Projet</div>
+      <p class="service-desc">Interprétation régulière sur la durée d'un projet ou d'une collaboration — utile quand une équipe française et un partenaire japonais travaillent ensemble sur plusieurs semaines ou mois et ont besoin d'un interlocuteur constant qui connaît déjà le sujet et le contexte.</p>
+      <ul class="service-includes">
+        <li>Réunions de suivi régulières</li>
+        <li>Continuité terminologique d'une session à l'autre</li>
+        <li>Lecture et clarification de documents techniques</li>
+        <li>Pont culturel dans les échanges (style de communication, attentes implicites)</li>
+        <li>Disponibilité sur Tokyo et le Kanto</li>
+      </ul>
+      <div class="service-duration">
+        <span>Durée</span>
+        <strong>Plusieurs semaines – mois</strong>
+      </div>
+    </div>
+
+    <!-- Tier 3: Vulgarisation tech -->
+    <div class="service-card" style="--service-color:#4aaa60;">
+      <div class="service-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2C5.6 2 2 5.6 2 10s3.6 8 8 8 8-3.6 8-8" stroke="#4aaa60" stroke-width="1.2"/><path d="M14 2l4 4-4 4" stroke="#4aaa60" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="service-tag" style="color:#4aaa60;">Expertise technique</span>
+      <div class="service-name">Sujets Robotique &amp; Tech</div>
+      <p class="service-desc">Pour les échanges où le vocabulaire technique est dense — robotique, IA, ingénierie, recherche académique — et où un interprète généraliste risquerait de perdre la précision du propos. C'est mon domaine de travail quotidien, en français comme en japonais.</p>
+      <ul class="service-includes">
+        <li>Robotique, téléopération, haptique</li>
+        <li>Intelligence artificielle et apprentissage automatique</li>
+        <li>Ingénierie mécanique et électronique</li>
+        <li>Présentations de recherche et soutenances</li>
+        <li>Discussions académiques et collaborations universitaires</li>
+      </ul>
+      <div class="service-duration">
+        <span>Format</span>
+        <strong>Consécutif, FR↔JP</strong>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ DOMAINES DE VOCABULAIRE ══════════════════════════════════ -->
+<section id="expertise">
+  <span class="section-label">Profondeur technique</span>
+  <h2 class="section-title">Là où je peux le plus aider</h2>
+
+  <div class="expertise-grid">
+
+    <div class="expertise-item">
+      <div class="expertise-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="9" stroke="var(--accent)" stroke-width="1.2"/><circle cx="11" cy="11" r="4" stroke="var(--accent)" stroke-width="1"/><line x1="11" y1="2" x2="11" y2="7" stroke="var(--accent)" stroke-width="1"/><line x1="11" y1="15" x2="11" y2="20" stroke="var(--accent)" stroke-width="1"/></svg>
+      </div>
+      <div>
+        <div class="expertise-name">Robotique &amp; Téléopération</div>
+        <div class="expertise-desc">Mon propre domaine de recherche, en français et en japonais : architecture de contrôle, retour haptique, téléopération bilatérale, robots avatars. Je connais le vocabulaire parce que je l'utilise chaque jour dans mon travail.</div>
+        <div class="expertise-tags">
+          <span class="expertise-tag">Téléopération</span>
+          <span class="expertise-tag">Contrôle d'impédance</span>
+          <span class="expertise-tag">Retour haptique</span>
+          <span class="expertise-tag">Robots avatars</span>
+          <span class="expertise-tag">Bras robotique</span>
+          <span class="expertise-tag">Interaction homme-robot</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="expertise-item">
+      <div class="expertise-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 14 Q7 8 11 11 Q15 14 18 8" stroke="var(--accent)" stroke-width="1.2" fill="none"/><rect x="8" y="2" width="6" height="8" rx="1" stroke="var(--accent)" stroke-width="1"/><line x1="11" y1="10" x2="11" y2="13" stroke="var(--accent)" stroke-width="1"/></svg>
+      </div>
+      <div>
+        <div class="expertise-name">Intelligence Artificielle</div>
+        <div class="expertise-desc">Apprentissage automatique, vision par ordinateur, traitement du signal — des sujets que je manipule directement dans mes propres projets de recherche, pas seulement en tant qu'interprète extérieur au domaine.</div>
+        <div class="expertise-tags">
+          <span class="expertise-tag">Apprentissage automatique</span>
+          <span class="expertise-tag">Vision par ordinateur</span>
+          <span class="expertise-tag">Réseaux de neurones</span>
+          <span class="expertise-tag">Traitement du signal</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="expertise-item">
+      <div class="expertise-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 18 C6 12 10 15 11 10 C12 5 16 8 18 4" stroke="var(--accent)" stroke-width="1.2" fill="none"/><circle cx="4" cy="18" r="2" fill="var(--accent)" opacity="0.6"/><circle cx="18" cy="4" r="2" fill="var(--accent)" opacity="0.6"/></svg>
+      </div>
+      <div>
+        <div class="expertise-name">Ingénierie Mécanique &amp; Électronique</div>
+        <div class="expertise-desc">Conception mécanique, électronique embarquée, prototypage — j'ai conçu, usiné et câblé mes propres prototypes de recherche, donc je comprends concrètement de quoi parlent les ingénieurs, pas seulement le vocabulaire.</div>
+        <div class="expertise-tags">
+          <span class="expertise-tag">CAO / usinage CNC</span>
+          <span class="expertise-tag">Électronique embarquée</span>
+          <span class="expertise-tag">Prototypage</span>
+          <span class="expertise-tag">Impression 3D</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="expertise-item">
+      <div class="expertise-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="6" width="18" height="12" rx="1.5" stroke="var(--accent)" stroke-width="1.2"/><circle cx="8" cy="12" r="2.5" stroke="var(--accent)" stroke-width="1"/><path d="M13 10h4M13 14h3" stroke="var(--accent)" stroke-width="1" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="expertise-name">Milieu Académique &amp; Recherche</div>
+        <div class="expertise-desc">Familier avec le fonctionnement des laboratoires japonais et français — encadrement, soutenances, collaborations inter-universitaires, structure d'un projet de recherche. Utile pour les échanges entre chercheurs ou avec des institutions académiques.</div>
+        <div class="expertise-tags">
+          <span class="expertise-tag">Présentations de recherche</span>
+          <span class="expertise-tag">Soutenances</span>
+          <span class="expertise-tag">Collaborations académiques</span>
+          <span class="expertise-tag">Vie de laboratoire</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Index complet -->
+  <div style="margin-top:32px;padding:24px;border:1px solid var(--border);background:var(--surface);">
+    <div style="font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Index de vocabulaire</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <span class="expertise-tag">Téléopération</span>
+      <span class="expertise-tag">Contrôle d'impédance</span>
+      <span class="expertise-tag">Retour haptique</span>
+      <span class="expertise-tag">Robots avatars</span>
+      <span class="expertise-tag">Robotique humanoïde</span>
+      <span class="expertise-tag">Robots quadrupèdes</span>
+      <span class="expertise-tag">Interaction homme-robot</span>
+      <span class="expertise-tag">Robotique portable</span>
+      <span class="expertise-tag">Membres surnuméraires</span>
+      <span class="expertise-tag">Robotique souple</span>
+      <span class="expertise-tag">IA incarnée</span>
+      <span class="expertise-tag">Apprentissage par démonstration</span>
+      <span class="expertise-tag">Apprentissage automatique</span>
+      <span class="expertise-tag">Vision par ordinateur</span>
+      <span class="expertise-tag">Réseaux de neurones</span>
+      <span class="expertise-tag">CAO / conception mécanique</span>
+      <span class="expertise-tag">Usinage CNC</span>
+      <span class="expertise-tag">Électronique embarquée</span>
+      <span class="expertise-tag">Prototypage</span>
+      <span class="expertise-tag">Impression 3D</span>
+      <span class="expertise-tag">Robotique médicale</span>
+      <span class="expertise-tag">Échocardiographie</span>
+      <span class="expertise-tag">Pneumatique</span>
+      <span class="expertise-tag">Capteurs &amp; instrumentation</span>
+      <span class="expertise-tag">Python · C++</span>
+      <span class="expertise-tag">ROS / ROS2</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PARCOURS EN JAPONAIS ═══════════════════════════════════════ -->
+<section id="track-record">
+  <span class="section-label">Parcours</span>
+  <h2 class="section-title">Le japonais, langue de travail au quotidien</h2>
+
+  <div class="proof-grid">
+
+    <div class="proof-card">
+      <div class="proof-org">Honda Research Institute Japan</div>
+      <div class="proof-what">Chercheur permanent, équipe Frontier Robotics — Avatar Project</div>
+      <div class="proof-outcome">Poste de chercheur titulaire au sein d'une entreprise japonaise, environnement de travail entièrement en japonais — réunions techniques, documentation interne, échanges avec les équipes d'ingénierie.</div>
+      <span class="proof-tag">Industrie · 2025</span>
+    </div>
+
+    <div class="proof-card">
+      <div class="proof-org">Waseda University · Iwata Lab</div>
+      <div class="proof-what">Chercheur associé, 2023–2025</div>
+      <div class="proof-outcome">Deux ans en laboratoire de recherche japonais : encadrement d'étudiants, réunions d'équipe, rédaction administrative, présentations — entièrement en japonais. Projet Miruoto déployé aux Deaflympics de Tokyo 2025, financé par la ville de Tokyo.</div>
+      <span class="proof-tag">Recherche · 2023–25</span>
+    </div>
+
+    <div class="proof-card">
+      <div class="proof-org">APEF Aoyama — Cours de formation d'interprètes</div>
+      <div class="proof-what">Cours d'interprétation consécutif, niveau 基礎科 (kisoka)</div>
+      <div class="proof-outcome">Formation continue depuis 1,5 an auprès de l'APEF (公益財団法人フランス語教育振興協会), organisme japonais spécialisé dans la formation d'interprètes et de traducteurs français-japonais. Niveau intermédiaire (基礎科), avant le niveau professionnel (本科).</div>
+      <span class="proof-tag">Formation · en cours, depuis 2024</span>
+    </div>
+
+    <div class="proof-card">
+      <div class="proof-org">JLPT N1 &amp; 13 ans de japonais</div>
+      <div class="proof-what">Niveau le plus élevé du test de compétence en japonais</div>
+      <div class="proof-outcome">Étude du japonais depuis 13 ans, du niveau débutant jusqu'au JLPT N1. Doctorat et travaux de recherche menés en partie au Japon, dans des environnements professionnels et académiques exclusivement japonophones.</div>
+      <span class="proof-tag">Certification · JLPT N1</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ POUR QUI ══════════════════════════════════════════════════ -->
+<section id="for-whom">
+  <span class="section-label">Est-ce pour vous ?</span>
+  <h2 class="section-title">Les situations où je peux le mieux aider</h2>
+
+  <div class="forwhom-grid">
+
+    <div class="forwhom-item">
+      <div class="forwhom-num">01</div>
+      <div>
+        <div class="forwhom-title">Entreprises françaises en discussion avec un partenaire japonais</div>
+        <div class="forwhom-desc">Vous négociez, présentez un produit ou explorez un partenariat avec une entreprise ou une université japonaise, et le sujet est technique — robotique, ingénierie, R&amp;D.</div>
+      </div>
+    </div>
+
+    <div class="forwhom-item">
+      <div class="forwhom-num">02</div>
+      <div>
+        <div class="forwhom-title">Chercheurs et laboratoires en collaboration franco-japonaise</div>
+        <div class="forwhom-desc">Un chercheur français visite un laboratoire japonais (ou l'inverse), et la réunion ou la présentation nécessite une interprétation précise du vocabulaire scientifique, pas seulement une traduction générale.</div>
+      </div>
+    </div>
+
+    <div class="forwhom-item">
+      <div class="forwhom-num">03</div>
+      <div>
+        <div class="forwhom-title">Entreprises japonaises souhaitant communiquer en français</div>
+        <div class="forwhom-desc">Vous présentez votre technologie à un public ou un partenaire francophone et avez besoin d'un interprète qui comprenne le fond technique du sujet, pas seulement la langue.</div>
+      </div>
+    </div>
+
+    <div class="forwhom-item">
+      <div class="forwhom-num">04</div>
+      <div>
+        <div class="forwhom-title">Visites de site, salons professionnels, conférences techniques</div>
+        <div class="forwhom-desc">Une visite de laboratoire, une démonstration robotique ou un salon professionnel où les échanges informels et les questions techniques s'enchaînent rapidement, en consécutif.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ PONT JAPON ══════════════════════════════════════════════════ -->
+<section id="japan">
+  <div class="japan-block">
+    <div>
+      <span class="section-label">Pourquoi moi</span>
+      <h2 class="japan-title">Le japonais comme <em>outil de travail</em>, pas comme compétence à part</h2>
+      <p class="japan-desc">
+        Je ne suis pas interprète de métier — je suis chercheur en robotique, et le japonais est la langue dans laquelle je travaille au quotidien depuis plusieurs années au Japon : à Waseda, puis chez Honda, aujourd'hui à Keio. Cette double compétence (technique + linguistique) est rare : la plupart des interprètes généralistes n'ont pas le bagage scientifique, et la plupart des chercheurs n'ont pas le niveau de japonais nécessaire pour interpréter.
+      </p>
+      <p class="japan-desc" style="margin-top:14px;">
+        Je complète actuellement cette pratique de terrain par une formation structurée en interprétation consécutive à l'APEF Aoyama, pour professionnaliser une compétence que j'utilise déjà concrètement depuis plusieurs années.
+      </p>
+    </div>
+    <div class="japan-facts">
+      <div class="japan-fact">
+        <div class="japan-fact-icon">🇯🇵</div>
+        <div class="japan-fact-text"><strong>Basé à Tokyo</strong>Disponible sur place pour réunions, visites de laboratoires et démonstrations dans le Kanto, ou à distance en visio.</div>
+      </div>
+      <div class="japan-fact">
+        <div class="japan-fact-icon">🗣️</div>
+        <div class="japan-fact-text"><strong>JLPT N1 — 13 ans de japonais</strong>Niveau de langue acquis sur le terrain, dans des environnements professionnels et académiques japonophones.</div>
+      </div>
+      <div class="japan-fact">
+        <div class="japan-fact-icon">🎓</div>
+        <div class="japan-fact-text"><strong>Formation APEF Aoyama</strong>Cours d'interprétation consécutif français-japonais, niveau 基礎科, en cours depuis 1,5 an. <a href="https://apefdapf.org/apef/cours/presentation" target="_blank" style="color:var(--accent);">Voir le site de l'APEF ↗</a></div>
+      </div>
+      <div class="japan-fact">
+        <div class="japan-fact-icon">🔬</div>
+        <div class="japan-fact-text"><strong>Double formation tech + langue</strong>Doctorat en robotique, recherche menée en japonais à Waseda et chez Honda — je comprends le fond du sujet, pas seulement les mots.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══════════════════════════════════════════════════ -->
+<section id="contact">
+  <span class="section-label">Démarrer une conversation</span>
+  <h2 class="section-title">Me contacter</h2>
+
+  <div class="contact-block">
+    <div class="contact-left">
+      <h3>Décrivez-moi votre <em>besoin</em></h3>
+      <p>Plus vous êtes précis sur le contexte (date, durée, sujet, niveau technique attendu), plus je peux vous dire rapidement si je suis disponible et adapté. Je réponds à tous les messages sérieux sous 48 heures.</p>
+      <p>Vous pouvez aussi me contacter directement :</p>
+      <div class="contact-channels">
+        <a class="contact-channel" href="#" onclick="revealEmail(this);return false;">
+          Cliquer pour afficher l'email<span class="contact-channel-label">Email</span>
+        </a>
+        <a class="contact-channel" href="https://www.linkedin.com/in/guillaume-gourmelen-71b655161/" target="_blank">
+          LinkedIn<span class="contact-channel-label">Message</span>
+        </a>
+        <a class="contact-channel" href="index.html" target="_blank">
+          Profil de recherche complet &amp; publications<span class="contact-channel-label">Site recherche</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Formulaire de pré-qualification -->
+    <form class="inquiry-form" name="interpreter-inquiry" method="POST" onsubmit="handleSubmit(event)">
+      <div class="form-field">
+        <label class="form-label" for="company">Entreprise / Organisation</label>
+        <input class="form-input" id="company" name="company" type="text" placeholder="ex. Acme Robotics SAS" required/>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="role">Votre fonction</label>
+        <input class="form-input" id="role" name="role" type="text" placeholder="ex. Directeur technique, Responsable R&amp;D"/>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="service">Type de mission</label>
+        <select class="form-select" id="service" name="service">
+          <option value="">— Sélectionner —</option>
+          <option value="meeting">Réunion ou appel ponctuel</option>
+          <option value="visit">Visite de laboratoire / site industriel</option>
+          <option value="project">Suivi de projet sur plusieurs semaines</option>
+          <option value="conference">Conférence / salon professionnel</option>
+          <option value="unsure">Pas encore sûr — échange exploratoire</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="challenge">Décrivez votre besoin</label>
+        <textarea class="form-textarea" id="challenge" name="challenge" placeholder="Quel est le contexte ? Quel sujet technique sera abordé ? Date et durée approximatives ? Sur site à Tokyo ou à distance ?" required></textarea>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="email">Votre email</label>
+        <input class="form-input" id="email" name="email" type="email" placeholder="vous@entreprise.com" required/>
+      </div>
+      <button type="submit" class="form-submit" id="submit-btn">Envoyer ma demande →</button>
+      <p class="form-note">Je lis chaque message personnellement. Pas de démarchage, pas de liste de diffusion. Demandes sérieuses uniquement.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <span>Guillaume Gourmelen · <a href="index.html">Site recherche</a> · Tokyo, Japon</span>
+  <span>Interprétariat Français-Japonais · Tech &amp; Robotique</span>
+</footer>
+
+</div><!-- end .container -->
+
+<script>
+function revealEmail(el){
+  el.href='mailto:guillaume@kmd.keio.ac.jp';
+  el.childNodes[0].textContent='guillaume@kmd.keio.ac.jp';
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const form = e.target;
+  const data = Object.fromEntries(new FormData(form));
+  // Build mailto with pre-filled subject and body
+  const subject = encodeURIComponent(`Demande d'interprétariat — ${data.company} — ${data.service || 'Général'}`);
+  const body = encodeURIComponent(
+    `Entreprise : ${data.company}\nFonction : ${data.role}\nType de mission : ${data.service}\n\nBesoin :\n${data.challenge}\n\nRépondre à : ${data.email}`
+  );
+  // Open email client with pre-filled content
+  window.location.href = `mailto:guillaume@kmd.keio.ac.jp?subject=${subject}&body=${body}`;
+  btn.textContent = 'Ouverture de votre client mail…';
+  btn.style.opacity = '0.6';
+  setTimeout(() => { btn.textContent = 'Envoyer ma demande →'; btn.style.opacity = '1'; }, 3000);
+}
+</script>
+</body>
+</html>

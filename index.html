@@ -1,728 +1,1578 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Guillaume Gourmelen — Robotics Researcher</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --bg: #f7f9fc; --surface: #ffffff; --border: #dde6f0;
-      --accent: #0099aa; --accent2: #c97800;
-      --text: #0d1f30; --muted: #8aaabf; --mid: #3d6880;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Mono', monospace; font-size: 14px; line-height: 1.7; overflow-x: hidden; }
-    #robo-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-    body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 2; opacity: 0.4; mix-blend-mode: multiply; }
-    .grid-bg { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .grid-bg::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 700px 400px at 5% 10%, rgba(0,180,200,0.05) 0%, transparent 60%), radial-gradient(ellipse 500px 500px at 95% 5%, rgba(220,140,0,0.04) 0%, transparent 55%); }
-    .container { max-width: 960px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 3; }
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 20px 32px; display: flex; justify-content: space-between; align-items: center; background: rgba(247,249,252,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(0,153,170,0.15); box-shadow: 0 1px 24px rgba(13,31,48,0.06); }
-    .nav-logo { font-family: 'Fraunces', serif; font-size: 16px; color: var(--accent); letter-spacing: 0.05em; }
-    .nav-links { display: flex; gap: 28px; list-style: none; flex-wrap: wrap; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--accent); }
-    .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 0 80px; }
-    .hero-inner { width: 100%; }
-    .hero-tag { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
-    .hero-tag::before { content: ''; display: block; width: 40px; height: 1px; background: var(--accent); }
-    .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(52px, 8vw, 96px); font-weight: 300; line-height: 1.0; letter-spacing: -0.02em; margin-bottom: 8px; color: var(--text); }
-    .hero h1 em { font-style: italic; color: var(--accent); }
-    .hero-subtitle { font-size: clamp(14px, 2vw, 17px); color: var(--mid); margin-top: 32px; max-width: 520px; line-height: 1.9; }
-    .hero-meta { margin-top: 48px; display: flex; gap: 48px; flex-wrap: wrap; }
-    .hero-meta-item { display: flex; flex-direction: column; gap: 4px; }
-    .hero-meta-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
-    .hero-meta-value { font-size: 13px; color: var(--text); }
-    .hero-meta-value a { color: var(--accent); text-decoration: none; }
-    .hero-scroll { margin-top: 80px; display: flex; align-items: center; gap: 12px; color: var(--muted); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; }
-    .hero-scroll-line { width: 60px; height: 1px; background: var(--accent); animation: scrollLine 2s ease-in-out infinite; }
-    @keyframes scrollLine { 0%, 100% { width: 60px; opacity: 0.4; } 50% { width: 100px; opacity: 1; } }
-    section { padding: 100px 0; border-top: 1px solid var(--border); }
-    .section-header { display: flex; align-items: baseline; gap: 20px; margin-bottom: 64px; }
-    .section-num { font-size: 11px; color: var(--accent2); letter-spacing: 0.1em; }
-    .section-title { font-family: 'Fraunces', serif; font-size: clamp(28px, 4vw, 42px); font-weight: 300; letter-spacing: -0.01em; color: var(--text); }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-    .about-text { color: var(--mid); line-height: 1.9; font-size: 13px; }
-    .about-text p + p { margin-top: 20px; }
-    .about-text strong { color: var(--text); font-weight: 500; }
-    .about-skills { display: flex; flex-direction: column; gap: 12px; }
-    .skill-tag { padding: 10px 16px; border: 1px solid var(--border); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid); display: flex; justify-content: space-between; align-items: center; transition: border-color 0.3s, color 0.3s, background 0.3s; background: var(--surface); }
-    .skill-tag:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,153,170,0.04); }
-    .skill-tag span { color: var(--muted); font-size: 10px; }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Guillaume Gourmelen — Robotics Researcher</title>
 
-    /* ─── NEWS compact ───────────────────────────────────────────── */
-    section.news-section { padding: 56px 0; }
-    section.news-section .section-header { margin-bottom: 16px; }
-    .news-list { display: flex; flex-direction: column; }
-    .news-item { display: grid; grid-template-columns: 96px 32px 1fr; gap: 0 14px; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--border); transition: background 0.2s; }
-    .news-item:hover { background: rgba(0,153,170,0.03); }
-    .news-date { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
-    .news-type-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .news-type-dot.chair  { background: var(--accent2); }
-    .news-type-dot.talk   { background: #2d8a4e; }
-    .news-type-dot.award  { background: #d4006a; }
-    .news-type-dot.review { background: var(--accent); }
-    .news-type-dot.media  { background: #6d4fc4; }
-    .news-type-dot.misc   { background: var(--muted); }
-    .news-content { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; min-width: 0; }
-    .news-tag { display: inline-block; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 1px 6px; border: 1px solid currentColor; flex-shrink: 0; }
-    .news-tag.chair  { color: var(--accent2); border-color: rgba(201,120,0,0.4); }
-    .news-tag.talk   { color: #2d8a4e;        border-color: rgba(45,138,78,0.35); }
-    .news-tag.award  { color: #d4006a;        border-color: rgba(212,0,106,0.35); }
-    .news-tag.review { color: var(--accent);  border-color: rgba(0,153,170,0.4); }
-    .news-tag.media  { color: #6d4fc4;        border-color: rgba(109,79,196,0.35); }
-    .news-tag.misc   { color: var(--mid);     border-color: rgba(61,104,128,0.3); }
-    .news-headline { font-size: 12px; color: var(--text); }
-    .news-sub { font-size: 11px; color: var(--muted); margin-left: auto; white-space: nowrap; }
-    .news-sub a { color: var(--accent); text-decoration: none; }
+<!-- 4. Meta description -->
+<meta name="description" content="Guillaume Gourmelen — PhD, Project Assistant Professor at Keio University KMD. Research in teleoperation, haptics, human motor control, and embodied robotics. Tokyo, Japan."/>
+<meta name="author" content="Guillaume Gourmelen"/>
 
-    /* ─── PUBLICATIONS ─────────────────────────────────────────── */
-    .pub-list { display: flex; flex-direction: column; }
-    .pub-item { padding: 28px 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 96px 80px 1fr; gap: 20px; align-items: start; }
-    .pub-item:hover .pub-title { color: var(--accent); }
-    .pub-title a { color: inherit; text-decoration: none; transition: color 0.2s; }
-    .pub-link { display: inline-block; margin-top: 8px; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(0,153,170,0.35); padding-bottom: 1px; }
-    .pub-year { font-size: 12px; color: var(--muted); padding-top: 4px; }
-    .pub-venue-badge { display: inline-block; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent2); margin-bottom: 8px; padding: 2px 8px; border: 1px solid rgba(201,120,0,0.35); }
-    .pub-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 300; color: var(--text); margin-bottom: 8px; transition: color 0.2s; line-height: 1.3; }
-    .pub-authors { font-size: 12px; color: var(--muted); }
-    .pub-authors strong { color: var(--mid); }
+<!-- 5. Open Graph — controls LinkedIn / Twitter / Slack previews -->
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Guillaume Gourmelen — Robotics Researcher"/>
+<meta property="og:description" content="Teleoperation · Haptics · Embodied Systems · JST Moonshot · Keio University KMD · Tokyo"/>
+<meta property="og:image" content="https://guillaumegourmelen.github.io/assets/img/gourmelen.jpg"/>
+<meta property="og:url" content="https://guillaumegourmelen.github.io"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Guillaume Gourmelen — Robotics Researcher"/>
+<meta name="twitter:description" content="Teleoperation · Haptics · Embodied Systems · Keio University KMD · Tokyo"/>
+<meta name="twitter:image" content="https://guillaumegourmelen.github.io/assets/img/gourmelen.jpg"/>
+<meta name="twitter:creator" content="@GourmGui"/>
 
-    /* ── Thumbnail: img on top (z:1), placeholder behind (z:0) ── */
-    .pub-thumb { width: 96px; height: 72px; border: 1px solid var(--border); background: #eef3f7; flex-shrink: 0; overflow: hidden; position: relative; transition: border-color 0.3s, box-shadow 0.3s; }
-    .pub-item:hover .pub-thumb { border-color: rgba(0,153,170,0.4); box-shadow: 0 2px 12px rgba(0,153,170,0.1); }
-    .pub-thumb > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 1; }
-    .pub-thumb-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; z-index: 0; }
-    .pub-thumb-placeholder svg { opacity: 0.25; }
-    .pub-thumb-placeholder span { font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-align: center; padding: 0 6px; line-height: 1.4; }
+<!-- 6. JSON-LD structured data — Google knowledge panel -->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person",
+"name":"Guillaume Gourmelen",
+"jobTitle":"Project Assistant Professor",
+"affiliation":{"@type":"Organization","name":"Keio University Graduate School of Media Design"},
+"url":"https://guillaumegourmelen.github.io",
+"email":"guillaume@kmd.keio.ac.jp",
+"knowsLanguage":["fr","en","ja","it"],
+"sameAs":[
+  "https://scholar.google.com/citations?user=GC2dxjQAAAAJ",
+  "https://cv.hal.science/guillaume-gourmelen",
+  "https://www.linkedin.com/in/guillaume-gourmelen-71b655161/"
+]}
+</script>
 
-    /* ─── EXPERIENCE ─────────────────────────────────────────────── */
-    .exp-list { display: flex; flex-direction: column; }
-    .exp-item { padding: 32px 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 180px 1fr; gap: 24px; }
-    .exp-period { font-size: 12px; color: var(--muted); padding-top: 4px; line-height: 1.8; }
-    .exp-org { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
-    .exp-role { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 300; margin-bottom: 10px; color: var(--text); }
-    .exp-desc { font-size: 12px; color: var(--mid); line-height: 1.8; max-width: 500px; }
-    .exp-desc strong { color: var(--text); }
+<!-- 10. SVG favicon — "GG" initials in accent cyan -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d1f30'/><text x='16' y='22' text-anchor='middle' font-family='serif' font-size='16' font-weight='300' fill='%230099aa'>GG</text></svg>"/>
 
-    /* ─── PROJECTS ───────────────────────────────────────────────── */
-    .project-card { border: 1px solid var(--border); background: var(--surface); margin-bottom: 64px; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s; }
-    .project-card:hover { border-color: rgba(0,153,170,0.3); box-shadow: 0 4px 32px rgba(0,153,170,0.08); }
-    .project-header { padding: 32px 36px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 28px; }
-    .project-tag { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 10px; border: 1px solid rgba(201,120,0,0.4); color: var(--accent2); white-space: nowrap; flex-shrink: 0; margin-top: 6px; }
-    .project-title-block { flex: 1; }
-    .project-title { font-family: 'Fraunces', serif; font-size: clamp(22px, 3vw, 32px); font-weight: 300; line-height: 1.2; margin-bottom: 10px; color: var(--text); }
-    .project-title em { font-style: italic; color: var(--accent); }
-    .project-subtitle { font-size: 12px; color: var(--muted); letter-spacing: 0.05em; }
-    .project-video { position: relative; width: 100%; padding-bottom: 56.25%; background: #e8f0f5; border-bottom: 1px solid var(--border); }
-    .project-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-    .project-video-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px; background: linear-gradient(135deg, #eef3f7 0%, #f7f9fc 100%); cursor: pointer; transition: background 0.2s; }
-    .project-video-placeholder:hover { background: linear-gradient(135deg, #e4edf5 0%, #eef3f7 100%); }
-    .project-video-placeholder svg { opacity: 0.5; transition: opacity 0.2s; }
-    .project-video-placeholder:hover svg { opacity: 0.8; }
-    .project-video-placeholder span { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--mid); }
-    .project-video-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); }
-    .project-video-grid .project-video { border-bottom: none; border-right: 1px solid var(--border); }
-    .project-video-grid .project-video:last-child { border-right: none; }
-    .project-body { padding: 36px; }
-    .project-meta-row { display: flex; gap: 40px; flex-wrap: wrap; padding-top: 32px; border-top: 1px solid var(--border); }
-    .project-meta-col { display: flex; flex-direction: column; gap: 4px; }
-    .project-meta-col dt { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
-    .project-meta-col dd { font-size: 12px; color: var(--mid); }
-    .project-meta-col dd a { color: var(--accent); text-decoration: none; }
-    .project-pub-ref { margin-top: 24px; padding: 16px 20px; border: 1px solid rgba(201,120,0,0.2); background: rgba(201,120,0,0.03); font-size: 12px; color: var(--mid); line-height: 1.7; }
-    .project-pub-ref span { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent2); display: block; margin-bottom: 4px; }
+<!-- 1. Subsetted Google Fonts — only characters actually used, ~80% smaller download -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap&subset=latin" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
+  --accent:#0099aa;--accent2:#c97800;
+  --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
+  --shadow:rgba(13,31,48,0.08);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0d1117;--surface:#161b22;--border:#21262d;
+    --accent:#22c2d4;--accent2:#e09a30;
+    --text:#e6edf3;--muted:#4a6070;--mid:#8baabb;
+    --shadow:rgba(0,0,0,0.4);
+  }
+  body::before{opacity:0.15;}
+  .pub-thumb,.contact-photo-frame{background:#1c2128;}
+  .tile-placeholder{filter:brightness(0.85);}
+  nav{background:rgba(13,17,23,0.93);}
+  #back-top{background:var(--surface);}
+}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
+#robo-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+/* 8. noise overlay is decorative — aria-hidden set in HTML */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:2;opacity:0.4;mix-blend-mode:multiply;}
 
-    /* ─── CONTACT ─────────────────────────────────────────────────── */
-    .contact-grid { display: grid; grid-template-columns: 220px 1fr; gap: 56px; align-items: start; }
-    .contact-photo-col { display: flex; flex-direction: column; gap: 16px; }
-    .contact-photo-frame { width: 220px; height: 260px; border: 1px solid var(--border); overflow: hidden; position: relative; background: #e8f0f5; }
-    .contact-photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
-    .contact-photo-frame:hover img { transform: scale(1.03); }
-    .contact-photo-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; color: var(--muted); }
-    .contact-photo-placeholder svg { opacity: 0.4; }
-    .contact-photo-placeholder span { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.6; text-align: center; padding: 0 12px; }
-    .contact-photo-caption { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-    .contact-right { display: flex; flex-direction: column; gap: 28px; }
-    .contact-blurb { font-family: 'Fraunces', serif; font-size: clamp(20px, 2.5vw, 30px); font-weight: 300; line-height: 1.35; color: var(--mid); }
-    .contact-blurb em { color: var(--accent); font-style: italic; }
-    .contact-links { display: flex; flex-direction: column; gap: 12px; }
-    .contact-link { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border: 1px solid var(--border); color: var(--mid); text-decoration: none; font-size: 12px; letter-spacing: 0.08em; background: var(--surface); transition: border-color 0.3s, color 0.3s, box-shadow 0.3s; }
-    .contact-link:hover { border-color: var(--accent); color: var(--accent); box-shadow: 0 2px 16px rgba(0,153,170,0.1); }
-    .contact-link-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-left: auto; }
-    footer { padding: 32px 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 11px; }
-    .fade-in { opacity: 0; transform: translateY(20px); animation: fadeIn 0.8s ease forwards; }
-    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-    .fade-in:nth-child(1){animation-delay:0.1s}.fade-in:nth-child(2){animation-delay:0.2s}.fade-in:nth-child(3){animation-delay:0.3s}.fade-in:nth-child(4){animation-delay:0.4s}
+/* 7. Skip-to-content link */
+.skip-link{position:absolute;left:-9999px;top:8px;z-index:9999;padding:10px 18px;background:var(--accent);color:#fff;font-size:12px;letter-spacing:0.1em;text-decoration:none;border-radius:2px;transition:left 0s;}
+.skip-link:focus{left:16px;}
 
-    @media (max-width: 780px) {
-      nav { padding: 16px 20px; } .nav-links { gap: 14px; } .container { padding: 0 20px; }
-      .about-grid { grid-template-columns: 1fr; }
-      .pub-item { grid-template-columns: 72px 1fr; gap: 12px; }
-      .pub-item .pub-year { display: none; }
-      .exp-item { grid-template-columns: 1fr; gap: 4px; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .contact-photo-frame { width: 100%; height: 220px; }
-      .hero-meta { gap: 24px; }
-      .project-header { flex-direction: column; gap: 12px; }
-      .news-item { grid-template-columns: 76px 28px 1fr; }
-      .project-video-grid { grid-template-columns: 1fr; }
-      .project-video-grid .project-video { border-right: none; border-bottom: 1px solid var(--border); }
-    }
-    ::selection { background: var(--accent); color: #fff; }
-  </style>
+/* 9. Active nav indicator */
+.nav-links a.active{color:var(--accent);}
+.nav-links a.active::after{content:'';display:block;height:1px;background:var(--accent);margin-top:2px;}
+
+/* 11. Back-to-top button */
+#back-top{position:fixed;bottom:28px;right:28px;z-index:200;width:40px;height:40px;background:var(--surface);border:1px solid var(--border);color:var(--mid);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s,border-color 0.3s,color 0.3s,box-shadow 0.3s;box-shadow:0 2px 12px rgba(13,31,48,0.08);}
+#back-top.visible{opacity:1;pointer-events:auto;}
+#back-top:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 4px 20px rgba(0,153,170,0.15);}
+
+/* 12. Copy-citation button */
+.pub-cite-btn{display:inline-flex;align-items:center;gap:5px;margin-top:7px;margin-left:12px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:2px 8px;cursor:pointer;transition:color 0.2s,border-color 0.2s;font-family:'DM Mono',monospace;}
+.pub-cite-btn:hover{color:var(--accent);border-color:var(--accent);}
+.pub-cite-btn.copied{color:#2d8a4e;border-color:rgba(45,138,78,0.4);}
+.pub-cite-btn svg{flex-shrink:0;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,153,170,0.15);box-shadow:0 1px 24px var(--shadow);}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:var(--accent);letter-spacing:0.05em;text-decoration:none;}
+.nav-links{display:flex;gap:20px;list-style:none;flex-wrap:wrap;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-burger{display:none;background:none;border:1px solid var(--border);padding:6px 9px;cursor:pointer;flex-direction:column;gap:4px;transition:border-color 0.2s;}
+.nav-burger:hover{border-color:var(--accent);}
+.nav-burger span{display:block;width:18px;height:1px;background:var(--mid);transition:transform 0.25s,opacity 0.25s;}
+
+/* LAYOUT */
+.container{max-width:960px;margin:0 auto;padding:0 32px;position:relative;z-index:3;}
+section{padding:72px 0;border-top:1px solid var(--border);}
+.section-header{display:flex;align-items:baseline;gap:20px;margin-bottom:44px;}
+.section-num{font-size:11px;color:var(--accent2);letter-spacing:0.1em;}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(26px,4vw,40px);font-weight:300;letter-spacing:-0.01em;color:var(--text);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:120px 0 80px;}
+.hero-inner{width:100%;}
+.hero-tag{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;display:flex;align-items:center;gap:12px;}
+.hero-tag::before{content:'';display:block;width:40px;height:1px;background:var(--accent);}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(52px,8vw,96px);font-weight:300;line-height:1.0;letter-spacing:-0.02em;color:var(--text);}
+.hero h1 em{font-style:italic;color:var(--accent);}
+.hero-subtitle{font-size:clamp(13px,2vw,16px);color:var(--mid);margin-top:28px;max-width:540px;line-height:1.9;}
+.hero-meta{margin-top:40px;display:flex;gap:40px;flex-wrap:wrap;}
+.hero-meta-item{display:flex;flex-direction:column;gap:4px;}
+.hero-meta-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);}
+.hero-meta-value{font-size:13px;color:var(--text);}
+.hero-meta-value a{color:var(--accent);text-decoration:none;}
+.hero-scroll{margin-top:64px;display:flex;align-items:center;gap:12px;color:var(--muted);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;}
+.hero-scroll-line{width:60px;height:1px;background:var(--accent);animation:scrollLine 2s ease-in-out infinite;}
+@keyframes scrollLine{0%,100%{width:60px;opacity:0.4;}50%{width:100px;opacity:1;}}
+.fade-in{opacity:0;transform:translateY(18px);animation:fadeIn 0.8s ease forwards;}
+@keyframes fadeIn{to{opacity:1;transform:translateY(0);}}
+.fade-in:nth-child(1){animation-delay:0.1s}.fade-in:nth-child(2){animation-delay:0.2s}.fade-in:nth-child(3){animation-delay:0.3s}.fade-in:nth-child(4){animation-delay:0.4s}
+
+/* ── SHOWCASE
+   Each tile: .tile-static (always visible) + .tile-gif (fades in on hover).
+   Hover-to-play: pure CSS transition, zero JS.
+   To activate: uncomment <img> tags and point to your files. ── */
+.showcase-section{padding:72px 0;}
+.showcase-intro{font-size:13px;color:var(--mid);max-width:600px;line-height:1.9;margin-bottom:40px;}
+.showcase-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;}
+.showcase-tile{position:relative;aspect-ratio:1/1;overflow:hidden;display:block;text-decoration:none;cursor:pointer;background:#0d1f30;}
+.tile-static{position:absolute;inset:0;z-index:1;transition:transform 0.5s ease;}
+.showcase-tile:hover .tile-static{transform:scale(1.05);}
+.tile-static img{width:100%;height:100%;object-fit:cover;display:block;}
+.tile-static.has-thumb .tile-placeholder{display:none;}
+.tile-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
+.tile-placeholder svg{opacity:0.35;}
+.tile-placeholder-label{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);text-align:center;padding:0 10px;line-height:1.5;}
+.tile-gif{position:absolute;inset:0;z-index:2;opacity:0;transition:opacity 0.4s ease;pointer-events:none;}
+.showcase-tile:hover .tile-gif{opacity:1;}
+.tile-gif img{width:100%;height:100%;object-fit:cover;display:block;}
+.tile-num{position:absolute;top:9px;left:10px;font-size:10px;color:rgba(255,255,255,0.3);z-index:4;transition:opacity 0.3s;}
+.showcase-tile:hover .tile-num{opacity:0;}
+.tile-overlay{position:absolute;inset:0;z-index:3;background:linear-gradient(to top,rgba(10,20,30,0.88) 0%,rgba(10,20,30,0.2) 55%,transparent 100%);opacity:0;transition:opacity 0.35s ease;display:flex;flex-direction:column;justify-content:flex-end;padding:13px 11px;}
+.showcase-tile:hover .tile-overlay{opacity:1;}
+.tile-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.92);line-height:1.45;}
+.tile-label em{display:block;font-style:normal;color:var(--accent);font-size:8px;margin-top:3px;letter-spacing:0.15em;}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
+.about-text{color:var(--mid);line-height:1.9;font-size:13px;}
+.about-text p+p{margin-top:16px;}
+.about-text strong{color:var(--text);font-weight:500;}
+.skill-list{display:flex;flex-direction:column;gap:9px;}
+.skill-tag{padding:9px 15px;border:1px solid var(--border);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--mid);display:flex;justify-content:space-between;align-items:center;transition:border-color 0.3s,color 0.3s,background 0.3s;background:var(--surface);}
+.skill-tag:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,153,170,0.04);}
+.skill-tag span{color:var(--muted);font-size:10px;}
+
+/* NEWS */
+.news-section{padding:52px 0;}
+.news-section .section-header{margin-bottom:12px;}
+.news-list{display:flex;flex-direction:column;}
+.news-item{display:grid;grid-template-columns:94px 26px 1fr;gap:0 12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);transition:background 0.2s;}
+.news-item:hover{background:rgba(0,153,170,0.03);}
+.news-date{font-size:11px;color:var(--muted);}
+.news-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.news-dot.chair{background:var(--accent2);}
+.news-dot.talk{background:#2d8a4e;}
+.news-dot.misc{background:var(--muted);}
+.news-content{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.news-tag{display:inline-block;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:1px 6px;border:1px solid currentColor;flex-shrink:0;}
+.news-tag.chair{color:var(--accent2);}
+.news-tag.talk{color:#2d8a4e;}
+.news-tag.misc{color:var(--mid);}
+.news-headline{font-size:12px;color:var(--text);}
+.news-sub{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap;}
+.news-sub a{color:var(--accent);text-decoration:none;}
+
+/* PUBLICATIONS */
+.pub-list{display:flex;flex-direction:column;}
+.pub-item{padding:22px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:86px 70px 1fr;gap:18px;align-items:start;}
+.pub-item:hover .pub-title{color:var(--accent);}
+.pub-title a{color:inherit;text-decoration:none;transition:color 0.2s;}
+.pub-link{display:inline-block;margin-top:7px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,153,170,0.35);padding-bottom:1px;}
+.pub-year{font-size:12px;color:var(--muted);padding-top:4px;}
+.pub-venue{display:inline-block;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:6px;padding:2px 8px;border:1px solid rgba(201,120,0,0.35);}
+.pub-title{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--text);margin-bottom:6px;transition:color 0.2s;line-height:1.3;}
+.pub-authors{font-size:12px;color:var(--muted);}
+.pub-authors strong{color:var(--mid);}
+.pub-thumb{width:86px;height:64px;border:1px solid var(--border);background:#eef3f7;flex-shrink:0;overflow:hidden;position:relative;transition:border-color 0.3s,box-shadow 0.3s;}
+.pub-item:hover .pub-thumb{border-color:rgba(0,153,170,0.4);box-shadow:0 2px 12px rgba(0,153,170,0.1);}
+.pub-thumb>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:1;}
+.pub-thumb-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;z-index:0;}
+.pub-thumb-ph svg{opacity:0.2;}
+.pub-thumb-ph span{font-size:7px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-align:center;padding:0 4px;}
+/* PhD thesis row — slightly different style */
+.pub-item.thesis .pub-venue{color:var(--mid);border-color:rgba(61,104,128,0.35);}
+
+/* EXPERIENCE */
+.exp-list{display:flex;flex-direction:column;}
+.exp-item{padding:26px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:170px 1fr;gap:22px;}
+.exp-period{font-size:11px;color:var(--muted);padding-top:4px;line-height:1.8;}
+.exp-period .dur{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);display:block;margin-top:2px;}
+.exp-org{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;}
+.exp-role{font-family:'Fraunces',serif;font-size:19px;font-weight:300;margin-bottom:7px;color:var(--text);}
+.exp-desc{font-size:12px;color:var(--mid);line-height:1.8;max-width:520px;}
+.exp-desc strong{color:var(--text);}
+.exp-desc li{margin-left:16px;margin-top:3px;}
+.exp-desc ul{list-style:disc;}
+
+/* ── REVIEWING ── */
+.review-intro{font-size:13px;color:var(--mid);line-height:1.9;max-width:580px;margin-bottom:32px;}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+.review-item{padding:16px 18px;background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;gap:4px;transition:border-color 0.3s,box-shadow 0.3s;}
+.review-item:hover{border-color:rgba(0,153,170,0.35);box-shadow:0 2px 14px rgba(0,153,170,0.07);}
+.review-venue{font-family:'Fraunces',serif;font-size:15px;font-weight:300;color:var(--text);}
+.review-meta{font-size:11px;color:var(--muted);}
+.review-years{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);}
+/* session chair highlight */
+.review-item.chair-item{border-color:rgba(201,120,0,0.3);}
+.review-item.chair-item .review-venue{color:var(--accent2);}
+
+/* ── TEACHING ── */
+.teaching-intro{font-size:13px;color:var(--mid);line-height:1.9;max-width:600px;margin-bottom:40px;}
+.teaching-block{margin-bottom:48px;}
+.teaching-block:last-child{margin-bottom:0;}
+.teaching-org{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.teaching-org::after{content:'';flex:1;height:1px;background:var(--border);}
+.course-list{display:flex;flex-direction:column;}
+.course-item{display:grid;grid-template-columns:50px 1fr auto;gap:16px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--border);}
+.course-item:last-child{border-bottom:none;}
+.course-hours{font-size:11px;color:var(--accent2);font-variant-numeric:tabular-nums;}
+.course-name{font-size:12px;color:var(--text);}
+.course-level{font-size:10px;color:var(--muted);letter-spacing:0.04em;}
+/* teaching philosophy blurb */
+.teaching-quote{margin-top:36px;padding:20px 24px;border-left:3px solid var(--accent);background:rgba(0,153,170,0.03);font-size:13px;color:var(--mid);line-height:1.9;font-style:italic;max-width:640px;}
+.teaching-quote cite{display:block;margin-top:10px;font-size:11px;font-style:normal;color:var(--muted);letter-spacing:0.05em;}
+
+/* Scroll-reveal: sections start invisible, JS adds .revealed when in viewport */
+section, .showcase-section{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.6s ease, transform 0.6s ease;
+}
+section.revealed, .showcase-section.revealed{
+  opacity:1;
+  transform:translateY(0);
+}
+/* Stagger pub/exp items inside revealed sections */
+.pub-item, .exp-item, .news-item, .review-item, .course-item{
+  opacity:0;transform:translateY(12px);
+  transition:opacity 0.45s ease,transform 0.45s ease;
+}
+.revealed .pub-item, .revealed .exp-item,
+.revealed .news-item, .revealed .review-item,
+.revealed .course-item{opacity:1;transform:translateY(0);}
+.revealed .pub-item:nth-child(1),.revealed .exp-item:nth-child(1),.revealed .news-item:nth-child(1),.revealed .review-item:nth-child(1){transition-delay:0.05s;}
+.revealed .pub-item:nth-child(2),.revealed .exp-item:nth-child(2),.revealed .news-item:nth-child(2),.revealed .review-item:nth-child(2){transition-delay:0.12s;}
+.revealed .pub-item:nth-child(3),.revealed .exp-item:nth-child(3),.revealed .news-item:nth-child(3),.revealed .review-item:nth-child(3){transition-delay:0.19s;}
+.revealed .pub-item:nth-child(4),.revealed .exp-item:nth-child(4),.revealed .news-item:nth-child(4),.revealed .review-item:nth-child(4){transition-delay:0.26s;}
+.revealed .pub-item:nth-child(5),.revealed .exp-item:nth-child(5),.revealed .news-item:nth-child(5){transition-delay:0.33s;}
+/* Respect reduced-motion preference */
+@media(prefers-reduced-motion:reduce){
+  section,.showcase-section,.pub-item,.exp-item,.news-item,.review-item,.course-item{
+    opacity:1!important;transform:none!important;transition:none!important;
+  }
+}
+.wip-section .section-header{margin-bottom:12px;}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start;}
+/* FIXED PHOTO: img is a direct child of .contact-photo-frame at z-index:1,
+   fills frame via object-fit:cover. Placeholder SVG sits behind at z-index:0. */
+.contact-photo-frame{width:200px;height:240px;border:1px solid var(--border);overflow:hidden;position:relative;background:#e8f0f5;}
+.contact-photo-frame>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;z-index:1;transition:transform 0.4s;}
+.contact-photo-frame:hover>img{transform:scale(1.03);}
+.contact-photo-ph{position:absolute;inset:0;z-index:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
+.contact-photo-ph svg{opacity:0.4;}
+.contact-photo-ph span{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;opacity:0.6;text-align:center;padding:0 12px;}
+.contact-caption{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:10px;}
+.contact-blurb{font-family:'Fraunces',serif;font-size:clamp(18px,2.5vw,28px);font-weight:300;line-height:1.35;color:var(--mid);margin-bottom:22px;}
+.contact-blurb em{color:var(--accent);font-style:italic;}
+.contact-links{display:flex;flex-direction:column;gap:9px;}
+.contact-link{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid var(--border);color:var(--mid);text-decoration:none;font-size:12px;letter-spacing:0.08em;background:var(--surface);transition:border-color 0.3s,color 0.3s,box-shadow 0.3s;}
+.contact-link:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 2px 16px rgba(0,153,170,0.1);}
+.contact-link-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-left:auto;}
+
+footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;}
+
+/* ── Stats bar ── */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);
+  border:1px solid var(--border);
+  margin-top:48px;
+}
+.stat-cell{
+  background:var(--surface);
+  padding:16px 20px;
+  display:flex;flex-direction:column;gap:3px;
+}
+.stat-num{
+  font-family:'Fraunces',serif;font-size:28px;font-weight:300;
+  color:var(--accent);letter-spacing:-0.02em;line-height:1;
+}
+.stat-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);}
+
+/* ── Topic filter pills on showcase ── */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+.filter-pill{
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  padding:5px 12px;border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);
+  cursor:pointer;transition:all 0.2s;user-select:none;
+}
+.filter-pill:hover{border-color:var(--accent);color:var(--accent);}
+.filter-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.showcase-tile.hidden{display:none;}
+
+/* ── Talks section ── */
+.talks-list{display:flex;flex-direction:column;}
+.talk-item{
+  display:grid;grid-template-columns:90px 1fr auto;
+  gap:0 18px;align-items:center;
+  padding:12px 0;border-bottom:1px solid var(--border);
+  transition:background 0.2s;
+}
+.talk-item:hover{background:rgba(0,153,170,0.03);}
+.talk-date{font-size:11px;color:var(--muted);}
+.talk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--accent);}
+.talk-body{display:flex;flex-direction:column;gap:2px;}
+.talk-title{font-size:12px;color:var(--text);}
+.talk-event{font-size:11px;color:var(--muted);}
+.talk-link{
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--accent);text-decoration:none;
+  border:1px solid rgba(0,153,170,0.3);padding:4px 10px;
+  white-space:nowrap;transition:all 0.2s;flex-shrink:0;
+}
+.talk-link:hover{background:var(--accent);color:#fff;}
+
+/* ── Video lab section ── */
+.video-lab-section{padding:72px 0;}
+.video-lab-intro{font-size:13px;color:var(--mid);line-height:1.9;max-width:600px;margin-bottom:12px;}
+.video-lab-hint{
+  font-size:11px;color:var(--muted);
+  padding:12px 16px;border:1px dashed var(--border);
+  margin-bottom:36px;line-height:1.7;
+}
+.video-lab-hint code{color:var(--accent);font-size:10px;letter-spacing:0.05em;}
+.video-grid-lab{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:3px;
+}
+.video-card{
+  position:relative;
+  background:#0d1f30;
+  overflow:hidden;
+}
+.video-card-media{
+  position:relative;
+  padding-bottom:56.25%;/* 16:9 */
+  width:100%;
+}
+/* video element fills the card and plays on hover */
+.video-card-media video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+  cursor:pointer;
+}
+/* placeholder shown when no video file is set */
+.video-card-ph{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:12px;background:linear-gradient(135deg,#0d1f30,#1a2e40);
+}
+.video-card-ph svg{opacity:0.25;}
+.video-card-ph-label{
+  font-size:9px;letter-spacing:0.14em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);text-align:center;padding:0 12px;line-height:1.6;
+}
+.video-card-info{
+  padding:12px 14px;
+  background:var(--surface);border-top:1px solid var(--border);
+}
+.video-card-title{font-size:12px;color:var(--text);margin-bottom:3px;}
+.video-card-meta{font-size:10px;color:var(--muted);letter-spacing:0.04em;}
+.video-card-tag{
+  display:inline-block;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  padding:1px 6px;border:1px solid rgba(0,153,170,0.35);color:var(--accent);
+  margin-top:4px;
+}
+/* hover to play overlay hint */
+.video-play-hint{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(0,0,0,0.4);
+  border:1.5px solid rgba(255,255,255,0.4);
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+  transition:opacity 0.3s;
+}
+.video-card:hover .video-play-hint{opacity:0;}
+
+@media(max-width:780px){
+  .stats-bar{grid-template-columns:1fr 1fr;}
+  .video-grid-lab{grid-template-columns:1fr 1fr;}
+  .talk-item{grid-template-columns:70px 1fr;gap:0 10px;}
+  .talk-link{display:none;}
+}
+
+
+/* One-sentence research identity */
+.hero-identity{
+  font-family:'Fraunces',serif;
+  font-size:clamp(16px,2.5vw,22px);
+  font-weight:300;font-style:italic;
+  color:var(--mid);line-height:1.4;
+  margin-bottom:20px;
+  max-width:560px;
+}
+.hero-identity em{color:var(--accent);font-style:normal;}
+
+/* Social row */
+.social-row{
+  display:flex;align-items:center;
+  gap:10px;flex-wrap:wrap;
+  margin-top:32px;
+}
+.social-link{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:11px;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+  padding:6px 12px;border:1px solid var(--border);
+  background:var(--surface);
+  transition:color 0.2s,border-color 0.2s,box-shadow 0.2s;
+}
+.social-link:hover{color:var(--accent);border-color:var(--accent);box-shadow:0 2px 12px rgba(0,153,170,0.1);}
+
+
+/* Award badges on publications */
+.pub-award{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  padding:2px 8px;margin-left:8px;
+  background:rgba(201,120,0,0.08);
+  border:1px solid rgba(201,120,0,0.35);
+  color:var(--accent2);vertical-align:middle;
+}
+/* Per-paper video thumbnail in pub list */
+.pub-video-thumb{
+  position:relative;width:86px;height:64px;
+  border:1px solid var(--border);
+  background:#0d1f30;flex-shrink:0;
+  overflow:hidden;cursor:pointer;
+}
+.pub-video-thumb video{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block;opacity:0;
+  transition:opacity 0.3s;
+}
+.pub-video-thumb:hover video{opacity:1;}
+.pub-video-thumb img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block;z-index:1;
+}
+.pub-video-thumb .pub-play{
+  position:absolute;inset:0;z-index:2;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(13,31,48,0.4);
+  transition:background 0.2s;
+}
+.pub-video-thumb:hover .pub-play{background:rgba(13,31,48,0.2);}
+.pub-video-thumb .pub-play svg{opacity:0.8;}
+
+/* ── Print stylesheet ── */
+@media print{
+  *{color:#000!important;background:#fff!important;box-shadow:none!important;}
+  nav,#robo-canvas,#back-top,.skip-link,.hero-scroll,
+  .showcase-section,.pub-cite-btn,.contact-photo-frame,
+  body::before{display:none!important;}
+  .container{max-width:100%;padding:0 16px;}
+  section{padding:20px 0;border-top:1px solid #ccc;opacity:1!important;transform:none!important;}
+  .pub-item,.exp-item,.news-item,.review-item{opacity:1!important;transform:none!important;}
+  .hero{min-height:auto;padding:24px 0 16px;}
+  .hero h1{font-size:32px;}
+  .about-grid,.contact-grid{grid-template-columns:1fr;}
+  a{text-decoration:none;}
+  a[href]::after{content:" (" attr(href) ")";font-size:9px;color:#666;}
+  a[href^="#"]::after,a[href^="mailto"]::after{content:"";}
+  footer{font-size:10px;}
+}
+::selection{background:var(--accent);color:#fff;}
+
+@media(max-width:780px){
+  nav{padding:12px 16px;}
+  .container{padding:0 16px;}
+  .nav-burger{display:flex;}
+  .nav-links{
+    display:none;flex-direction:column;gap:0;flex-wrap:nowrap;
+    position:fixed;top:52px;left:0;right:0;z-index:99;
+    background:var(--bg);border-bottom:1px solid var(--border);
+    padding:8px 0;box-shadow:0 8px 24px var(--shadow);
+  }
+  .nav-links.open{display:flex;}
+  .nav-links li{border-bottom:1px solid var(--border);}
+  .nav-links a{display:block;padding:12px 20px;font-size:11px;letter-spacing:0.12em;}
+  .about-grid{grid-template-columns:1fr;}
+  .pub-item{grid-template-columns:68px 1fr;gap:10px;}
+  .pub-video-thumb{width:68px;height:51px;}
+  .pub-item .pub-year{display:none;}
+  .exp-item{grid-template-columns:1fr;gap:4px;}
+  .contact-grid{grid-template-columns:1fr;}
+  .contact-photo-frame{width:100%;height:200px;}
+  .review-grid{grid-template-columns:1fr;}
+  .course-item{grid-template-columns:44px 1fr auto;gap:10px;}
+  .showcase-grid{grid-template-columns:repeat(2,1fr);}
+  .tile-overlay{opacity:1;background:linear-gradient(to top,rgba(10,20,30,0.75) 0%,transparent 60%);}
+  .hero-meta{gap:24px;}
+  .meta-strip{grid-template-columns:1fr 1fr;}
+}
+</style>
 </head>
 <body>
-  <canvas id="robo-canvas"></canvas>
-  <div class="grid-bg"></div>
+<!-- 7. Skip to content — visible on keyboard focus, invisible otherwise -->
+<a class="skip-link" href="#about">Skip to content</a>
 
-  <nav>
-    <div class="nav-logo">G. Gourmelen</div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#news">News</a></li>
-      <li><a href="#publications">Publications</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#wip">WIP</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<!-- 11. Back to top button -->
+<button id="back-top" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-  <div class="container">
-    <div class="hero">
-      <div class="hero-inner">
-        <div class="hero-tag fade-in">Robotics Researcher · Tokyo, Japan</div>
-        <h1 class="fade-in">Guillaume<br /><em>Gourmelen</em></h1>
-        <p class="hero-subtitle fade-in">PhD in embodied robotics. I work at the intersection of teleoperation, haptics, and human motor control — building systems that transfer human skill into robotic bodies. Currently developing bimanual avatar teleoperation systems for human-robot interaction research in Tokyo.</p>
-        <div class="hero-meta fade-in">
-          <div class="hero-meta-item"><span class="hero-meta-label">Current</span><span class="hero-meta-value">Project Asst. Prof., KMD · Keio University</span></div>
-          <div class="hero-meta-item"><span class="hero-meta-label">Based in</span><span class="hero-meta-value">Tokyo, Japan 🇯🇵</span></div>
-          <div class="hero-meta-item"><span class="hero-meta-label">Scholar</span><span class="hero-meta-value"><a href="https://scholar.google.com/citations?hl=en&user=GC2dxjQAAAAJ" target="_blank">Google Scholar ↗</a></span></div>
+<canvas id="robo-canvas" aria-hidden="true"></canvas>
+
+<nav>
+  <a class="nav-logo" href="index.html">G. Gourmelen</a>
+  <button class="nav-burger" aria-label="Toggle navigation" onclick="toggleNav(this)" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <a href="assets/cv-gourmelen.pdf" target="_blank" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">CV ↓</a>
+    <a href="consulting.html" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);text-decoration:none;border:1px solid rgba(201,120,0,0.35);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='var(--accent2)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--accent2)'">Consulting</a>
+    <a href="interprete.html" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);text-decoration:none;border:1px solid rgba(0,153,170,0.35);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='var(--accent)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--accent)'">Interprétariat FR-JP</a>
+  </div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#research">Research</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#news">News</a></li>
+    <li><a href="#publications">Publications</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#reviewing">Reviewing</a></li>
+    <li><a href="#teaching">Teaching</a></li>
+    <li><a href="#talks">Talks</a></li>
+    <li><a href="#video-lab">Videos</a></li>
+    <li><a href="#wip">WIP</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="container">
+
+<!-- ═══ HERO ═══════════════════════════════════════════════════ -->
+<div class="hero">
+  <div class="hero-inner">
+    <!-- One-sentence research identity — above the fold, first thing read -->
+    <div class="hero-tag fade-in">PhD · Project Assistant Professor · Tokyo, Japan</div>
+    <div class="hero-identity fade-in">I build robots that understand, replicate, and extend <em>human physical skill.</em></div>
+    <h1 class="fade-in">Guillaume<br/><em>Gourmelen</em></h1>
+    <p class="hero-subtitle fade-in">I build systems at the intersection of teleoperation, haptics, and human motor control — robots that transfer human skill, replicate physical compliance, and extend the body's reach. Currently leading robotics and vision research at Keio University KMD and contributing to Japan's JST Moonshot Avatar program.</p>
+    <div class="hero-meta fade-in">
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Position</span>
+        <span class="hero-meta-value">Project Asst. Prof., KMD · Keio University</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Based in</span>
+        <span class="hero-meta-value">Tokyo, Japan 🇯🇵</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Languages</span>
+        <span class="hero-meta-value">French · English · Japanese (N1) · Italian</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="hero-meta-label">Scholar</span>
+        <span class="hero-meta-value"><a href="https://scholar.google.com/citations?user=GC2dxjQAAAAJ" target="_blank">Google Scholar ↗</a></span>
+      </div>
+    </div>
+    <!-- Social presence row -->
+    <div class="social-row fade-in">
+      <a href="https://scholar.google.com/citations?user=GC2dxjQAAAAJ" target="_blank" class="social-link" aria-label="Google Scholar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z"/></svg>
+        Scholar
+      </a>
+      <a href="https://cv.hal.science/guillaume-gourmelen" target="_blank" class="social-link" aria-label="HAL">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+        HAL
+      </a>
+      <a href="https://www.linkedin.com/in/guillaume-gourmelen-71b655161/" target="_blank" class="social-link" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/guillaumegourmelen" target="_blank" class="social-link" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+      <a href="consulting.html" class="social-link" style="color:var(--accent2);border-color:rgba(201,120,0,0.3);" aria-label="Consulting">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        Consulting
+      </a>
+      <a href="interprete.html" class="social-link" style="color:var(--accent);border-color:rgba(0,153,170,0.3);" aria-label="Interprétariat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Interprétariat FR-JP
+      </a>
+    </div>
+    <div class="hero-scroll"><div class="hero-scroll-line"></div>Scroll to explore</div>
+  </div>
+</div>
+
+<!-- ═══ RESEARCH SHOWCASE ════════════════════════════════════
+     HOW TO ADD YOUR MEDIA:
+     1. Still image  →  assets/img/showcase/PROJECT-still.jpg
+     2. Animated GIF →  assets/img/showcase/PROJECT.gif
+     In each tile uncomment both <img> tags below.
+     The GIF layer is invisible at rest — CSS fades it in on hover.
+     ════════════════════════════════════════════════════════ -->
+<section id="research" class="showcase-section" style="border-top:1px solid var(--border);padding-top:72px;">
+  <div class="section-header">
+    <span class="section-num">00</span>
+    <h2 class="section-title">Research at a Glance</h2>
+  </div>
+  <p class="showcase-intro">Nine projects across teleoperation, haptics, human motor learning, medical robotics, soft robotics, and embodied systems — plus a running log of work in progress. Hover any tile to preview — click to open the full project page.</p>
+
+  <!-- Filter pills — click to show only matching topics -->
+  <div class="filter-row">
+    <button class="filter-pill active" data-filter="all" onclick="filterTiles(this)">All</button>
+    <button class="filter-pill" data-filter="teleoperation" onclick="filterTiles(this)">Teleoperation</button>
+    <button class="filter-pill" data-filter="haptics" onclick="filterTiles(this)">Haptics</button>
+    <button class="filter-pill" data-filter="wearable" onclick="filterTiles(this)">Wearable</button>
+    <button class="filter-pill" data-filter="medical" onclick="filterTiles(this)">Medical</button>
+    <button class="filter-pill" data-filter="ai" onclick="filterTiles(this)">AI / Vision</button>
+    <button class="filter-pill" data-filter="underwater" onclick="filterTiles(this)">Underwater</button>
+  </div>
+
+  <div class="showcase-grid">
+
+    <a href="projects/teleoperation.html" class="showcase-tile" data-topics="teleoperation haptics">
+      <span class="tile-num">01</span>
+      <div class="tile-static" data-prefix="teleoperation">
+        <!-- <img src="assets/img/showcase/teleoperation-still.jpg" alt="7DoF teleoperation"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#081825,#0d2a38)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><circle cx="19" cy="19" r="16" stroke="#0099aa" stroke-width="1"/><circle cx="19" cy="19" r="6" fill="none" stroke="#0099aa" stroke-width="1"/><line x1="19" y1="3" x2="19" y2="13" stroke="#0099aa" stroke-width="1"/><line x1="19" y1="25" x2="19" y2="35" stroke="#0099aa" stroke-width="1"/><line x1="3" y1="19" x2="13" y2="19" stroke="#0099aa" stroke-width="1"/><line x1="25" y1="19" x2="35" y2="19" stroke="#0099aa" stroke-width="1"/></svg>
+          <span class="tile-placeholder-label">7DoF Teleoperation</span>
         </div>
-        <div class="hero-scroll"><div class="hero-scroll-line"></div>Scroll to explore</div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/teleoperation.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">7DoF Teleoperation &amp; Impedance Adaptation<em>IEEE IROS 2021</em></div></div>
+    </a>
+
+    <a href="projects/trajectory-learning.html" class="showcase-tile" data-topics="teleoperation haptics">
+      <span class="tile-num">02</span>
+      <div class="tile-static" data-prefix="trajectory-learning">
+        <!-- <img src="assets/img/showcase/trajectory-still.jpg" alt="Trajectory learning"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#0d1a08,#182610)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><path d="M4 30C10 18 16 26 22 14C28 2 33 10 36 8" stroke="#4aaa60" stroke-width="1.5" fill="none"/><circle cx="4" cy="30" r="3" fill="#4aaa60"/><circle cx="36" cy="8" r="3" fill="#4aaa60"/></svg>
+          <span class="tile-placeholder-label">Trajectory &amp; Impedance Learning</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/trajectory.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">Human Trajectory &amp; Impedance Learning<em>PhD Thesis · LIRMM 2022</em></div></div>
+    </a>
+
+    <a href="projects/honda.html" class="showcase-tile" data-topics="teleoperation haptics">
+      <span class="tile-num">03</span>
+      <div class="tile-static" data-prefix="honda">
+        <!-- <img src="assets/img/showcase/honda-still.jpg" alt="Honda avatar"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#1e0c06,#2e1208)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect x="11" y="4" width="16" height="12" rx="2" stroke="#c97800" stroke-width="1.5"/><rect x="6" y="16" width="26" height="17" rx="1" stroke="#c97800" stroke-width="1.5"/><line x1="19" y1="16" x2="19" y2="33" stroke="#c97800" stroke-width="1"/><circle cx="11" cy="30" r="3" stroke="#c97800" stroke-width="1.5"/><circle cx="27" cy="30" r="3" stroke="#c97800" stroke-width="1.5"/></svg>
+          <span class="tile-placeholder-label">Honda Avatar</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/honda.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">Bimanual Avatar Teleoperation<em>Honda Research Institute Japan</em></div></div>
+    </a>
+
+    <a href="projects/miruoto.html" class="showcase-tile" data-topics="ai">
+      <span class="tile-num">04</span>
+      <div class="tile-static" data-prefix="miruoto">
+        <!-- <img src="assets/img/showcase/miruoto-still.jpg" alt="Miruoto"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#08081e,#0e0e2e)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><circle cx="19" cy="19" r="14" stroke="#6d4fc4" stroke-width="1.5"/><circle cx="19" cy="19" r="8" stroke="#6d4fc4" stroke-width="1" stroke-dasharray="2 3"/><circle cx="19" cy="19" r="3" fill="#6d4fc4" opacity="0.7"/></svg>
+          <span class="tile-placeholder-label">Miruoto</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/miruoto.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">Miruoto — Seeing Sound at the Stadium<em>Tokyo 2025 Deaflympics</em></div></div>
+    </a>
+
+    <a href="projects/submarine.html" class="showcase-tile" data-topics="underwater">
+      <span class="tile-num">05</span>
+      <div class="tile-static" data-prefix="submarine">
+        <!-- <img src="assets/img/showcase/submarine-still.jpg" alt="AUV"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#081018,#0c1a26)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><ellipse cx="19" cy="19" rx="14" ry="7" stroke="#0099aa" stroke-width="1"/><line x1="5" y1="19" x2="33" y2="19" stroke="#0099aa" stroke-width="1"/><line x1="11" y1="12" x2="11" y2="6" stroke="#0099aa" stroke-width="1.5"/><line x1="27" y1="26" x2="27" y2="32" stroke="#0099aa" stroke-width="1.5"/></svg>
+          <span class="tile-placeholder-label">Submarine AUV</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/submarine.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">Reconfigurable AUV · Karst Exploration<em>Sensors (MDPI) 2022</em></div></div>
+    </a>
+
+    <a href="projects/soft-grasp.html" class="showcase-tile" data-topics="haptics">
+      <span class="tile-num">06</span>
+      <div class="tile-static" data-prefix="soft-grasp">
+        <!-- <img src="assets/img/showcase/softgrasp-still.jpg" alt="Soft grasp"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#140e1a,#1e1428)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><path d="M19 32C11 32 7 26 7 19C7 12 11 7 19 7C27 7 31 12 31 19C31 26 27 32 19 32Z" stroke="#9d6fc4" stroke-width="1.5" fill="none"/><path d="M14 19Q19 14 24 19Q19 24 14 19Z" fill="#9d6fc4" opacity="0.4"/></svg>
+          <span class="tile-placeholder-label">Soft Robotics Grasp</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/softgrasp.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">Hybrid Roller–Jamming Grasping<em>Under Review — IEEE Access</em></div></div>
+    </a>
+
+    <a href="projects/3arm.html" class="showcase-tile" data-topics="wearable haptics">
+      <span class="tile-num">07</span>
+      <div class="tile-static" data-prefix="3arm">
+        <!-- <img src="assets/img/showcase/3arm-still.jpg" alt="MESSPa shoulder pad"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#180c0c,#271010)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><line x1="19" y1="6" x2="19" y2="21" stroke="#c97800" stroke-width="2.5"/><line x1="19" y1="21" x2="10" y2="33" stroke="#c97800" stroke-width="2.5"/><line x1="19" y1="21" x2="28" y2="33" stroke="#c97800" stroke-width="2.5"/><line x1="19" y1="15" x2="6" y2="23" stroke="#c97800" stroke-width="1.5" stroke-dasharray="2 2"/><circle cx="19" cy="6" r="3" stroke="#c97800" stroke-width="1.5"/></svg>
+          <span class="tile-placeholder-label">MESSPa Shoulder Pad</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/3arm.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">MESSPa — Detachable Arm Embodiment<em>Waseda University · Iwata Lab</em></div></div>
+    </a>
+
+    <a href="projects/colimbs.html" class="showcase-tile" data-topics="wearable haptics">
+      <span class="tile-num">08</span>
+      <div class="tile-static" data-prefix="colimbs">
+        <!-- <img src="assets/img/showcase/colimbs-still.jpg" alt="Co-Limbs"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#0c150c,#121e12)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><circle cx="19" cy="10" r="5" stroke="#4aaa60" stroke-width="1"/><line x1="19" y1="15" x2="19" y2="25" stroke="#4aaa60" stroke-width="1.5"/><line x1="19" y1="21" x2="10" y2="33" stroke="#4aaa60" stroke-width="1.5"/><line x1="19" y1="21" x2="28" y2="33" stroke="#4aaa60" stroke-width="1.5"/><path d="M28 18C34 16 36 21 32 25" stroke="#4aaa60" stroke-width="1.5" fill="none"/></svg>
+          <span class="tile-placeholder-label">Co-Limbs</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/colimbs.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">Co-Limbs — Wearable Robot Arms<em>ACM SIGGRAPH Asia 2019</em></div></div>
+    </a>
+
+    <a href="projects/echo.html" class="showcase-tile" data-topics="medical teleoperation haptics">
+      <span class="tile-num">09</span>
+      <div class="tile-static" data-prefix="echo">
+        <!-- <img src="assets/img/showcase/echo-still.jpg" alt="Echo robot"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#081818,#0c2222)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><path d="M5 22Q10 10 19 19Q28 28 33 17" stroke="#0099aa" stroke-width="1.5" fill="none"/><rect x="15" y="4" width="8" height="12" rx="2" stroke="#0099aa" stroke-width="1"/><line x1="19" y1="16" x2="19" y2="21" stroke="#0099aa" stroke-width="1"/></svg>
+          <span class="tile-placeholder-label">Echocardiography Robot</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/echo.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">Medical Echo Teleoperation<em>Waseda University · Iwata Lab</em></div></div>
+    </a>
+
+    <a href="wip.html" class="showcase-tile" data-topics="all">
+      <span class="tile-num">10</span>
+      <div class="tile-static" data-prefix="wip">
+        <!-- <img src="assets/img/showcase/wip-still.jpg" alt="Work in progress"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#1a1408,#241c0c)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect x="6" y="6" width="26" height="26" rx="2" stroke="#c97800" stroke-width="1" stroke-dasharray="3 3"/><circle cx="19" cy="19" r="4" fill="#c97800" opacity="0.5"/></svg>
+          <span class="tile-placeholder-label">Work in Progress</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/wip.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">Work in Progress<em>Monthly updates &amp; videos</em></div></div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ═══ ABOUT ═══════════════════════════════════════════════════ -->
+<section id="about">
+  <div class="section-header"><span class="section-num">01</span><h2 class="section-title">About</h2></div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>I am a French robotics researcher based in Tokyo. I currently serve as <strong>Project Assistant Professor</strong> at the Embodied Media Project, Keio University Graduate School of Media Design (KMD), where I lead the Robotics and Vision Augmentation team under Prof. Kouta Minamizawa.</p>
+      <p>My research addresses <strong>physical human–robot interaction</strong>: developing systems that enable robots to understand and replicate human motor intent — not just trajectories, but dynamic compliance, force profiles, and embodied skill. Three threads define my work: <strong>impedance-aware teleoperation</strong>, <strong>wearable supernumerary robotics</strong>, and <strong>AI-driven accessibility</strong>.</p>
+      <p>I hold a <strong>PhD from the University of Montpellier / LIRMM-CNRS</strong> (2022), funded by the JST ERATO Jizai Body project. Before Keio, I was a permanent researcher at <strong>Honda Research Institute Japan</strong> (Avatar Project, 2025) and Research Associate at <strong>Waseda University Iwata Lab</strong> (2023–2025).</p>
+      <p>I was awarded <strong>Silver Medal at WorldSkills France 2018</strong> and <strong>Bronze Medal at EuroSkills 2018</strong> in Mobile Robotics. I am fluent in <strong>French, English, and Japanese (JLPT N1)</strong>, with intermediate Italian.</p>
+    </div>
+    <div class="skill-list">
+      <div class="skill-tag">Teleoperation &amp; Haptic Control <span>Core</span></div>
+      <div class="skill-tag">Human Impedance Estimation <span>Core</span></div>
+      <div class="skill-tag">Embodied / Supernumerary Robotics <span>Core</span></div>
+      <div class="skill-tag">Learning from Demonstration <span>Applied</span></div>
+      <div class="skill-tag">Computer Vision · OpenCV · YOLO <span>Applied</span></div>
+      <div class="skill-tag">CNN · LSTM · TensorFlow <span>Applied</span></div>
+      <div class="skill-tag">ROS2 · MuJoCo · Isaac Sim <span>Tools</span></div>
+      <div class="skill-tag">C/C++ · Python · Docker · Git <span>Tools</span></div>
+      <div class="skill-tag">PCB Design · Pneumatics · 3D Print <span>Hardware</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ NEWS ════════════════════════════════════════════════════ -->
+<section id="news" class="news-section">
+  <div class="section-header"><span class="section-num">01.5</span><h2 class="section-title">Updates</h2></div>
+  <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:600px;margin-bottom:20px;">Recent news, talks, publications, and deployments.</p>
+  <div class="news-list">
+    <div class="news-item">
+      <div class="news-date">May 2026</div><div class="news-dot talk"></div>
+      <div class="news-content">
+        <span class="news-tag talk">Talk</span>
+        <span class="news-headline">Invited Seminar — "From Human Skill to Robot Embodiment: Control, Learning, and Haptic Feedback for Human-Robot Systems" · GV Lab, University of Tokyo</span>
+      </div>
+    </div>
+    <div class="news-item">
+      <div class="news-date">Mar 2026</div><div class="news-dot chair"></div>
+      <div class="news-content">
+        <span class="news-tag chair">Chair</span>
+        <span class="news-headline">Session Chair — Augmented Human 2026 · Human–Robot Communication &amp; Control</span>
+      </div>
+    </div>
+    <div class="news-item">
+      <div class="news-date">Jan 2026</div><div class="news-dot misc"></div>
+      <div class="news-content">
+        <span class="news-tag misc">Position</span>
+        <span class="news-headline">Started as Project Assistant Professor at Keio University KMD, Embodied Media Project</span>
+      </div>
+    </div>
+    <div class="news-item">
+      <div class="news-date">Nov 2025</div><div class="news-dot talk"></div>
+      <div class="news-content">
+        <span class="news-tag talk">Deploy</span>
+        <span class="news-headline">Miruoto live at Tokyo 2025 Deaflympics — table tennis (Tokyo Metropolitan Gymnasium) &amp; badminton (Keio Arena Tokyo), funded by Tokyo Metropolitan Government</span>
+      </div>
+    </div>
+    <div class="news-item">
+      <div class="news-date">Apr 2025</div><div class="news-dot misc"></div>
+      <div class="news-content">
+        <span class="news-tag misc">Industry</span>
+        <span class="news-headline">Joined Honda Research Institute Japan — Avatar Project, Frontier Robotics</span>
+      </div>
+    </div>
+    <div class="news-item">
+      <div class="news-date">Aug 2024</div><div class="news-dot talk"></div>
+      <div class="news-content">
+        <span class="news-tag talk">Paper</span>
+        <span class="news-headline">Miruoto at ACM SIGGRAPH 2024 Emerging Technologies — Denver, CO</span>
+        <span class="news-sub"><a href="https://dl.acm.org/doi/10.1145/3641517.3664393" target="_blank">ACM DL ↗</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PUBLICATIONS ════════════════════════════════════════════
+     Source: HAL open archive — 5 documents verified (Jun 2026)
+     1 journal · 3 conference papers · 1 PhD thesis
+     3 papers under review (not yet on HAL)
+     ══════════════════════════════════════════════════════════ -->
+<section id="publications">
+  <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Publications</h2></div>
+  <div class="pub-list">
+
+    <!-- ── JOURNAL ── -->
+    <div class="pub-item">
+      <div class="pub-video-thumb">
+          <img src="assets/img/auv.png" alt="AUV" onerror="this.style.display='none'">
+          <!--
+            Video thumbnail: drop your .mp4 here, it plays silently on hover.
+            <video src="assets/video/submarine-auv.mp4" muted loop playsinline preload="none"></video>
+          -->
+          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>auv.png</span></div>
+          <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
+        </div>
+      <div class="pub-year">2022</div>
+      <div>
+        <div class="pub-venue">Sensors (MDPI) · Journal</div>
+        <div class="pub-title"><a href="https://doi.org/10.3390/s22093379" target="_blank">A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration: Design and Experiment</a></div>
+        <div class="pub-authors">H.T. Dang, L. Lapierre, R. Zapata, B. Ropars, <strong>G. Gourmelen</strong> · LIRMM, Université de Montpellier</div>
+        <a href="https://hal.science/hal-03929843v1/document" target="_blank" class="pub-link">PDF via HAL · hal-03929843 ↗</a>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@article{dang2022auv,\n  author={Dang, H.T. and Lapierre, L. and Zapata, R. and Ropars, B. and Gourmelen, G.},\n  title={A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration},\n  journal={Sensors},\n  volume={22},\n  number={9},\n  pages={3379},\n  year={2022},\n  doi={10.3390/s22093379}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
       </div>
     </div>
 
-    <!-- ─── ABOUT ─────────────────────────────────────────────────── -->
-    <section id="about">
-      <div class="section-header"><span class="section-num">01</span><h2 class="section-title">About</h2></div>
-      <div class="about-grid">
-        <div class="about-text">
-          <p>I am a French robotics researcher based in Tokyo, currently serving as <strong>Project Assistant Professor</strong> at the Embodied Media Project (KMD), Keio University, and <strong>Visiting Researcher</strong> at Waseda University (Iwata Lab) and Honda Research Institute Japan.</p>
-          <p>My research focuses on <strong>teleoperation, embodiment, and human-in-the-loop control</strong> — specifically on how humans can seamlessly transfer motor skills to robotic systems through intuitive interfaces, haptic feedback, and impedance adaptation. At Honda, I developed <strong>bimanual teleoperation</strong> systems for next-generation avatar platforms.</p>
-          <p>I hold a <strong>PhD from the University of Montpellier / LIRMM</strong> (2022), funded by the JST ERATO project. I am now focused on applied academic research in teleoperation and human motor control — contributing to the <strong>JST Moonshot program</strong> on VR, neurosciences and robotics at KMD.</p>
-          <p>I collaborate closely with the Inami Lab at UTokyo — where my work on supernumerary robotic limbs (Co-Limbs) originated.</p>
-          <p>I am fluent in <strong>French, English, and Japanese</strong> (日本語)</p>
+    <!-- ── SIGGRAPH 2024 ── -->
+    <div class="pub-item">
+      <div class="pub-video-thumb">
+          <img src="assets/img/miruoto.png" alt="Miruoto" onerror="this.style.display='none'">
+          <!--
+            Video thumbnail: drop your .mp4 here, it plays silently on hover.
+            <video src="assets/video/miruoto-landscape.mp4" muted loop playsinline preload="none"></video>
+          -->
+          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>miruoto.png</span></div>
+          <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
         </div>
-        <div class="about-skills">
-          <div class="skill-tag">Teleoperation Systems <span>Core</span></div>
-          <div class="skill-tag">Haptic Feedback &amp; Control <span>Core</span></div>
-          <div class="skill-tag">Human Impedance Estimation <span>Core</span></div>
-          <div class="skill-tag">Embodied Robotics <span>Core</span></div>
-          <div class="skill-tag">Skill Transfer / Learning from Demo <span>Applied</span></div>
-          <div class="skill-tag">Computer Vision · OpenCV <span>Applied</span></div>
-          <div class="skill-tag">Real-time Image &amp; Sound Processing <span>Applied</span></div>
-          <div class="skill-tag">CNN · LSTM · YOLO <span>Applied</span></div>
-          <div class="skill-tag">Supernumerary Robotic Limbs <span>Applied</span></div>
-          <div class="skill-tag">ROS · Python · C++ · Docker <span>Tools</span></div>
-        </div>
+      <div class="pub-year">2024</div>
+      <div>
+        <div class="pub-venue">ACM SIGGRAPH 2024 — Emerging Technologies · Denver, USA</div>
+        <div class="pub-title"><a href="https://doi.org/10.1145/3641517.3664393" target="_blank">Miruoto: Sports Event Atmosphere Visual Rendering through Real-Time Image and Sound Processing</a></div>
+        <div class="pub-authors"><strong>G. Gourmelen</strong>, S. Toriya, E. Miya, N. Shioura, H. Iwata · Waseda University</div>
+        <a href="https://miruoto.jp/en/top" target="_blank" class="pub-link">Official project site, miruoto.jp ↗</a>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2024miruoto,\n  author={Gourmelen, G. and Toriya, S. and Miya, E. and Shioura, N. and Iwata, H.},\n  title={Miruoto: Sports Event Atmosphere Visual Rendering through Real-Time Image and Sound Processing},\n  booktitle={ACM SIGGRAPH 2024 Emerging Technologies},\n  year={2024},\n  doi={10.1145/3641517.3664393}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
       </div>
-    </section>
+    </div>
 
-    <!-- ─── NEWS compact ──────────────────────────────────────────── -->
-    <section id="news" class="news-section">
-      <div class="section-header"><span class="section-num">01.5</span><h2 class="section-title">News</h2></div>
-      <div class="news-list">
-        <!-- Copy a news-item block and change the type class + text to add entries -->
-        <!-- Types: chair / talk / award / review / media / misc -->
-
-        <div class="news-item">
-          <div class="news-date">Mar 2026</div>
-          <div class="news-type-dot chair"></div>
-          <div class="news-content">
-            <span class="news-tag chair">Chair</span>
-            <span class="news-headline">Session Chair — Augmented Human 2026 · Human–Robot Communication &amp; Control</span>
-          </div>
+    <!-- ── IROS 2021 ── -->
+    <div class="pub-item">
+      <div class="pub-video-thumb">
+          <img src="assets/img/iros2021.png" alt="IROS 2021" onerror="this.style.display='none'">
+          <!--
+            Video thumbnail: drop your .mp4 here, it plays silently on hover.
+            <video src="assets/video/iros2021-impedance.mp4" muted loop playsinline preload="none"></video>
+          -->
+          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>iros2021.png</span></div>
+          <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
         </div>
-
-        <div class="news-item">
-          <div class="news-date">Nov 2025</div>
-          <div class="news-type-dot talk"></div>
-          <div class="news-content">
-            <span class="news-tag talk">Demo</span>
-            <span class="news-headline">Miruoto deployed live — Tokyo Deaflympics 2025 Championship Finals</span>
-            <span class="news-sub">Tokyo, Japan</span>
-          </div>
-        </div>
-
-        <div class="news-item">
-          <div class="news-date">Aug 2024</div>
-          <div class="news-type-dot talk"></div>
-          <div class="news-content">
-            <span class="news-tag talk">Presentation</span>
-            <span class="news-headline">Miruoto at ACM SIGGRAPH 2024 — Denver, CO</span>
-            <span class="news-sub"><a href="https://dl.acm.org/doi/10.1145/3641517.3664393" target="_blank">ACM DL ↗</a></span>
-          </div>
-        </div>
-
+      <div class="pub-year">2021</div>
+      <div>
+        <div class="pub-venue">IEEE/RSJ IROS 2021 — Prague, Czech Republic</div>
+        <div class="pub-title"><a href="https://doi.org/10.1109/IROS51168.2021.9636418" target="_blank">Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance</a></div>
+        <div class="pub-authors"><strong>G. Gourmelen</strong>, B. Navarro, A. Cherubini, G. Ganesh · LIRMM</div>
+        <a href="https://hal.science/hal-03324747v1/document" target="_blank" class="pub-link">PDF via HAL · hal-03324747 ↗</a>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2021iros,\n  author={Gourmelen, G. and Navarro, B. and Cherubini, A. and Ganesh, G.},\n  title={Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance},\n  booktitle={IEEE/RSJ IROS},\n  pages={9276--9282},\n  year={2021},\n  doi={10.1109/IROS51168.2021.9636418}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
       </div>
-    </section>
+    </div>
 
-    <!-- ─── PUBLICATIONS ──────────────────────────────────────────── -->
-    <section id="publications">
-      <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Publications</h2></div>
-      <div class="pub-list">
-
-        <!--
-          PHOTO STRUCTURE (correct, no double-render bug):
-          <div class="pub-thumb">
-            <img src="assets/img/photo.png" alt="Alt text" onerror="this.style.display='none'">
-            <div class="pub-thumb-placeholder">
-              SVG fallback (hidden behind img via z-index)
-            </div>
-          </div>
-        -->
-
-        <!-- WHC 2025 -->
-        <div class="pub-item">
-          <div class="pub-thumb">
-            <img src="assets/img/messpa.png" alt="MESSPa" onerror="this.style.display='none'">
-            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>messpa.png</span></div>
-          </div>
-          <div class="pub-year">2025</div>
-          <div>
-            <div class="pub-venue-badge">IEEE World Haptics — Suwon, South Korea</div>
-            <div class="pub-title"><a href="https://2025.worldhaptics.org/work-in-progress-papers/" target="_blank">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</a></div>
-            <div class="pub-authors">V. Vimolmongkolporn, <strong>G. Gourmelen</strong>, Y. Iwasaki, H. Iwata · Waseda University / Iwata Lab</div>
-            <a href="https://2025.worldhaptics.org/work-in-progress-papers/" target="_blank" class="pub-link">WHC 2025 Program ↗</a>
-          </div>
+    <!-- ── SIGGRAPH Asia 2019 ── -->
+    <div class="pub-item">
+      <div class="pub-video-thumb">
+          <img src="assets/img/colimbs.png" alt="Co-Limbs" onerror="this.style.display='none'">
+          <!--
+            Video thumbnail: drop your .mp4 here, it plays silently on hover.
+            <video src="assets/video/colimbs-siggraph.mp4" muted loop playsinline preload="none"></video>
+          -->
+          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>colimbs.png</span></div>
+          <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
         </div>
-
-        <!-- RSJ 2024 -->
-        <div class="pub-item">
-          <div class="pub-thumb">
-            <img src="assets/img/messpa.png" alt="MESSPa RSJ" onerror="this.style.display='none'">
-            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>messpa.png</span></div>
-          </div>
-          <div class="pub-year">2024</div>
-          <div>
-            <div class="pub-venue-badge">RSJ 2024 — Robotics National Conf. Japan</div>
-            <div class="pub-title">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</div>
-            <div class="pub-authors"><strong>G. Gourmelen</strong>, V. Vimolmongkolporn, Y. Iwasaki, H. Iwata · Waseda University / Iwata Lab</div>
-            <a href="https://cv.hal.science/guillaume-gourmelen" target="_blank" class="pub-link">HAL Profile ↗</a>
-          </div>
-        </div>
-
-        <!-- SIGGRAPH 2024 -->
-        <div class="pub-item">
-          <div class="pub-thumb">
-            <img src="assets/img/miruoto.png" alt="Miruoto" onerror="this.style.display='none'">
-            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>miruoto.png</span></div>
-          </div>
-          <div class="pub-year">2024</div>
-          <div>
-            <div class="pub-venue-badge">ACM SIGGRAPH 2024 E-tech — Denver, USA</div>
-            <div class="pub-title"><a href="https://dl.acm.org/doi/10.1145/3641517.3664393" target="_blank">Miruoto: Sports Event Atmosphere Visual Rendering through Real-time Image and Sound Processing</a></div>
-            <div class="pub-authors"><strong>G. Gourmelen</strong>, S. Toriya, E. Miya, N. Shioura, H. Iwata · Waseda University / JST</div>
-            <a href="https://hal.science/hal-05197860v1/document" target="_blank" class="pub-link">PDF via HAL ↗</a>
-          </div>
-        </div>
-
-        <!-- VRSJ 2024 -->
-        <div class="pub-item">
-          <div class="pub-thumb">
-            <img src="assets/img/miruoto.png" alt="Miruoto VRSJ" onerror="this.style.display='none'">
-            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>miruoto.png</span></div>
-          </div>
-          <div class="pub-year">2024</div>
-          <div>
-            <div class="pub-venue-badge">VRSJ 2024 — VR National Conf. Japan</div>
-            <div class="pub-title">ミルオト：リアルタイム画像・音声処理システムによるスポーツイベントの雰囲気ビジュアルレンダリング</div>
-            <div class="pub-authors"><strong>G. Gourmelen</strong>, S. Toriya, E. Miya, H. Iwata · Waseda University / Iwata Lab</div>
-            <a href="https://conference.vrsj.org/ac2024/program/doc/2B2-08.pdf" target="_blank" class="pub-link">PDF ↗</a>
-          </div>
-        </div>
-
-        <!-- Sensors 2022 -->
-        <div class="pub-item">
-          <div class="pub-thumb">
-            <img src="assets/img/auv.png" alt="AUV" onerror="this.style.display='none'">
-            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>auv.png</span></div>
-          </div>
-          <div class="pub-year">2022</div>
-          <div>
-            <div class="pub-venue-badge">Sensors (MDPI)</div>
-            <div class="pub-title"><a href="https://doi.org/10.3390/s22093379" target="_blank">A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration</a></div>
-            <div class="pub-authors">T. Dang, L. Lapierre, R. Zapata, B. Ropars, <strong>G. Gourmelen</strong> · LIRMM / Université de Montpellier</div>
-            <a href="https://hal.science/hal-03929843v1/document" target="_blank" class="pub-link">PDF via HAL ↗</a>
-          </div>
-        </div>
-
-        <!-- IROS 2021 -->
-        <div class="pub-item">
-          <div class="pub-thumb">
-            <img src="assets/img/iros2021.png" alt="IROS 2021" onerror="this.style.display='none'">
-            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>iros2021.png</span></div>
-          </div>
-          <div class="pub-year">2021</div>
-          <div>
-            <div class="pub-venue-badge">IEEE IROS 2021</div>
-            <div class="pub-title"><a href="https://doi.org/10.1109/IROS51168.2021.9636418" target="_blank">Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance</a></div>
-            <div class="pub-authors"><strong>G. Gourmelen</strong>, B. Navarro, A. Cherubini, G. Ganesh · LIRMM</div>
-            <a href="https://hal.science/hal-03324747v1/document" target="_blank" class="pub-link">PDF via HAL ↗</a>
-          </div>
-        </div>
-
-        <!-- SIGGRAPH Asia 2019 -->
-        <div class="pub-item">
-          <div class="pub-thumb">
-            <img src="assets/img/colimbs.png" alt="Co-Limbs" onerror="this.style.display='none'">
-            <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg><span>colimbs.png</span></div>
-          </div>
-          <div class="pub-year">2019</div>
-          <div>
-            <div class="pub-venue-badge">ACM SIGGRAPH Asia 2019 — E-Tech, Brisbane, Australia</div>
-            <div class="pub-title"><a href="https://doi.org/10.1145/3355049.3360526" target="_blank">Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms</a></div>
-            <div class="pub-authors"><strong>G. Gourmelen</strong>, A. Verhulst, B. Navarro, T. Sasaki, G. Ganesh, M. Inami · UTokyo / LIRMM</div>
-            <a href="https://hal.science/hal-02407032v1/document" target="_blank" class="pub-link">PDF via HAL ↗</a>
-          </div>
-        </div>
-
+      <div class="pub-year">2019</div>
+      <div>
+        <div class="pub-venue">ACM SIGGRAPH Asia 2019 — Emerging Technologies · Brisbane, Australia</div>
+        <div class="pub-title"><a href="https://doi.org/10.1145/3355049.3360526" target="_blank">Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms</a></div>
+        <div class="pub-authors"><strong>G. Gourmelen</strong>, A. Verhulst, T. Sasaki, B. Navarro, G. Ganesh, M. Inami · LIRMM / UTokyo</div>
+        <a href="https://hal.science/hal-02407032v1/document" target="_blank" class="pub-link">PDF via HAL · hal-02407032 ↗</a>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2019colimbs,\n  author={Gourmelen, G. and Verhulst, A. and Sasaki, T. and Navarro, B. and Ganesh, G. and Inami, M.},\n  title={Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms},\n  booktitle={SA: ACM SIGGRAPH Asia 2019 Emerging Technologies},\n  pages={9--10},\n  year={2019},\n  doi={10.1145/3355049.3360526}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
       </div>
-    </section>
+    </div>
 
-    <!-- ─── PROJECTS ──────────────────────────────────────────────── -->
-    <section id="projects">
-      <div class="section-header"><span class="section-num">02.5</span><h2 class="section-title">Featured Projects</h2></div>
-
-      <!-- MIRUOTO -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-tag">ACM SIGGRAPH 2024</div>
-          <div class="project-title-block">
-            <div class="project-title"><em>Miruoto</em> — Seeing Sound at the Stadium</div>
-            <div class="project-subtitle">Real-time AI visual rendering of sports atmosphere · Waseda University / JST · 2022–2025</div>
-          </div>
+    <!-- ── PhD THESIS ── -->
+    <div class="pub-item thesis">
+      <div class="pub-video-thumb" style="cursor:default;">
+          <div class="pub-thumb-ph" style="z-index:1;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="2" width="14" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><line x1="6" y1="7" x2="14" y2="7" stroke="var(--muted)" stroke-width="1"/><line x1="6" y1="10" x2="14" y2="10" stroke="var(--muted)" stroke-width="1"/><line x1="6" y1="13" x2="11" y2="13" stroke="var(--muted)" stroke-width="1"/></svg><span>thesis</span></div>
         </div>
-        <div class="project-video-grid">
-          <div class="project-video">
-            <div class="project-video-placeholder" onclick="loadVideo(this,'https://www.youtube.com/embed/XdFl1PHtbGU')">
-              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/></svg>
-              <span>Live at the Deaflympics Finals</span>
-              <span style="font-size:9px;color:var(--muted)">Real-time system · Nov 2025</span>
-            </div>
-          </div>
-          <div class="project-video">
-            <div class="project-video-placeholder" onclick="loadVideo(this,'https://www.youtube.com/embed/db5LRZ3BhJ4')">
-              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/></svg>
-              <span>Project Overview</span>
-              <span style="font-size:9px;color:var(--muted)">ACM SIGGRAPH 2024</span>
-            </div>
-          </div>
-        </div>
-        <div class="project-body">
-          <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:680px;margin-bottom:28px;">
-            <strong style="color:var(--text)">Miruoto</strong> (ミルオト — "seeing sound") is a real-time AI system that makes the atmosphere of live sports events visible for Deaf and hard-of-hearing spectators — translating crowd noise and player motion into an affective visual rendering. Presented as an <strong style="color:var(--text)">Emerging Technologies demo at ACM SIGGRAPH 2024</strong> in Denver, the system was subsequently deployed <strong style="color:var(--text)">live during the championship finals of the Tokyo Deaflympics 2025</strong> (November 2025), running in real time on venue screens alongside the match.
-          </p>
-          <div class="project-pub-ref">
-            <span>Publication</span>
-            G. Gourmelen, S. Toriya, E. Miya, N. Shioura, H. Iwata. "Miruoto: Sports Event Atmosphere Visual Rendering through Real-time Image and Sound Processing." ACM SIGGRAPH 2024 — Emerging Technologies. <a href="https://dl.acm.org/doi/10.1145/3641517.3664393" style="color:var(--accent);text-decoration:none;">doi:10.1145/3641517.3664393 ↗</a> · <a href="https://hal.science/hal-05197860v1/document" style="color:var(--accent);text-decoration:none;">PDF ↗</a> · <a href="https://miruoto.jp" target="_blank" style="color:var(--accent);text-decoration:none;">miruoto.jp ↗</a>
-          </div>
-          <div class="project-meta-row" style="margin-top:28px">
-            <dl class="project-meta-col"><dt>Institution</dt><dd>Waseda University · Iwata Lab</dd></dl>
-            <dl class="project-meta-col"><dt>Track</dt><dd>ACM SIGGRAPH Emerging Tech</dd></dl>
-            <dl class="project-meta-col"><dt>Role</dt><dd>Lead Researcher &amp; Engineer</dd></dl>
-            <dl class="project-meta-col"><dt>Website</dt><dd><a href="https://miruoto.jp" target="_blank">miruoto.jp ↗</a></dd></dl>
-            <dl class="project-meta-col"><dt>Deployed</dt><dd>Tokyo Deaflympics 2025</dd></dl>
-          </div>
-        </div>
+      <div class="pub-year">2022</div>
+      <div>
+        <div class="pub-venue">PhD Thesis · Université de Montpellier / LIRMM-CNRS</div>
+        <div class="pub-title"><a href="https://theses.hal.science/tel-04124264v1" target="_blank">Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans</a></div>
+        <div class="pub-authors"><strong>G. Gourmelen</strong> · Funded by JST ERATO Jizai Body · NNT: 2022UMONS091</div>
+        <a href="https://theses.hal.science/tel-04124264v1/document" target="_blank" class="pub-link">Full Thesis PDF · tel-04124264 ↗</a>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@phdthesis{gourmelen2022thesis,\n  author={Gourmelen, Guillaume},\n  title={Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans},\n  school={Université de Montpellier / LIRMM-CNRS},\n  year={2022},\n  note={NNT: 2022UMONS091, HAL: tel-04124264, JST ERATO Jizai Body}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
       </div>
+    </div>
 
-      <!-- IROS 2021 -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-tag">IEEE IROS 2021</div>
-          <div class="project-title-block">
-            <div class="project-title"><em>Impedance Adaptation</em> — Tele-Operated Physical Assistance</div>
-            <div class="project-subtitle">Human guided trajectory &amp; impedance estimation during HRI · LIRMM / Université de Montpellier · 2021</div>
-          </div>
-        </div>
-        <div class="project-video">
-          <div class="project-video-placeholder" onclick="loadVideo(this,'https://www.youtube.com/embed/bMBCkF2lrp8')">
-            <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/></svg>
-            <span>Project Video</span>
-            <span style="font-size:9px;color:var(--muted)">IEEE IROS 2021</span>
-          </div>
-        </div>
-        <div class="project-body">
-          <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:680px;margin-bottom:28px;">
-            This work addresses a core challenge in teleoperation: <strong style="color:var(--text)">transferring not just position but physical interaction quality</strong> from a human to a robotic system. The system estimates the human operator's <strong style="color:var(--text)">arm impedance</strong> (stiffness and damping) online during task execution, then adapts the robot's impedance to match — so the robot replicates not only the trajectory but the <em>compliance strategy</em> the human chose for a given task. A 7-DoF robot arm was controlled via a 3-DoF haptic device, with real-time impedance adaptation demonstrated on physical assistance tasks.
-          </p>
-          <div class="project-pub-ref">
-            <span>Publication</span>
-            G. Gourmelen, B. Navarro, A. Cherubini, G. Ganesh. "Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance." IEEE IROS 2021. <a href="https://doi.org/10.1109/IROS51168.2021.9636418" style="color:var(--accent);text-decoration:none;">doi:10.1109/IROS51168.2021.9636418 ↗</a> · <a href="https://hal.science/hal-03324747v1/document" style="color:var(--accent);text-decoration:none;">PDF ↗</a>
-          </div>
-          <div class="project-meta-row" style="margin-top:28px">
-            <dl class="project-meta-col"><dt>Institution</dt><dd>LIRMM · Université de Montpellier</dd></dl>
-            <dl class="project-meta-col"><dt>Funding</dt><dd>JST ERATO Jizai Body</dd></dl>
-            <dl class="project-meta-col"><dt>Role</dt><dd>Lead Researcher</dd></dl>
-            <dl class="project-meta-col"><dt>Robot</dt><dd>7-DoF arm · 3-DoF haptic</dd></dl>
-          </div>
-        </div>
-      </div>
-
-      <!-- CO-LIMBS -->
-      <div class="project-card">
-        <div class="project-header">
-          <div class="project-tag">ACM SIGGRAPH Asia 2019</div>
-          <div class="project-title-block">
-            <div class="project-title"><em>Co-Limbs</em> — Wearable Collaborative Robotic Arms</div>
-            <div class="project-subtitle">Supernumerary robotic limbs with intuitive shared control · UTokyo / LIRMM JST ERATO · 2019</div>
-          </div>
-        </div>
-        <div class="project-video">
-          <div class="project-video-placeholder" onclick="loadVideo(this,'https://www.youtube.com/embed/cb1HsKfddYY')">
-            <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="26" r="24" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="21,16 21,36 41,26" fill="rgba(0,130,150,0.5)"/></svg>
-            <span>Project Video</span>
-            <span style="font-size:9px;color:var(--muted)">ACM SIGGRAPH Asia 2019</span>
-          </div>
-        </div>
-        <div class="project-body">
-          <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:680px;margin-bottom:28px;">
-            Co-Limbs is a <strong style="color:var(--text)">wearable supernumerary robotic arm</strong> designed to be worn and controlled intuitively — without dedicated hand controllers or explicit command inputs. The system decodes the wearer's <strong style="color:var(--text)">intent from shoulder and wrist kinematics</strong>, activating a library of shared-control motion primitives (reach, grasp, hold) that blend human guidance with robotic force and precision. Developed during a research visit to the Inami Lab at the University of Tokyo, demonstrated live at <strong style="color:var(--text)">ACM SIGGRAPH Asia 2019</strong> Emerging Technologies (Brisbane). This work formed a core chapter of the doctoral thesis.
-          </p>
-          <div class="project-pub-ref">
-            <span>Publication</span>
-            G. Gourmelen, A. Verhulst, B. Navarro, T. Sasaki, G. Ganesh, M. Inami. "Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms." ACM SIGGRAPH Asia 2019 — Emerging Technologies. <a href="https://doi.org/10.1145/3355049.3360526" style="color:var(--accent);text-decoration:none;">doi:10.1145/3355049.3360526 ↗</a> · <a href="https://hal.science/hal-02407032v1/document" style="color:var(--accent);text-decoration:none;">PDF ↗</a>
-          </div>
-          <div class="project-meta-row" style="margin-top:28px">
-            <dl class="project-meta-col"><dt>Institution</dt><dd>UTokyo Inami Lab / LIRMM</dd></dl>
-            <dl class="project-meta-col"><dt>Funding</dt><dd>JST ERATO Jizai Body</dd></dl>
-            <dl class="project-meta-col"><dt>Role</dt><dd>Lead Researcher</dd></dl>
-            <dl class="project-meta-col"><dt>Track</dt><dd>SIGGRAPH Asia Emerging Tech</dd></dl>
-          </div>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- ─── EXPERIENCE ────────────────────────────────────────────── -->
-    <section id="experience">
-      <div class="section-header"><span class="section-num">03</span><h2 class="section-title">Experience</h2></div>
-      <div class="exp-list">
-        <div class="exp-item">
-          <div class="exp-period">Jan 2026 — Present<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">ONGOING</span></div>
-          <div>
-            <div class="exp-org">Keio Media Design · Embodied Media Lab · Tokyo, Takeshiba</div>
-            <div class="exp-role">Project Assistant Professor</div>
-            <div class="exp-desc">Leading the robotic and vision research team under Prof. Kouta Minamizawa — contributing to the JST Moonshot Cybernetic Avatar program on Robotics, Teleoperation and AI. Current collaboration: Oricafé research project.</div>
-          </div>
-        </div>
-        <div class="exp-item">
-          <div class="exp-period">Apr 2025 — Dec 2025<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">9 MONTHS</span></div>
-          <div>
-            <div class="exp-org">Honda Research Institute Japan · Wako Research Center · Saitama</div>
-            <div class="exp-role">Researcher — Avatar Project, Frontier Robotics Team</div>
-            <div class="exp-desc">Developed bimanual teleoperation systems for next-generation avatar platforms. Focus on haptic control, intuitive human-robot interfaces bridging human intent and robotic execution.</div>
-          </div>
-        </div>
-        <div class="exp-item">
-          <div class="exp-period">Apr 2023 — Mar 2025<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">2 YEARS</span></div>
-          <div>
-            <div class="exp-org">Waseda University · Iwata Lab · Tokyo</div>
-            <div class="exp-role">Research Associate</div>
-            <div class="exp-desc">Haptic teleoperation, control and learning from demonstration for an echocardiography medical robot. Embodied third-person view with AR glasses for bouldering. Air pressure haptic feedback device for wearable robots. Miruoto project: AI for player recognition during live sports events, with accessibility focus for Tokyo Deaflympics 2025.</div>
-          </div>
-        </div>
-        <div class="exp-item">
-          <div class="exp-period">Sep 2022 — Mar 2023<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">7 MONTHS</span></div>
-          <div>
-            <div class="exp-org">Polytech Montpellier · France</div>
-            <div class="exp-role">Lecturer</div>
-            <div class="exp-desc">270 hours of teaching across Robotics, Electronics, Automatics and Computer Sciences.</div>
-          </div>
-        </div>
-        <div class="exp-item">
-          <div class="exp-period">Dec 2018 — Nov 2022<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">4 YEARS</span></div>
-          <div>
-            <div class="exp-org">LIRMM · Université de Montpellier · France</div>
-            <div class="exp-role">PhD Researcher — JST ERATO "Jizai Body"</div>
-            <div class="exp-desc">Thesis: "Embodied robot systems: control and learning for skill-transfer from humans." Admittance control of 7DoF robot arm, teleoperation with 3DoF haptic feedback, human arm impedance estimation during HRI, and human intention prediction via deep learning from movement and visual data.</div>
-          </div>
-        </div>
-        <div class="exp-item">
-          <div class="exp-period">Feb · May · Nov 2019<br/><span style="color:var(--accent);font-size:10px;letter-spacing:0.1em">3 MONTHS</span></div>
-          <div>
-            <div class="exp-org">Inami-Hiyama Living Lab · University of Tokyo</div>
-            <div class="exp-role">Invited Researcher — JST ERATO Project</div>
-            <div class="exp-desc">Force control development for wearable robotic arm. Collaboration with Prof. Masahiko Inami. Resulted in SIGGRAPH Asia 2019 publication (Co-Limbs).</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── WIP ───────────────────────────────────────────────────── -->
-    <section id="wip">
-      <div class="section-header"><span class="section-num">03.5</span><h2 class="section-title">Work in Progress</h2></div>
-      <div class="pub-list">
-        <div class="pub-item">
-          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
-          <div class="pub-year">2025</div>
-          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress</div><div class="pub-title">Avatar Teleoperation with Haptic Feedback</div><div class="pub-authors"><strong>G. Gourmelen</strong> · Keio University / Embodied Media, KMD</div></div>
-        </div>
-        <div class="pub-item">
-          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
-          <div class="pub-year">2025</div>
-          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">Under Review · UIST 2026</div><div class="pub-title">Body Sublimation: Designing State-Changing Extended Hand for Embodied Out-of-Reach Interaction</div><div class="pub-authors">M. Ohta, R. Ban, H. Nii, <strong>G. Gourmelen</strong>, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa · Keio University / Embodied Media, KMD</div></div>
-        </div>
-        <div class="pub-item">
-          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
-          <div class="pub-year">2025</div>
-          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress</div><div class="pub-title">Transparent Screen Robotic AI Vision</div><div class="pub-authors"><strong>G. Gourmelen</strong> · Keio University / Embodied Media, KMD</div></div>
-        </div>
-        <div class="pub-item">
-          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
-          <div class="pub-year">2025</div>
-          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress</div><div class="pub-title">Learning from Demonstration for Echocardiography Teleoperation Robot</div><div class="pub-authors"><strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div></div>
-        </div>
-        <div class="pub-item">
-          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
-          <div class="pub-year">2025</div>
-          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">Under Review · IROS 2026</div><div class="pub-title">Hybrid Roller–Jamming Grasping: Active Intake with Post-Capture Stiffening</div><div class="pub-authors">Y. Ren, <strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div></div>
-        </div>
-        <div class="pub-item">
-          <div class="pub-thumb"><div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3"/><circle cx="14" cy="14" r="3" fill="var(--muted)" opacity="0.4"/></svg><span>In Progress</span></div></div>
-          <div class="pub-year">2025</div>
-          <div><div class="pub-venue-badge" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Progress</div><div class="pub-title">Augmented Ascent: Third-Person AR Support for Bouldering</div><div class="pub-authors"><strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── CONTACT ───────────────────────────────────────────────── -->
-    <section id="contact">
-      <div class="section-header"><span class="section-num">05</span><h2 class="section-title">Contact</h2></div>
-      <div class="contact-grid">
-        <div class="contact-photo-col">
-          <div class="contact-photo-frame">
-            <div class="contact-photo-placeholder">
-              <svg width="52" height="52" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="20" r="10" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><path d="M6 46 C6 34 46 34 46 46" stroke="rgba(0,130,150,0.5)" stroke-width="1.5" fill="none"/></svg>
-              <img src="assets/img/gourmelen.jpg" alt="Guillaume Gourmelen" />
-            </div>
-          </div>
-          <div class="contact-photo-caption">Guillaume Gourmelen · Tokyo, 2025</div>
-        </div>
-        <div class="contact-right">
-          <div class="contact-blurb">Open to <em>research collaborations</em>, visiting positions, and conversations about teleoperation, haptics, and embodied systems.</div>
-          <div class="contact-links">
-            <a id="email-link" class="contact-link" href="#" onclick="revealEmail(this); return false;">click to reveal email<span class="contact-link-label">Email</span></a>
-            <a href="https://scholar.google.com/citations?hl=en&user=GC2dxjQAAAAJ" target="_blank" class="contact-link">Google Scholar<span class="contact-link-label">Publications</span></a>
-            <a href="https://www.linkedin.com/in/guillaume-gourmelen-71b655161/" target="_blank" class="contact-link">LinkedIn<span class="contact-link-label">Profile</span></a>
-            <a href="https://www.embodiedmedia.org/members" target="_blank" class="contact-link">KMD Embodied Media Lab<span class="contact-link-label">Lab</span></a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <span>Guillaume Gourmelen · Tokyo, Japan</span>
-      <span>Robotics · Teleoperation · Embodiment</span>
-    </footer>
   </div>
 
-  <script>
-  const canvas=document.getElementById('robo-canvas'),ctx=canvas.getContext('2d');
-  function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-  resize();window.addEventListener('resize',resize);
-  let t=0;
-  const CYAN='rgba(0,130,150,',AMBER='rgba(180,100,0,',BLUE='rgba(0,80,180,',WHITE='rgba(60,100,130,';
-  function proj(x,y,z,cx,cy,fov=300){const s=fov/(fov+z+100);return{x:cx+x*s,y:cy+y*s,s};}
-  const ease=x=>x<0.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
-  function drawHumanArm(cx,cy){
-    const mp=t*0.11,raw=Math.sin(mp),intent=ease((raw+1)/2);
-    const br=Math.sin(t*0.17)*0.03,tr=Math.sin(t*1.6)*0.008+Math.sin(t*2.3)*0.005,wy=Math.cos(t*0.17)*3;
-    const sp=-0.28+intent*0.42+br+tr,sy2=intent*0.15+Math.sin(t*0.13)*0.04,ul=85;
-    const ex=cx+Math.cos(sp)*ul,ey=cy+Math.sin(sp)*ul+wy,ez=-15+sy2*25;
-    const li=ease((Math.sin(mp-0.15)+1)/2),fl=72,eb=0.38-li*0.22+tr;
-    const wx=ex+Math.cos(sp-eb)*fl,wy2=ey+Math.sin(sp-eb)*fl+wy*0.3,wz=ez-8;
-    const wr=Math.sin(t*0.19+0.8)*0.08+tr,hl=26;
-    const hx=wx+Math.cos(sp-eb-0.08+wr)*hl,hy=wy2+Math.sin(sp-eb-0.08+wr)*hl;
-    const pS=proj(0,0,0,cx,cy),pE=proj(ex-cx,ey-cy,ez,cx,cy),pW=proj(wx-cx,wy2-cy,wz,cx,cy),pH=proj(hx-cx,hy-cy,wz-5,cx,cy);
-    ctx.beginPath();ctx.moveTo(pS.x,pS.y);ctx.lineTo(pE.x,pE.y);ctx.strokeStyle=WHITE+'0.18)';ctx.lineWidth=9;ctx.lineCap='round';ctx.stroke();
-    ctx.beginPath();ctx.moveTo(pE.x,pE.y);ctx.lineTo(pW.x,pW.y);ctx.strokeStyle=WHITE+'0.15)';ctx.lineWidth=7;ctx.lineCap='round';ctx.stroke();
-    ctx.beginPath();ctx.moveTo(pW.x,pW.y);ctx.lineTo(pH.x,pH.y);ctx.strokeStyle=WHITE+'0.12)';ctx.lineWidth=5;ctx.stroke();
-    const ha=Math.atan2(pH.y-pW.y,pH.x-pW.x),fc=0.2+li*0.15;
-    [-0.35,-0.12,0.08,0.28].forEach((fa,i)=>{const a=ha+fa,len=[18,22,21,17][i]*(0.9+intent*0.1);const p1x=pH.x+Math.cos(a)*len*0.5,p1y=pH.y+Math.sin(a)*len*0.5,p2x=pH.x+Math.cos(a+fc*0.3)*len,p2y=pH.y+Math.sin(a+fc*0.3)*len;ctx.beginPath();ctx.moveTo(pH.x,pH.y);ctx.quadraticCurveTo(p1x,p1y,p2x,p2y);ctx.strokeStyle=WHITE+'0.12)';ctx.lineWidth=2.5-i*0.3;ctx.lineCap='round';ctx.stroke();});
-    ctx.beginPath();ctx.arc(pS.x,pS.y,6,0,Math.PI*2);ctx.strokeStyle=WHITE+'0.2)';ctx.lineWidth=1;ctx.stroke();
-    const aa=intent*0.3;if(aa>0.05){const ax1=pH.x+Math.cos(ha)*20,ay1=pH.y+Math.sin(ha)*20,ax2=pH.x+Math.cos(ha)*45,ay2=pH.y+Math.sin(ha)*45;ctx.beginPath();ctx.moveTo(ax1,ay1);ctx.lineTo(ax2,ay2);ctx.strokeStyle=CYAN+aa+')';ctx.setLineDash([3,5]);ctx.lineWidth=1;ctx.stroke();ctx.setLineDash([]);}
-    return{x:pH.x,y:pH.y,intent};
-  }
-  function drawRobotArm(cx,cy){
-    const cycle=(t*0.11)%(Math.PI*2),phase=cycle/(Math.PI*2);
-    function trap(p,r=0.25){if(p<r)return ease(p/r);if(p<1-r)return 1;return ease((1-p)/r);}
-    const ext=phase<0.5?trap(phase*2,0.3):trap((1-phase)*2,0.3),hold=phase>0.32&&phase<0.68;
-    const mr=hold?Math.sin(t*2.4)*0.008+Math.sin(t*3.7)*0.005:0;
-    const sp=-0.45+ext*0.50+mr,eb=0.42-ext*0.26+mr*0.4,wp=mr*0.8;
-    const j0x=cx,j0y=cy,j1x=j0x-Math.cos(sp)*95,j1y=j0y+Math.sin(sp)*95;
-    const j2x=j1x-Math.cos(sp-eb)*80,j2y=j1y+Math.sin(sp-eb)*80;
-    const j3x=j2x-Math.cos(sp-eb-0.15+wp)*55,j3y=j2y+Math.sin(sp-eb-0.15+wp)*55;
-    const j4x=j3x-Math.cos(sp-eb-0.1)*35,j4y=j3y+Math.sin(sp-eb-0.1)*35;
-    const joints=[[j0x,j0y],[j1x,j1y],[j2x,j2y],[j3x,j3y],[j4x,j4y]],sizes=[8,7,6,5,4];
-    ctx.beginPath();ctx.rect(j0x-22,j0y,44,14);ctx.strokeStyle=CYAN+'0.2)';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle=CYAN+'0.03)';ctx.fill();
-    for(let i=0;i<joints.length-1;i++){
-      const[ax,ay]=joints[i],[bx,by]=joints[i+1];
-      ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.strokeStyle=CYAN+(0.15-i*0.02)+')';ctx.lineWidth=8-i*1.2;ctx.lineCap='round';ctx.stroke();
-      ctx.beginPath();ctx.arc(ax,ay,sizes[i],0,Math.PI*2);ctx.strokeStyle=CYAN+'0.3)';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle=CYAN+'0.05)';ctx.fill();
-      ctx.beginPath();ctx.arc(ax,ay,2.5,0,Math.PI*2);ctx.fillStyle=AMBER+'0.7)';ctx.fill();
-    }
-    const[ex,ey]=joints[4];
-    ctx.beginPath();ctx.arc(ex,ey,6,0,Math.PI*2);ctx.strokeStyle=AMBER+'0.8)';ctx.lineWidth=2;ctx.stroke();
-    ctx.beginPath();ctx.arc(ex,ey,2.5,0,Math.PI*2);ctx.fillStyle=AMBER+'1.0)';ctx.fill();
-    if(!drawRobotArm.trail)drawRobotArm.trail=[];
-    drawRobotArm.trail.push({x:ex,y:ey});if(drawRobotArm.trail.length>70)drawRobotArm.trail.shift();
-    drawRobotArm.trail.forEach((p,i)=>{const a=(i/drawRobotArm.trail.length)*0.12;ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fillStyle=AMBER+a+')';ctx.fill();});
-    ctx.fillStyle=CYAN+'0.18)';ctx.font='9px DM Mono,monospace';ctx.fillText('MODE: TELE-OP',cx-30,cy-120);
-    ctx.fillStyle=AMBER+'0.3)';ctx.fillText('PHASE: '+(phase<0.25?'WAIT':phase<0.5?'EXTEND':phase<0.65?'HOLD':'RETRACT'),cx-30,cy-108);
-    return{x:ex,y:ey};
-  }
-  function drawInteractionLink(hx,hy,rx,ry,intent){
-    if(intent<0.05)return;
-    const alpha=intent*0.25,midX=(hx+rx)/2,midY=(hy+ry)/2-20*intent;
-    ctx.beginPath();ctx.moveTo(hx,hy);ctx.quadraticCurveTo(midX,midY,rx,ry);ctx.strokeStyle=CYAN+(alpha*0.8)+')';ctx.lineWidth=1.5;ctx.setLineDash([4,6]);ctx.stroke();ctx.setLineDash([]);
-    for(let i=0;i<3;i++){const tP=((t*0.6+i/3)%1),px=(1-tP)*(1-tP)*hx+2*(1-tP)*tP*midX+tP*tP*rx,py=(1-tP)*(1-tP)*hy+2*(1-tP)*tP*midY+tP*tP*ry;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fillStyle=CYAN+(intent*0.7)+')';ctx.fill();}
-  }
-  function drawTelemetry(x,y,w,label,color,freq,phase){
-    ctx.beginPath();for(let i=0;i<80;i++){const val=Math.sin((i+t*12)*freq*0.25)*18+Math.sin((i+t*7)*(freq*1.6)*0.25+phase)*8,px=x+(i/80)*w;i===0?ctx.moveTo(px,y+val):ctx.lineTo(px,y+val);}
-    ctx.strokeStyle=color+'0.35)';ctx.lineWidth=1;ctx.stroke();
-    ctx.fillStyle=color+'0.22)';ctx.font='9px DM Mono,monospace';ctx.fillText(label,x,y-14);
-    ctx.fillStyle=color+'0.45)';ctx.fillText((Math.sin(t*3.1+phase)*18).toFixed(2)+'Nm',x+w-48,y-14);
-  }
-  function drawGrid(){ctx.strokeStyle=CYAN+'0.06)';ctx.lineWidth=1;for(let x=0;x<canvas.width;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}for(let y=0;y<canvas.height;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}}
-  function animate(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);drawGrid();
-    const cY=canvas.height*0.48,hCX=canvas.width*0.22,rCX=canvas.width*0.78;
-    const hand=drawHumanArm(hCX,cY),ee=drawRobotArm(rCX,cY);
-    drawInteractionLink(hand.x,hand.y,ee.x,ee.y,hand.intent);
-    const ty=canvas.height-55;
-    drawTelemetry(canvas.width*0.28,ty,canvas.width*0.44,'τ_J1',CYAN,1,0);
-    drawTelemetry(canvas.width*0.28,ty+22,canvas.width*0.44,'τ_J2',AMBER,1.4,1.2);
-    t+=0.009;requestAnimationFrame(animate);
-  }
-  animate();
+  <!-- Under review — not yet on HAL -->
+  <div style="margin-top:28px;padding:18px 22px;border:1px dashed var(--border);font-size:12px;color:var(--mid);line-height:1.9;">
+    <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px;">Under Review</div>
+    <div style="margin-bottom:6px;"><strong style="color:var(--text)">Ohta M., Ban R., Nii H., Gourmelen G.</strong> et al. "Body Sublimation: Designing State-Changing Extended Hand for Embodied Out-of-Reach Interaction." <em>UIST 2026</em></div>
+    <div style="margin-bottom:6px;"><strong style="color:var(--text)">Ren Y., Gourmelen G., Iwata H.</strong> "Hybrid Roller-Jamming Gripper for Robust Object Acquisition and Retention Under Pose Uncertainty." <em>Under Review — IEEE Access, 2026</em></div>
+    <div><strong style="color:var(--text)">Vitvasin V., Gourmelen G., Iwasaki Y., Iwata H.</strong> "MESSPa: A Multi-modal Embodiment Stimulation Shoulder Pad for Preserving the Sense of Agency in a Detachable Robotic Arm." <em>Manuscript in preparation</em></div>
+  </div>
+</section>
 
-  function revealEmail(el){const u='guillaume',d=['keio','jp'].join('.');const email=u+'@'+d;el.href='mailto:'+email;el.childNodes[0].textContent=email+' ';}
+<!-- ═══ EXPERIENCE ══════════════════════════════════════════════ -->
+<section id="experience">
+  <div class="section-header"><span class="section-num">03</span><h2 class="section-title">Experience</h2></div>
+  <div class="exp-list">
 
-  function loadVideo(el,url){
-    const wrap=el.parentElement;
-    if(url&&!url.startsWith('MIRUOTO')){
-      wrap.innerHTML=`<iframe src="${url}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
-    } else {
-      wrap.innerHTML=`<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#eef3f7;gap:14px;padding:24px;text-align:center;"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><polygon points="16,11 16,29 31,20" fill="rgba(0,130,150,0.5)"/></svg><p style="font-family:'DM Mono',monospace;font-size:11px;color:#3d6880;max-width:280px;line-height:1.7;">Replace MIRUOTO_VIDEO_URL_1 / _2 with your YouTube embed URL.<br/><a href="https://miruoto.jp" target="_blank" style="color:#0099aa;text-decoration:none;">miruoto.jp ↗</a></p></div>`;
+    <div class="exp-item">
+      <div class="exp-period">Jan 2026 — Present<span class="dur">Ongoing</span></div>
+      <div>
+        <div class="exp-org">Keio University · Graduate School of Media Design · KMD · Tokyo (Takeshiba)</div>
+        <div class="exp-role">Project Assistant Professor</div>
+        <div class="exp-desc">Embodied Media Lab (Prof. Minamizawa) — JST Moonshot Cybernetic Avatar Program.
+          <ul>
+            <li>Lead the Robotics and Vision Augmentation team</li>
+            <li>Supervise graduate students in haptics, teleoperation, and embodied AI</li>
+            <li>Develop haptic teleoperation for quadruped and humanoid robots</li>
+            <li>Design interaction paradigms combining AI, transparent screens, and haptic feedback</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Apr – Dec 2025<span class="dur">9 months</span></div>
+      <div>
+        <div class="exp-org">Honda Research Institute Japan · Frontier Robotics · Wako, Saitama</div>
+        <div class="exp-role">Permanent Researcher — Avatar Project</div>
+        <div class="exp-desc">
+          <ul>
+            <li>Bimanual teleoperation systems with force-feedback haptic control</li>
+            <li>Shared autonomy architectures for intuitive human–robot interfaces</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Apr 2023 – Apr 2025<span class="dur">2 years</span></div>
+      <div>
+        <div class="exp-org">Waseda University · Iwata Laboratory · Tokyo</div>
+        <div class="exp-role">Research Associate</div>
+        <div class="exp-desc">
+          <ul>
+            <li><strong>Miruoto</strong> (SIGGRAPH 2024): real-time sound-to-onomatopoeia visualization for Deaf and hard-of-hearing sports spectators, with Aisin Corp. and Hogaku Inc.; deployed at Tokyo 2025 Deaflympics with Tokyo Metropolitan Government support</li>
+            <li>Haptic teleoperation for echocardiography medical robot (learning from demonstration)</li>
+            <li>AR glasses system for bouldering proprioceptive training</li>
+            <li>Supervised graduate students and co-supervised 1 PhD student</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Sep 2022 – Mar 2023<span class="dur">7 months</span></div>
+      <div>
+        <div class="exp-org">Polytech Montpellier · Dept. Electronics, Robotics &amp; Industrial CS · France</div>
+        <div class="exp-role">Lecturer (ATER)</div>
+        <div class="exp-desc">270+ hours of instruction to cohorts of 40–60 students: Medical Robotics, C/C++ Programming, Python, Linear Systems &amp; Automation, IoT &amp; Embedded Networks, AI Foundations, Electronics Practicals.</div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">Dec 2018 – Nov 2022<span class="dur">4 years</span></div>
+      <div>
+        <div class="exp-org">LIRMM-CNRS · Université de Montpellier · France</div>
+        <div class="exp-role">PhD Researcher — JST ERATO "Jizai Body"</div>
+        <div class="exp-desc">Thesis: <em>Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans.</em> Real-time impedance estimation, haptic teleoperation, deep learning for human–robot interaction. Also: engineering project advisor and teaching assistant (2019–2021).</div>
+      </div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-period">2019 (3 visits)<span class="dur">~3 months</span></div>
+      <div>
+        <div class="exp-org">Inami-Hiyama Living Lab · University of Tokyo · JST ERATO</div>
+        <div class="exp-role">Invited Researcher</div>
+        <div class="exp-desc">Force control for wearable supernumerary robot arm — published in SIGGRAPH Asia 2019 (Co-Limbs).</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ REVIEWING ═══════════════════════════════════════════════ -->
+<section id="reviewing">
+  <div class="section-header"><span class="section-num">04</span><h2 class="section-title">Peer Review &amp; Service</h2></div>
+  <p class="review-intro">I review for the following international conferences in robotics and intelligent systems. I am also Session Chair at Augmented Human 2026.</p>
+
+  <div class="review-grid">
+
+    <div class="review-item chair-item">
+      <div class="review-venue">Augmented Human 2026 — Session Chair</div>
+      <div class="review-meta">ACM International Conference on Augmented Human Technology</div>
+      <div class="review-years">Session Chair · Human–Robot Communication &amp; Control</div>
+    </div>
+
+    <div class="review-item">
+      <div class="review-venue">IEEE IROS</div>
+      <div class="review-meta">IEEE/RSJ International Conference on Intelligent Robots and Systems</div>
+      <div class="review-years">Reviewer · multiple years</div>
+    </div>
+
+    <div class="review-item">
+      <div class="review-venue">ACM VRST</div>
+      <div class="review-meta">ACM Symposium on Virtual Reality Software and Technology</div>
+      <div class="review-years">Reviewer</div>
+    </div>
+
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:18px;line-height:1.7;">Reviewing scope: robotics, teleoperation, haptics, human-robot interaction, embodied systems.</p>
+</section>
+
+<!-- ═══ TEACHING ════════════════════════════════════════════════ -->
+<section id="teaching">
+  <div class="section-header"><span class="section-num">04.5</span><h2 class="section-title">Teaching</h2></div>
+
+  <p class="teaching-intro">Over 300 hours of university-level instruction across France and Japan, from introductory programming to advanced robotics and embedded systems.</p>
+
+  <div class="teaching-quote">
+    "I treat teaching the way I treat research: the measure of success is not the quality of what is produced in the lab — it is whether the thing actually works in the world."
+    <cite>— Teaching Statement, April 2026</cite>
+  </div>
+
+  <!-- ── Keio University ── -->
+  <div class="teaching-block" style="margin-top:44px;">
+    <div class="teaching-org">Keio University · KMD · Tokyo — 2026–present</div>
+    <div class="course-list">
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">Statistics for Research</div>
+        <div class="course-level">Graduate seminar</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">How to Design and Run Research Experiments</div>
+        <div class="course-level">Graduate seminar</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">In-Lab Robotics Presentations</div>
+        <div class="course-level">Lab internal · ongoing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Polytech Montpellier ── -->
+  <div class="teaching-block">
+    <div class="teaching-org">Polytech Montpellier · France — Sep 2022 – Mar 2023 · 270+ hours total</div>
+    <div class="course-list">
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">Medical Robotics</div>
+        <div class="course-level">Engineering · 3rd year</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">C / C++ Programming</div>
+        <div class="course-level">Engineering · 2nd year</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">Python for Engineers</div>
+        <div class="course-level">Engineering · 2nd year</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">Linear Systems &amp; Automation (Control Theory)</div>
+        <div class="course-level">Engineering · 2nd–3rd year</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">IoT &amp; Embedded Networks — Hands-on</div>
+        <div class="course-level">Engineering · 2nd–3rd year</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">AI Foundations (Supervised Learning, Neural Networks)</div>
+        <div class="course-level">Engineering · 3rd year</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">Electronics Practicals (Analog / Digital Circuits)</div>
+        <div class="course-level">Engineering · 2nd year</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">Linux &amp; Embedded Systems</div>
+        <div class="course-level">Engineering · 2nd–3rd year</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Université de Montpellier ── -->
+  <div class="teaching-block">
+    <div class="teaching-org">Université de Montpellier — 2019–2022 · PhD monitorat (ATER)</div>
+    <div class="course-list">
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">Introduction to Programming (Python)</div>
+        <div class="course-level">Licence 1st year</div>
+      </div>
+      <div class="course-item">
+        <div class="course-hours">—</div>
+        <div class="course-name">Signals &amp; Systems</div>
+        <div class="course-level">Licence 2nd year</div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:var(--muted);margin-top:20px;line-height:1.8;">
+    Courses available to offer: Introduction to Robotics · Robot Programming · Autonomous Systems · Embedded Systems &amp; IoT · Machine Learning / Deep Learning · Human–Robot Interaction · Computer Vision · Digital Literacy.
+  </p>
+</section>
+
+
+<!-- ═══ TALKS ═══════════════════════════════════════════════════ -->
+<section id="talks">
+  <div class="section-header"><span class="section-num">04.8</span><h2 class="section-title">Talks &amp; Presentations</h2></div>
+  <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:580px;margin-bottom:32px;">Invited talks, session chairs, and conference presentations. Video links added as recordings become available.</p>
+  <div class="talks-list">
+
+    <div class="talk-item">
+      <div class="talk-date">May 2026</div>
+      <div class="talk-body">
+        <span class="talk-title">From Human Skill to Robot Embodiment: Control, Learning, and Haptic Feedback for Human-Robot Systems</span>
+        <span class="talk-event">Invited Seminar · GV Lab, The University of Tokyo</span>
+      </div>
+      <a href="https://www.gvlab.jp/seminar.htm" target="_blank" class="talk-link">Details ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Mar 2026</div>
+      <div class="talk-body">
+        <span class="talk-title">Session Chair — Human–Robot Communication &amp; Control</span>
+        <span class="talk-event">Augmented Human 2026 · ACM International Conference</span>
+      </div>
+      <span style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(201,120,0,0.4);padding:4px 8px;white-space:nowrap;">Chair</span>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Aug 2024</div>
+      <div class="talk-body">
+        <span class="talk-title">Miruoto: Sports Event Atmosphere Visual Rendering through Real-Time Image and Sound Processing</span>
+        <span class="talk-event">ACM SIGGRAPH 2024 Emerging Technologies · Denver, CO</span>
+      </div>
+      <a href="https://dl.acm.org/doi/10.1145/3641517.3664393" target="_blank" class="talk-link">Paper ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Oct 2021</div>
+      <div class="talk-body">
+        <span class="talk-title">Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance</span>
+        <span class="talk-event">IEEE/RSJ IROS 2021 · Prague, Czech Republic</span>
+      </div>
+      <a href="https://hal.science/hal-03324747v1/document" target="_blank" class="talk-link">PDF ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Nov 2019</div>
+      <div class="talk-body">
+        <span class="talk-title">Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms</span>
+        <span class="talk-event">ACM SIGGRAPH Asia 2019 Emerging Technologies · Brisbane, Australia</span>
+      </div>
+      <a href="https://hal.science/hal-02407032v1/document" target="_blank" class="talk-link">PDF ↗</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ VIDEO LAB ═══════════════════════════════════════════════
+     HOW TO ADD YOUR VIDEOS:
+     ─ Drop your file in:  assets/video/NAME.mp4  (or .webm)
+     ─ In each card, uncomment the <video> tag and update src.
+     ─ Videos autoplay silently on hover; pause when mouse leaves.
+     ─ Use MP4 (H.264) for best browser compatibility.
+     ─ Recommended: 1920×1080 or 1280×720, under 30MB per clip.
+     ════════════════════════════════════════════════════════════ -->
+<section id="video-lab" class="video-lab-section" style="border-top:1px solid var(--border);">
+  <div class="section-header"><span class="section-num">05.2</span><h2 class="section-title">Lab Videos</h2></div>
+  <p class="video-lab-intro">Recent experiments, demos, and work-in-progress footage from the lab. Hover a card to play.</p>
+  <div class="video-lab-hint">
+    To add your videos: drop <code>.mp4</code> or <code>.webm</code> files in <code>assets/video/</code>, then uncomment the <code>&lt;video&gt;</code> tag in each card and update the <code>src</code> path. Videos play silently on hover and pause automatically when you move away.
+  </div>
+
+  <div class="video-grid-lab">
+
+    <!-- ① Avatar teleoperation demo -->
+    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
+      <div class="video-card-media">
+        <!--
+          UNCOMMENT and set src when you have the file:
+          <video src="assets/video/avatar-teleoperation.mp4" muted loop playsinline preload="none"></video>
+        -->
+        <div class="video-card-ph">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(0,153,170,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(0,153,170,0.5)"/></svg>
+          <span class="video-card-ph-label">assets/video/<br/>avatar-teleoperation.mp4</span>
+        </div>
+        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
+      </div>
+      <div class="video-card-info">
+        <div class="video-card-title">Avatar Teleoperation — Quadruped</div>
+        <div class="video-card-meta">Keio KMD · 2026</div>
+        <span class="video-card-tag">Teleoperation</span>
+      </div>
+    </div>
+
+    <!-- ③ Miruoto live -->
+    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
+      <div class="video-card-media">
+        <!--
+          <video src="assets/video/miruoto-landscape.mp4" muted loop playsinline preload="none"></video>
+        -->
+        <div class="video-card-ph">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(109,79,196,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(109,79,196,0.5)"/></svg>
+          <span class="video-card-ph-label">assets/video/<br/>miruoto-landscape.mp4</span>
+        </div>
+        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
+      </div>
+      <div class="video-card-info">
+        <div class="video-card-title">Miruoto — Tokyo 2025 Deaflympics</div>
+        <div class="video-card-meta">Hogaku Inc. · Waseda University · Tokyo Metropolitan Government</div>
+        <span class="video-card-tag">AI Vision</span>
+      </div>
+    </div>
+
+    <!-- ④ 7DoF impedance -->
+    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
+      <div class="video-card-media">
+        <!--
+          <video src="assets/video/iros2021-impedance.mp4" muted loop playsinline preload="none"></video>
+        -->
+        <div class="video-card-ph">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(0,153,170,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(0,153,170,0.5)"/></svg>
+          <span class="video-card-ph-label">assets/video/<br/>iros2021-impedance.mp4</span>
+        </div>
+        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
+      </div>
+      <div class="video-card-info">
+        <div class="video-card-title">7DoF Impedance Teleoperation</div>
+        <div class="video-card-meta">LIRMM · IEEE IROS 2021</div>
+        <span class="video-card-tag">Teleoperation</span>
+      </div>
+    </div>
+
+    <!-- ⑤ Co-Limbs -->
+    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
+      <div class="video-card-media">
+        <!--
+          <video src="assets/video/colimbs-siggraph.mp4" muted loop playsinline preload="none"></video>
+        -->
+        <div class="video-card-ph">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(74,170,96,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(74,170,96,0.5)"/></svg>
+          <span class="video-card-ph-label">assets/video/<br/>colimbs-siggraph.mp4</span>
+        </div>
+        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
+      </div>
+      <div class="video-card-info">
+        <div class="video-card-title">Co-Limbs — SIGGRAPH Asia 2019</div>
+        <div class="video-card-meta">UTokyo / LIRMM · Brisbane</div>
+        <span class="video-card-tag">Wearable</span>
+      </div>
+    </div>
+
+    <!-- ⑥ Echo robot -->
+    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
+      <div class="video-card-media">
+        <!--
+          <video src="assets/video/echo-robot.mp4" muted loop playsinline preload="none"></video>
+        -->
+        <div class="video-card-ph">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(0,153,170,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(0,153,170,0.5)"/></svg>
+          <span class="video-card-ph-label">assets/video/<br/>echo-robot.mp4</span>
+        </div>
+        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
+      </div>
+      <div class="video-card-info">
+        <div class="video-card-title">Echocardiography Teleoperation</div>
+        <div class="video-card-meta">Waseda University · Iwata Lab · 2024</div>
+        <span class="video-card-tag">Medical</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ WORK IN PROGRESS ════════════════════════════════════════ -->
+<section id="wip" class="wip-section" style="padding:52px 0;">
+  <div class="section-header"><span class="section-num">05</span><h2 class="section-title">Work in Progress</h2></div>
+  <div class="pub-list">
+
+    <div class="pub-item">
+      <div class="pub-thumb"><div class="pub-thumb-ph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="3" fill="var(--muted)" opacity="0.3"/></svg><span>WIP</span></div></div>
+      <div class="pub-year">2026</div>
+      <div><div class="pub-venue" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Preparation</div><div class="pub-title">Avatar Teleoperation with Haptic Feedback — Quadruped &amp; Humanoid</div><div class="pub-authors"><strong>G. Gourmelen</strong> · Keio University KMD</div></div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-thumb"><div class="pub-thumb-ph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="3" fill="var(--muted)" opacity="0.3"/></svg><span>WIP</span></div></div>
+      <div class="pub-year">2026</div>
+      <div><div class="pub-venue" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Preparation</div><div class="pub-title">Transparent Screen Robotic AI Vision</div><div class="pub-authors"><strong>G. Gourmelen</strong> · Keio University KMD</div></div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-thumb"><div class="pub-thumb-ph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="3" fill="var(--muted)" opacity="0.3"/></svg><span>WIP</span></div></div>
+      <div class="pub-year">2026</div>
+      <div><div class="pub-venue" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Preparation</div><div class="pub-title">Learning from Demonstration for Echocardiography Teleoperation Robot</div><div class="pub-authors"><strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div></div>
+    </div>
+
+    <div class="pub-item">
+      <div class="pub-thumb"><div class="pub-thumb-ph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="3" fill="var(--muted)" opacity="0.3"/></svg><span>WIP</span></div></div>
+      <div class="pub-year">2026</div>
+      <div><div class="pub-venue" style="border-color:rgba(0,153,170,0.4);color:var(--accent);">In Preparation</div><div class="pub-title">Augmented Ascent: Third-Person AR Support for Bouldering</div><div class="pub-authors"><strong>G. Gourmelen</strong>, H. Iwata · Waseda University / Iwata Lab</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ CONTACT ══════════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="section-header"><span class="section-num">06</span><h2 class="section-title">Contact</h2></div>
+  <div class="contact-grid">
+    <div>
+      <!-- Photo frame: img fills the frame at z-index:1; placeholder SVG at z-index:0 behind it -->
+      <div class="contact-photo-frame">
+        <div class="contact-photo-ph">
+          <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="16" r="8" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><path d="M4 42C4 30 40 30 40 42" stroke="rgba(0,130,150,0.5)" stroke-width="1.5" fill="none"/></svg>
+          <span>Guillaume Gourmelen</span>
+        </div>
+        <img src="assets/img/gourmelen.jpg" alt="Guillaume Gourmelen" onerror="this.style.display='none'"/>
+      </div>
+      <div class="contact-caption">Tokyo, 2025</div>
+    </div>
+    <div>
+      <div class="contact-blurb">Open to <em>research collaborations</em>, visiting positions, and conversations about teleoperation, haptics, and embodied systems.</div>
+      <div class="contact-links">
+        <a id="email-link" class="contact-link" href="#" onclick="revealEmail(this);return false;">Click to reveal email<span class="contact-link-label">Email</span></a>
+        <a href="https://scholar.google.com/citations?user=GC2dxjQAAAAJ" target="_blank" class="contact-link">Google Scholar<span class="contact-link-label">Publications</span></a>
+        <a href="https://cv.hal.science/guillaume-gourmelen" target="_blank" class="contact-link">HAL Open Archive<span class="contact-link-label">HAL CV</span></a>
+        <a href="https://www.linkedin.com/in/guillaume-gourmelen-71b655161/" target="_blank" class="contact-link">LinkedIn<span class="contact-link-label">Profile</span></a>
+        <a href="https://www.embodiedmedia.org/members" target="_blank" class="contact-link">KMD Embodied Media Lab<span class="contact-link-label">Lab</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Guillaume Gourmelen · Tokyo, Japan · <a href="https://cv.hal.science/guillaume-gourmelen" target="_blank" style="color:var(--muted)">HAL ↗</a> · <a href="consulting.html" style="color:var(--accent2)">Consulting ↗</a> · <a href="interprete.html" style="color:var(--accent)">Interprétariat FR-JP ↗</a></span>
+  <span>Robotics · Teleoperation · Embodiment</span>
+</footer>
+
+</div>
+
+<script>
+const canvas=document.getElementById('robo-canvas'),ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+resize();window.addEventListener('resize',resize);
+let t=0;
+const C='rgba(0,130,150,',A='rgba(180,100,0,',W='rgba(60,100,130,';
+const ease=x=>x<0.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
+function drawHumanArm(cx,cy){
+  const mp=t*0.11,intent=ease((Math.sin(mp)+1)/2);
+  const sp=-0.28+intent*0.42+Math.sin(t*0.17)*0.03,ul=85;
+  const ex=cx+Math.cos(sp)*ul,ey=cy+Math.sin(sp)*ul;
+  const eb=0.38-ease((Math.sin(mp-0.15)+1)/2)*0.22;
+  const wx=ex+Math.cos(sp-eb)*72,wy=ey+Math.sin(sp-eb)*72;
+  const hx=wx+Math.cos(sp-eb-0.08)*26,hy=wy+Math.sin(sp-eb-0.08)*26;
+  const draw=(ax,ay,bx,by,w,a)=>{ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.strokeStyle=W+a+')';ctx.lineWidth=w;ctx.lineCap='round';ctx.stroke();};
+  draw(cx,cy,ex,ey,9,0.18);draw(ex,ey,wx,wy,7,0.15);draw(wx,wy,hx,hy,5,0.12);
+  const ha=Math.atan2(hy-wy,hx-wx),fc=0.2+ease((Math.sin(mp-0.15)+1)/2)*0.15;
+  [-0.35,-0.12,0.08,0.28].forEach((fa,i)=>{const a=ha+fa,len=[18,22,21,17][i];ctx.beginPath();ctx.moveTo(hx,hy);ctx.quadraticCurveTo(hx+Math.cos(a)*len*0.5,hy+Math.sin(a)*len*0.5,hx+Math.cos(a+fc*0.3)*len,hy+Math.sin(a+fc*0.3)*len);ctx.strokeStyle=W+'0.12)';ctx.lineWidth=2.5-i*0.3;ctx.lineCap='round';ctx.stroke();});
+  return{x:hx,y:hy,intent};
+}
+function drawRobotArm(cx,cy){
+  const phase=((t*0.11)%(Math.PI*2))/(Math.PI*2);
+  const trap=(p,r=0.25)=>p<r?ease(p/r):p<1-r?1:ease((1-p)/r);
+  const ext=phase<0.5?trap(phase*2,0.3):trap((1-phase)*2,0.3);
+  const sp=-0.45+ext*0.50,eb=0.42-ext*0.26;
+  const j=[[cx,cy],[cx-Math.cos(sp)*95,cy+Math.sin(sp)*95]];
+  j.push([j[1][0]-Math.cos(sp-eb)*80,j[1][1]+Math.sin(sp-eb)*80]);
+  j.push([j[2][0]-Math.cos(sp-eb-0.15)*55,j[2][1]+Math.sin(sp-eb-0.15)*55]);
+  j.push([j[3][0]-Math.cos(sp-eb-0.1)*35,j[3][1]+Math.sin(sp-eb-0.1)*35]);
+  for(let i=0;i<4;i++){ctx.beginPath();ctx.moveTo(j[i][0],j[i][1]);ctx.lineTo(j[i+1][0],j[i+1][1]);ctx.strokeStyle=C+(0.15-i*0.02)+')';ctx.lineWidth=8-i*1.2;ctx.lineCap='round';ctx.stroke();ctx.beginPath();ctx.arc(j[i][0],j[i][1],8-i,0,Math.PI*2);ctx.strokeStyle=C+'0.3)';ctx.lineWidth=1.5;ctx.stroke();ctx.fillStyle=C+'0.05)';ctx.fill();ctx.beginPath();ctx.arc(j[i][0],j[i][1],2.5,0,Math.PI*2);ctx.fillStyle=A+'0.7)';ctx.fill();}
+  const[ex,ey]=j[4];
+  if(!drawRobotArm.trail)drawRobotArm.trail=[];
+  drawRobotArm.trail.push({x:ex,y:ey});if(drawRobotArm.trail.length>70)drawRobotArm.trail.shift();
+  drawRobotArm.trail.forEach((p,i)=>{const a=(i/drawRobotArm.trail.length)*0.12;ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fillStyle=A+a+')';ctx.fill();});
+  return{x:ex,y:ey};
+}
+function drawGrid(){ctx.strokeStyle=C+'0.05)';ctx.lineWidth=1;for(let x=0;x<canvas.width;x+=48){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke();}for(let y=0;y<canvas.height;y+=48){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();}}
+/* ── 1 & 2. Pause canvas when hero is off-screen (saves CPU while scrolling) ── */
+let animating = true;
+const heroEl = document.querySelector('.hero');
+const canvasObserver = new IntersectionObserver(entries => {
+  animating = entries[0].isIntersecting;
+  if (animating) requestAnimationFrame(animate);
+}, { threshold: 0.01 });
+canvasObserver.observe(heroEl);
+
+function animate(){
+  if (!animating) return;
+  ctx.clearRect(0,0,canvas.width,canvas.height);drawGrid();
+  const cY=canvas.height*0.48;
+  const hand=drawHumanArm(canvas.width*0.22,cY),ee=drawRobotArm(canvas.width*0.78,cY);
+  if(hand.intent>0.05){const midX=(hand.x+ee.x)/2,midY=(hand.y+ee.y)/2-20*hand.intent;ctx.beginPath();ctx.moveTo(hand.x,hand.y);ctx.quadraticCurveTo(midX,midY,ee.x,ee.y);ctx.strokeStyle=C+(hand.intent*0.18)+')';ctx.lineWidth=1.5;ctx.setLineDash([4,6]);ctx.stroke();ctx.setLineDash([]);}
+  t+=0.009;requestAnimationFrame(animate);
+}
+animate();
+
+/* ── 9. Active nav: highlight link matching the section currently in viewport ── */
+const sections = document.querySelectorAll('section[id], div.hero');
+const navLinks = document.querySelectorAll('.nav-links a');
+const navObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id || 'about';
+      navLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
     }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+sections.forEach(s => navObserver.observe(s));
+
+/* ── 11. Back-to-top: show after 300px scroll ── */
+const backTop = document.getElementById('back-top');
+window.addEventListener('scroll', () => {
+  backTop.classList.toggle('visible', window.scrollY > 300);
+}, { passive: true });
+
+/* ── 12. Copy BibTeX citation ── */
+function copyCite(btn, bibtex) {
+  navigator.clipboard.writeText(bibtex).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 14 14" fill="none"><polyline points="2,7 5,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX';
+    }, 2200);
+  });
+}
+
+/* ── Scroll-reveal: add .revealed when section enters viewport ── */
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) { e.target.classList.add('revealed'); revealObserver.unobserve(e.target); }});
+}, {threshold: 0.08});
+document.querySelectorAll('section, .showcase-section').forEach(s => revealObserver.observe(s));
+
+/* ── Hamburger nav ── */
+function toggleNav(btn) {
+  const links = document.getElementById('nav-links');
+  const open = links.classList.toggle('open');
+  btn.setAttribute('aria-expanded', open);
+  // Animate the three bars: × when open
+  const bars = btn.querySelectorAll('span');
+  if (open) {
+    bars[0].style.transform='translateY(5px) rotate(45deg)';
+    bars[1].style.opacity='0';
+    bars[2].style.transform='translateY(-5px) rotate(-45deg)';
+  } else {
+    bars[0].style.transform='';bars[1].style.opacity='';bars[2].style.transform='';
   }
-  </script>
+}
+// Close nav when a link is clicked (mobile)
+document.getElementById('nav-links').querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    const links = document.getElementById('nav-links');
+    links.classList.remove('open');
+    const btn = document.querySelector('.nav-burger');
+    if(btn){ btn.setAttribute('aria-expanded','false'); btn.querySelectorAll('span').forEach(s=>{s.style.transform='';s.style.opacity='';}); }
+  });
+});
+
+
+/* ── Research filter ── */
+function filterTiles(btn) {
+  const filter = btn.dataset.filter;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.showcase-tile').forEach(tile => {
+    if (filter === 'all') { tile.classList.remove('hidden'); return; }
+    const topics = tile.dataset.topics || '';
+    tile.classList.toggle('hidden', !topics.includes(filter));
+  });
+}
+
+/* ── Video lab hover play/pause ── */
+function playVid(card) {
+  const v = card.querySelector('video');
+  if (v) { v.play(); }
+}
+function pauseVid(card) {
+  const v = card.querySelector('video');
+  if (v) { v.pause(); v.currentTime = 0; }
+}
+
+function revealEmail(el){el.href='mailto:guillaume@kmd.keio.ac.jp';el.childNodes[0].textContent='guillaume@kmd.keio.ac.jp ';}
+</script>
+<script src="assets/js/thumb-loader.js"></script>
 </body>
 </html>
