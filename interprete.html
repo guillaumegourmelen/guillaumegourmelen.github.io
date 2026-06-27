@@ -21,15 +21,6 @@
   --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
   --shadow:rgba(13,31,48,0.07);
 }
-@media(prefers-color-scheme:dark){
-  :root{
-    --bg:#0d1117;--surface:#161b22;--border:#21262d;
-    --accent:#22c2d4;--accent2:#e09a30;
-    --text:#e6edf3;--muted:#4a6070;--mid:#8baabb;
-    --shadow:rgba(0,0,0,0.35);
-  }
-  nav{background:rgba(13,17,23,0.93);}
-}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
@@ -398,7 +389,7 @@ footer a{color:var(--accent);text-decoration:none;}
       <div class="cred-title">PhD · Professeur Assistant Associé · Tokyo</div>
       <div class="cred-badges">
         <div class="cred-badge"><div class="cred-badge-dot keio"></div>JLPT N1 — 13 ans d'étude du japonais</div>
-        <div class="cred-badge"><div class="cred-badge-dot honda"></div>Formation interprétariat APEF Aoyama — niveau 基礎科, 1,5 an</div>
+        <div class="cred-badge"><div class="cred-badge-dot honda"></div>Formation interprétariat APEF Aoyama — niveau 基礎科, depuis avril 2025</div>
         <div class="cred-badge"><div class="cred-badge-dot waseda"></div>Waseda University Iwata Lab — travail en japonais, 2023–25</div>
         <div class="cred-badge"><div class="cred-badge-dot lirmm"></div>Honda Research Institute Japan — travail en japonais, 2025</div>
       </div>
@@ -616,7 +607,7 @@ footer a{color:var(--accent);text-decoration:none;}
     <div class="proof-card">
       <div class="proof-org">APEF Aoyama — Cours de formation d'interprètes</div>
       <div class="proof-what">Cours d'interprétation consécutif, niveau 基礎科 (kisoka)</div>
-      <div class="proof-outcome">Formation continue depuis 1,5 an auprès de l'APEF (公益財団法人フランス語教育振興協会), organisme japonais spécialisé dans la formation d'interprètes et de traducteurs français-japonais. Niveau intermédiaire (基礎科), avant le niveau professionnel (本科).</div>
+      <div class="proof-outcome">Formation continue depuis avril 2025 auprès de l'APEF (公益財団法人フランス語教育振興協会), organisme japonais spécialisé dans la formation d'interprètes et de traducteurs français-japonais. Niveau intermédiaire (基礎科), avant le niveau professionnel (本科). <a href="https://apefdapf.org/apef/cours/cours_2026" target="_blank" style="color:var(--accent);">Détails du cours ↗</a></div>
       <span class="proof-tag">Formation · en cours, depuis 2024</span>
     </div>
 
@@ -696,7 +687,7 @@ footer a{color:var(--accent);text-decoration:none;}
       </div>
       <div class="japan-fact">
         <div class="japan-fact-icon">🎓</div>
-        <div class="japan-fact-text"><strong>Formation APEF Aoyama</strong>Cours d'interprétation consécutif français-japonais, niveau 基礎科, en cours depuis 1,5 an. <a href="https://apefdapf.org/apef/cours/presentation" target="_blank" style="color:var(--accent);">Voir le site de l'APEF ↗</a></div>
+        <div class="japan-fact-text"><strong>Formation APEF Aoyama</strong>Cours d'interprétation consécutif français-japonais, niveau 基礎科, depuis avril 2025. <a href="https://apefdapf.org/apef/cours/cours_2026" target="_blank" style="color:var(--accent);">Voir le détail du cours ↗</a></div>
       </div>
       <div class="japan-fact">
         <div class="japan-fact-icon">🔬</div>
@@ -772,9 +763,16 @@ footer a{color:var(--accent);text-decoration:none;}
 </div><!-- end .container -->
 
 <script>
+// TODO: définir l'adresse e-mail dédiée à l'interprétariat une fois décidée.
+const CONTACT_EMAIL = '';
+
 function revealEmail(el){
-  el.href='mailto:guillaume@kmd.keio.ac.jp';
-  el.childNodes[0].textContent='guillaume@kmd.keio.ac.jp';
+  if (!CONTACT_EMAIL) {
+    el.childNodes[0].textContent = 'Adresse e-mail à venir — contactez-moi via LinkedIn pour le moment';
+    return;
+  }
+  el.href = 'mailto:' + CONTACT_EMAIL;
+  el.childNodes[0].textContent = CONTACT_EMAIL;
 }
 
 function handleSubmit(e) {
@@ -782,13 +780,18 @@ function handleSubmit(e) {
   const btn = document.getElementById('submit-btn');
   const form = e.target;
   const data = Object.fromEntries(new FormData(form));
+  if (!CONTACT_EMAIL) {
+    btn.textContent = 'E-mail non configuré — contactez-moi via LinkedIn';
+    setTimeout(() => { btn.textContent = 'Envoyer ma demande →'; }, 4000);
+    return;
+  }
   // Build mailto with pre-filled subject and body
   const subject = encodeURIComponent(`Demande d'interprétariat — ${data.company} — ${data.service || 'Général'}`);
   const body = encodeURIComponent(
     `Entreprise : ${data.company}\nFonction : ${data.role}\nType de mission : ${data.service}\n\nBesoin :\n${data.challenge}\n\nRépondre à : ${data.email}`
   );
   // Open email client with pre-filled content
-  window.location.href = `mailto:guillaume@kmd.keio.ac.jp?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
   btn.textContent = 'Ouverture de votre client mail…';
   btn.style.opacity = '0.6';
   setTimeout(() => { btn.textContent = 'Envoyer ma demande →'; btn.style.opacity = '1'; }, 3000);

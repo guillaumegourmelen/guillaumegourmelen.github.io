@@ -187,6 +187,48 @@ footer a{color:var(--accent);text-decoration:none;}
   .auto-gallery{grid-template-columns:1fr 1fr;}
   .project-hero-media{padding-bottom:68%;}
 }
+
+/* ═══ PROJECT SIDEBAR ════════════════════════════════════════════
+   Persistent list of all projects, same on every project page.
+   Sticky on desktop; collapses to a horizontal scroll strip on
+   narrow viewports (see responsive block below).
+   ════════════════════════════════════════════════════════════ */
+.page-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start;max-width:1180px;margin:0 auto;}
+.project-sidebar{
+  position:sticky;top:88px;
+  padding-top:72px;
+  display:flex;flex-direction:column;gap:2px;
+  max-height:calc(100vh - 110px);overflow-y:auto;
+}
+.sidebar-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-left:12px;}
+.sidebar-link{
+  display:block;padding:9px 12px;font-size:11.5px;line-height:1.5;
+  color:var(--mid);text-decoration:none;border-left:2px solid transparent;
+  transition:color 0.2s,border-color 0.2s,background 0.2s;
+}
+.sidebar-link:hover{color:var(--text);background:rgba(13,31,48,0.03);}
+.sidebar-link.current{
+  color:var(--text);font-weight:500;
+  border-left-color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 7%,transparent);
+}
+.page-main{min-width:0;}
+
+@media(max-width:900px){
+  .page-layout{grid-template-columns:1fr;gap:0;}
+  .project-sidebar{
+    position:static;top:auto;padding-top:0;max-height:none;
+    flex-direction:row;overflow-x:auto;overflow-y:visible;
+    gap:8px;margin-top:72px;padding-bottom:12px;
+    border-bottom:1px solid var(--border);
+  }
+  .sidebar-label{display:none;}
+  .sidebar-link{
+    white-space:nowrap;border-left:none;border-bottom:2px solid transparent;
+    padding:8px 12px;flex-shrink:0;
+  }
+  .sidebar-link.current{border-left-color:transparent;border-bottom-color:var(--accent);}
+}
 </style>
 </head>
 <body>
@@ -201,7 +243,21 @@ footer a{color:var(--accent);text-decoration:none;}
   <span class="project-topbar-tag">ACM SIGGRAPH 2024 Emerging Technologies — Denver, CO</span>
 </div>
 
-<div class="container">
+<div class="container page-layout">
+  <aside class="project-sidebar">
+    <span class="sidebar-label">All Projects</span>
+    <a href="teleoperation.html" class="sidebar-link">7DoF Teleoperation &amp; Impedance Adaptation</a>
+    <a href="trajectory-learning.html" class="sidebar-link">Human Trajectory &amp; Impedance Learning</a>
+    <a href="honda.html" class="sidebar-link">Bimanual Avatar Teleoperation</a>
+    <a href="miruoto.html" class="sidebar-link current">Miruoto — Seeing Sound at the Stadium</a>
+    <a href="submarine.html" class="sidebar-link">Reconfigurable AUV for Karst Exploration</a>
+    <a href="soft-grasp.html" class="sidebar-link">Hybrid Roller–Jamming Gripper</a>
+    <a href="3arm.html" class="sidebar-link">MESSPa — Embodiment Stimulation Shoulder Pad</a>
+    <a href="colimbs.html" class="sidebar-link">Co-Limbs — Wearable Collaborative Robot Arms</a>
+    <a href="echo.html" class="sidebar-link">Echocardiography Teleoperation Robot</a>
+    <a href="moonshot.html" class="sidebar-link">JST Moonshot — Cybernetic Avatar</a>
+  </aside>
+  <div class="page-main">
 
   <!-- META STRIP -->
   <div class="meta-strip">
@@ -244,17 +300,26 @@ footer a{color:var(--accent);text-decoration:none;}
   <!-- VIDEO -->
   <section>
     <div class="section-header"><span class="section-label">Video</span><h2 class="section-title">Project Demo</h2></div>
-    <div class="video-wrap" style="display:flex;gap:16px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:200px;max-width:280px;">
-        <div class="video-placeholder" style="aspect-ratio:9/16;position:relative;" data-video-key="miruoto.portrait">
+    <div class="video-wrap" style="display:flex;gap:16px;flex-wrap:wrap;background:none;padding-bottom:0;width:auto;">
+      <div style="flex:1;min-width:200px;max-width:280px;aspect-ratio:9/16;position:relative;background:#0d1f30;">
+        <div class="video-placeholder" data-video-key="miruoto.portrait">
           <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
           <span class="video-label">Portrait · Click to play</span>
         </div>
       </div>
-      <div style="flex:2;min-width:280px;">
+      <div style="flex:2;min-width:280px;aspect-ratio:16/9;position:relative;background:#0d1f30;">
         <div class="video-placeholder" data-video-key="miruoto.landscape">
           <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
           <span class="video-label">Landscape · Click to play</span>
+        </div>
+      </div>
+      <!-- 3rd Miruoto video: once uploaded and public, change this placeholder's
+           style="cursor:default;" + remove the opacity:0.35 line, and add
+           data-video-key="miruoto.third" (already registered in videos.js). -->
+      <div style="flex:2;min-width:280px;aspect-ratio:16/9;position:relative;background:#0d1f30;">
+        <div class="video-placeholder" style="cursor:default;">
+          <div class="play-btn" style="opacity:0.35;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
+          <span class="video-label">Video coming soon</span>
         </div>
       </div>
     </div>
@@ -280,23 +345,12 @@ footer a{color:var(--accent);text-decoration:none;}
       <a href="https://minpo.online/article/post-655.html" target="_blank">テレビ各局が挑んだ大会報道（TOKYO MX特番でミルオトを実況に活用） — 民放online ↗</a> · <a href="https://s.mxtv.jp/tokyomxplus/mx/article/202511141300/detail/" target="_blank">TOKYO MX開局30周年記念特番「東京2025デフリンピック」放送概要 ↗</a>
     </div>
   </section>
-
-  <!-- PROJECT NAV -->
-  <div class="project-nav">
-    <a href="honda.html" class="project-nav-link prev">
-      <span class="project-nav-dir">Previous project</span>
-      <span class="project-nav-title">Honda Avatar</span>
-    </a>
-    <a href="submarine.html" class="project-nav-link next">
-      <span class="project-nav-dir">Next project</span>
-      <span class="project-nav-title">Submarine AUV</span>
-    </a>
-  </div>
-
   <footer>
     <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
     <span>Robotics · Teleoperation · Embodiment</span>
   </footer>
+
+</div><!-- end .page-main -->
 
 </div><!-- end .container -->
 

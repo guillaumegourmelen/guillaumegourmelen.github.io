@@ -187,6 +187,48 @@ footer a{color:var(--accent);text-decoration:none;}
   .auto-gallery{grid-template-columns:1fr 1fr;}
   .project-hero-media{padding-bottom:68%;}
 }
+
+/* ═══ PROJECT SIDEBAR ════════════════════════════════════════════
+   Persistent list of all projects, same on every project page.
+   Sticky on desktop; collapses to a horizontal scroll strip on
+   narrow viewports (see responsive block below).
+   ════════════════════════════════════════════════════════════ */
+.page-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start;max-width:1180px;margin:0 auto;}
+.project-sidebar{
+  position:sticky;top:88px;
+  padding-top:72px;
+  display:flex;flex-direction:column;gap:2px;
+  max-height:calc(100vh - 110px);overflow-y:auto;
+}
+.sidebar-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-left:12px;}
+.sidebar-link{
+  display:block;padding:9px 12px;font-size:11.5px;line-height:1.5;
+  color:var(--mid);text-decoration:none;border-left:2px solid transparent;
+  transition:color 0.2s,border-color 0.2s,background 0.2s;
+}
+.sidebar-link:hover{color:var(--text);background:rgba(13,31,48,0.03);}
+.sidebar-link.current{
+  color:var(--text);font-weight:500;
+  border-left-color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 7%,transparent);
+}
+.page-main{min-width:0;}
+
+@media(max-width:900px){
+  .page-layout{grid-template-columns:1fr;gap:0;}
+  .project-sidebar{
+    position:static;top:auto;padding-top:0;max-height:none;
+    flex-direction:row;overflow-x:auto;overflow-y:visible;
+    gap:8px;margin-top:72px;padding-bottom:12px;
+    border-bottom:1px solid var(--border);
+  }
+  .sidebar-label{display:none;}
+  .sidebar-link{
+    white-space:nowrap;border-left:none;border-bottom:2px solid transparent;
+    padding:8px 12px;flex-shrink:0;
+  }
+  .sidebar-link.current{border-left-color:transparent;border-bottom-color:var(--accent);}
+}
 </style>
 </head>
 <body>
@@ -201,7 +243,21 @@ footer a{color:var(--accent);text-decoration:none;}
   <span class="project-topbar-tag">Under Review — IEEE Access · 2026</span>
 </div>
 
-<div class="container">
+<div class="container page-layout">
+  <aside class="project-sidebar">
+    <span class="sidebar-label">All Projects</span>
+    <a href="teleoperation.html" class="sidebar-link">7DoF Teleoperation &amp; Impedance Adaptation</a>
+    <a href="trajectory-learning.html" class="sidebar-link">Human Trajectory &amp; Impedance Learning</a>
+    <a href="honda.html" class="sidebar-link">Bimanual Avatar Teleoperation</a>
+    <a href="miruoto.html" class="sidebar-link">Miruoto — Seeing Sound at the Stadium</a>
+    <a href="submarine.html" class="sidebar-link">Reconfigurable AUV for Karst Exploration</a>
+    <a href="soft-grasp.html" class="sidebar-link current">Hybrid Roller–Jamming Gripper</a>
+    <a href="3arm.html" class="sidebar-link">MESSPa — Embodiment Stimulation Shoulder Pad</a>
+    <a href="colimbs.html" class="sidebar-link">Co-Limbs — Wearable Collaborative Robot Arms</a>
+    <a href="echo.html" class="sidebar-link">Echocardiography Teleoperation Robot</a>
+    <a href="moonshot.html" class="sidebar-link">JST Moonshot — Cybernetic Avatar</a>
+  </aside>
+  <div class="page-main">
 
   <!-- META STRIP -->
   <div class="meta-strip">
@@ -258,23 +314,12 @@ footer a{color:var(--accent);text-decoration:none;}
       Y. Ren, G. Gourmelen, H. Iwata. "Hybrid Roller-Jamming Gripper for Robust Object Acquisition and Retention Under Pose Uncertainty." <em>Under Review — IEEE Access</em>, 2026.
     </div>
   </section>
-
-  <!-- PROJECT NAV -->
-  <div class="project-nav">
-    <a href="submarine.html" class="project-nav-link prev">
-      <span class="project-nav-dir">Previous project</span>
-      <span class="project-nav-title">Submarine AUV</span>
-    </a>
-    <a href="3arm.html" class="project-nav-link next">
-      <span class="project-nav-dir">Next project</span>
-      <span class="project-nav-title">Supernumerary 3-Arm</span>
-    </a>
-  </div>
-
   <footer>
     <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
     <span>Robotics · Teleoperation · Embodiment</span>
   </footer>
+
+</div><!-- end .page-main -->
 
 </div><!-- end .container -->
 

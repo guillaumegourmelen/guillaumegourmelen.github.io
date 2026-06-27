@@ -21,15 +21,6 @@
   --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
   --shadow:rgba(13,31,48,0.07);
 }
-@media(prefers-color-scheme:dark){
-  :root{
-    --bg:#0d1117;--surface:#161b22;--border:#21262d;
-    --accent:#22c2d4;--accent2:#e09a30;
-    --text:#e6edf3;--muted:#4a6070;--mid:#8baabb;
-    --shadow:rgba(0,0,0,0.35);
-  }
-  nav{background:rgba(13,17,23,0.93);}
-}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
@@ -886,9 +877,16 @@ footer a{color:var(--accent);text-decoration:none;}
 </div><!-- end .container -->
 
 <script>
+// TODO: set the dedicated consulting contact email here once decided.
+const CONTACT_EMAIL = '';
+
 function revealEmail(el){
-  el.href='mailto:guillaume@kmd.keio.ac.jp';
-  el.childNodes[0].textContent='guillaume@kmd.keio.ac.jp';
+  if (!CONTACT_EMAIL) {
+    el.childNodes[0].textContent = 'Email address coming soon — use LinkedIn for now';
+    return;
+  }
+  el.href = 'mailto:' + CONTACT_EMAIL;
+  el.childNodes[0].textContent = CONTACT_EMAIL;
 }
 
 function handleSubmit(e) {
@@ -896,13 +894,18 @@ function handleSubmit(e) {
   const btn = document.getElementById('submit-btn');
   const form = e.target;
   const data = Object.fromEntries(new FormData(form));
+  if (!CONTACT_EMAIL) {
+    btn.textContent = 'Email not yet configured — message me on LinkedIn';
+    setTimeout(() => { btn.textContent = 'Send inquiry →'; }, 4000);
+    return;
+  }
   // Build mailto with pre-filled subject and body
   const subject = encodeURIComponent(`Consulting inquiry — ${data.company} — ${data.service || 'General'}`);
   const body = encodeURIComponent(
     `Company: ${data.company}\nRole: ${data.role}\nEngagement type: ${data.service}\n\nChallenge:\n${data.challenge}\n\nReply to: ${data.email}`
   );
   // Open email client with pre-filled content
-  window.location.href = `mailto:guillaume@kmd.keio.ac.jp?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
   btn.textContent = 'Opening your email client…';
   btn.style.opacity = '0.6';
   setTimeout(() => { btn.textContent = 'Send inquiry →'; btn.style.opacity = '1'; }, 3000);

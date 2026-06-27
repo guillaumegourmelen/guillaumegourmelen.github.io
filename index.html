@@ -51,19 +51,6 @@
   --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
   --shadow:rgba(13,31,48,0.08);
 }
-@media(prefers-color-scheme:dark){
-  :root{
-    --bg:#0d1117;--surface:#161b22;--border:#21262d;
-    --accent:#22c2d4;--accent2:#e09a30;
-    --text:#e6edf3;--muted:#4a6070;--mid:#8baabb;
-    --shadow:rgba(0,0,0,0.4);
-  }
-  body::before{opacity:0.15;}
-  .pub-thumb,.contact-photo-frame{background:#1c2128;}
-  .tile-placeholder{filter:brightness(0.85);}
-  nav{background:rgba(13,17,23,0.93);}
-  #back-top{background:var(--surface);}
-}
 *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
 #robo-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
@@ -232,9 +219,8 @@ section{padding:72px 0;border-top:1px solid var(--border);}
 .teaching-org{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:14px;}
 .teaching-org::after{content:'';flex:1;height:1px;background:var(--border);}
 .course-list{display:flex;flex-direction:column;}
-.course-item{display:grid;grid-template-columns:50px 1fr auto;gap:16px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--border);}
+.course-item{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--border);}
 .course-item:last-child{border-bottom:none;}
-.course-hours{font-size:11px;color:var(--accent2);font-variant-numeric:tabular-nums;}
 .course-name{font-size:12px;color:var(--text);}
 .course-level{font-size:10px;color:var(--muted);letter-spacing:0.04em;}
 /* teaching philosophy blurb */
@@ -522,7 +508,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
   .contact-grid{grid-template-columns:1fr;}
   .contact-photo-frame{width:100%;height:200px;}
   .review-grid{grid-template-columns:1fr;}
-  .course-item{grid-template-columns:44px 1fr auto;gap:10px;}
+  .course-item{grid-template-columns:1fr auto;gap:10px;}
   .showcase-grid{grid-template-columns:repeat(2,1fr);}
   .tile-overlay{opacity:1;background:linear-gradient(to top,rgba(10,20,30,0.75) 0%,transparent 60%);}
   .hero-meta{gap:24px;}
@@ -1094,27 +1080,19 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 
   <p class="teaching-intro">Over 300 hours of university-level instruction across France and Japan, from introductory programming to advanced robotics and embedded systems.</p>
 
-  <div class="teaching-quote">
-    "I treat teaching the way I treat research: the measure of success is not the quality of what is produced in the lab — it is whether the thing actually works in the world."
-    <cite>— Teaching Statement, April 2026</cite>
-  </div>
-
   <!-- ── Keio University ── -->
   <div class="teaching-block" style="margin-top:44px;">
     <div class="teaching-org">Keio University · KMD · Tokyo — 2026–present</div>
     <div class="course-list">
       <div class="course-item">
-        <div class="course-hours">—</div>
         <div class="course-name">Statistics for Research</div>
         <div class="course-level">Graduate seminar</div>
       </div>
       <div class="course-item">
-        <div class="course-hours">—</div>
         <div class="course-name">How to Design and Run Research Experiments</div>
         <div class="course-level">Graduate seminar</div>
       </div>
       <div class="course-item">
-        <div class="course-hours">—</div>
         <div class="course-name">In-Lab Robotics Presentations</div>
         <div class="course-level">Lab internal · ongoing</div>
       </div>
@@ -1123,47 +1101,39 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 
   <!-- ── Polytech Montpellier ── -->
   <div class="teaching-block">
-    <div class="teaching-org">Polytech Montpellier · France — Sep 2022 – Mar 2023 · 270+ hours total</div>
+    <div class="teaching-org">Polytech Montpellier · France — Sep 2022 – Mar 2023 · 270+ hours total during ATER</div>
     <div class="course-list">
       <div class="course-item">
-        <div class="course-hours">—</div>
         <div class="course-name">Medical Robotics</div>
-        <div class="course-level">Engineering · 3rd year</div>
+        <div class="course-level">Engineering · M2</div>
       </div>
       <div class="course-item">
-        <div class="course-hours">—</div>
-        <div class="course-name">C / C++ Programming</div>
-        <div class="course-level">Engineering · 2nd year</div>
+        <div class="course-name">Linear Systems &amp; Automation (Control Theory) — Hands-on</div>
+        <div class="course-level">Engineering · Licence 3</div>
       </div>
       <div class="course-item">
-        <div class="course-hours">—</div>
-        <div class="course-name">Python for Engineers</div>
-        <div class="course-level">Engineering · 2nd year</div>
+        <div class="course-name">Embedded Networks — Hands-on</div>
+        <div class="course-level">Engineering · Licence 3</div>
       </div>
       <div class="course-item">
-        <div class="course-hours">—</div>
-        <div class="course-name">Linear Systems &amp; Automation (Control Theory)</div>
-        <div class="course-level">Engineering · 2nd–3rd year</div>
-      </div>
-      <div class="course-item">
-        <div class="course-hours">—</div>
-        <div class="course-name">IoT &amp; Embedded Networks — Hands-on</div>
-        <div class="course-level">Engineering · 2nd–3rd year</div>
-      </div>
-      <div class="course-item">
-        <div class="course-hours">—</div>
         <div class="course-name">AI Foundations (Supervised Learning, Neural Networks)</div>
-        <div class="course-level">Engineering · 3rd year</div>
+        <div class="course-level">Engineering · M2</div>
       </div>
       <div class="course-item">
-        <div class="course-hours">—</div>
-        <div class="course-name">Electronics Practicals (Analog / Digital Circuits)</div>
-        <div class="course-level">Engineering · 2nd year</div>
+        <div class="course-name">Electronics Practicals (Analog / Digital Circuits) — Hands-on</div>
+        <div class="course-level">Engineering · Licence 3</div>
       </div>
       <div class="course-item">
-        <div class="course-hours">—</div>
-        <div class="course-name">Linux &amp; Embedded Systems</div>
-        <div class="course-level">Engineering · 2nd–3rd year</div>
+        <div class="course-name">Linux &amp; Embedded Systems — IoT, Linux &amp; Embedded Systems assembly. Taught as a vacation contract during my PhD (2 × 60h equiv. TD).</div>
+        <div class="course-level">Engineering · Licence 3</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">Introduction to Programming (Python)</div>
+        <div class="course-level">Engineering · Licence 3</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">C / C++ Programming</div>
+        <div class="course-level">Engineering · Licence 3</div>
       </div>
     </div>
   </div>
@@ -1173,12 +1143,10 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     <div class="teaching-org">Université de Montpellier — 2019–2022 · PhD monitorat (ATER)</div>
     <div class="course-list">
       <div class="course-item">
-        <div class="course-hours">—</div>
         <div class="course-name">Introduction to Programming (Python)</div>
         <div class="course-level">Licence 1st year</div>
       </div>
       <div class="course-item">
-        <div class="course-hours">—</div>
         <div class="course-name">Signals &amp; Systems</div>
         <div class="course-level">Licence 2nd year</div>
       </div>
@@ -1213,6 +1181,33 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         <span class="talk-event">Augmented Human 2026 · ACM International Conference</span>
       </div>
       <span style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(201,120,0,0.4);padding:4px 8px;white-space:nowrap;">Chair</span>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Jul 2025</div>
+      <div class="talk-body">
+        <span class="talk-title">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad — Work-in-Progress Poster (WP1.26)</span>
+        <span class="talk-event">IEEE World Haptics Conference 2025 · Suwon, South Korea</span>
+      </div>
+      <a href="https://2025.worldhaptics.org/work-in-progress-papers/" target="_blank" class="talk-link">Program ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Sep 2024</div>
+      <div class="talk-body">
+        <span class="talk-title">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</span>
+        <span class="talk-event">第42回日本ロボット学会学術講演会 (RSJ2024) · Osaka Institute of Technology, Umeda Campus</span>
+      </div>
+      <span style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:4px 8px;white-space:nowrap;">Link TBD</span>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Sep 2024</div>
+      <div class="talk-body">
+        <span class="talk-title">スポーツ観戦中の聴覚障害者の活気増幅を目指した高揚状態可知化システム「ミルオト」の開発 (Miruoto: a system to convey match excitement to Deaf spectators)</span>
+        <span class="talk-event">第29回日本バーチャルリアリティ学会大会 (VRSJ 2024) · Meijo University, Nagoya — poster 2B2-08</span>
+      </div>
+      <a href="https://conference.vrsj.org/ac2024/program/program-flash02.html" target="_blank" class="talk-link">Program ↗</a>
     </div>
 
     <div class="talk-item">
@@ -1256,9 +1251,6 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 <section id="video-lab" class="video-lab-section" style="border-top:1px solid var(--border);">
   <div class="section-header"><span class="section-num">05.2</span><h2 class="section-title">Lab Videos</h2></div>
   <p class="video-lab-intro">Recent experiments, demos, and work-in-progress footage from the lab. Hover a card to play.</p>
-  <div class="video-lab-hint">
-    To add your videos: drop <code>.mp4</code> or <code>.webm</code> files in <code>assets/video/</code>, then uncomment the <code>&lt;video&gt;</code> tag in each card and update the <code>src</code> path. Videos play silently on hover and pause automatically when you move away.
-  </div>
 
   <div class="video-grid-lab">
 
@@ -1423,7 +1415,10 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 
 <footer>
   <span>Guillaume Gourmelen · Tokyo, Japan · <a href="https://cv.hal.science/guillaume-gourmelen" target="_blank" style="color:var(--muted)">HAL ↗</a> · <a href="consulting.html" style="color:var(--accent2)">Consulting ↗</a> · <a href="interprete.html" style="color:var(--accent)">Interprétariat FR-JP ↗</a></span>
-  <span>Robotics · Teleoperation · Embodiment</span>
+  <span style="display:flex;align-items:center;gap:14px;">
+    <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fguillaumegourmelen.github.io%2F&count_bg=%230099AA&title_bg=%233D6880&icon=&icon_color=%23FFFFFF&title=visitors&edge_flat=false" alt="Visitor count" style="height:18px;vertical-align:middle;opacity:0.85;"/>
+    <span>Robotics · Teleoperation · Embodiment</span>
+  </span>
 </footer>
 
 </div>
