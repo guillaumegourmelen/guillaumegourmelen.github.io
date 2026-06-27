@@ -13,12 +13,12 @@
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Guillaume Gourmelen — Robotics Researcher"/>
 <meta property="og:description" content="Teleoperation · Haptics · Embodied Systems · JST Moonshot · Keio University KMD · Tokyo"/>
-<meta property="og:image" content="https://guillaumegourmelen.github.io/assets/gourmelen/gourmelen.jpg"/>
+<meta property="og:image" content="https://guillaumegourmelen.github.io/assets/img/main/gourmelen.jpg"/>
 <meta property="og:url" content="https://guillaumegourmelen.github.io"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Guillaume Gourmelen — Robotics Researcher"/>
 <meta name="twitter:description" content="Teleoperation · Haptics · Embodied Systems · Keio University KMD · Tokyo"/>
-<meta name="twitter:image" content="https://guillaumegourmelen.github.io/assets/gourmelen/gourmelen.jpg"/>
+<meta name="twitter:image" content="https://guillaumegourmelen.github.io/assets/img/main/gourmelen.jpg"/>
 <meta name="twitter:creator" content="@GourmGui"/>
 
 <!-- 6. JSON-LD structured data — Google knowledge panel -->
@@ -397,6 +397,18 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 }
 .video-card:hover .video-play-hint{opacity:0;}
 
+/* ── YouTube click-to-play placeholder (Lab Videos cards) ── */
+.video-placeholder{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#081825 0%,#0d2a38 100%);
+  cursor:pointer;transition:opacity 0.2s;
+}
+.video-placeholder:hover{opacity:0.85;}
+.play-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;transition:border-color 0.2s,transform 0.2s;}
+.video-placeholder:hover .play-btn{border-color:rgba(255,255,255,0.8);transform:scale(1.08);}
+.play-btn svg{margin-left:2px;}
+.video-card-media iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+
 @media(max-width:780px){
   .stats-bar{grid-template-columns:1fr 1fr;}
   .video-grid-lab{grid-template-columns:1fr 1fr;}
@@ -531,7 +543,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     <span></span><span></span><span></span>
   </button>
   <div style="display:flex;align-items:center;gap:14px;">
-    <a href="assets/gourmelen/CV-Gourmelen.pdf" target="_blank" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">CV ↓</a>
+    <a href="assets/data/main/CV-Gourmelen.pdf" target="_blank" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">CV ↓</a>
     <a href="consulting.html" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);text-decoration:none;border:1px solid rgba(201,120,0,0.35);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='var(--accent2)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--accent2)'">Consulting</a>
     <a href="interprete.html" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);text-decoration:none;border:1px solid rgba(0,153,170,0.35);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='var(--accent)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--accent)'">Interprétariat FR-JP</a>
   </div>
@@ -797,7 +809,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 <section id="news" class="news-section">
   <div class="section-header"><span class="section-num">01.5</span><h2 class="section-title">Updates</h2></div>
   <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:600px;margin-bottom:20px;">Recent news, talks, publications, and deployments.</p>
-  <!-- Content loaded from assets/data/news.json — edit that file to add,
+  <!-- Content loaded from assets/data/main/news.json — edit that file to add,
        remove, or change entries. No HTML editing needed. -->
   <div class="news-list" data-source="news.json"></div>
 </section>
@@ -1208,50 +1220,22 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 </section>
 
 <!-- ═══ VIDEO LAB ═══════════════════════════════════════════════
-     HOW TO ADD YOUR VIDEOS:
-     ─ Drop your file in:  assets/video/NAME.mp4  (or .webm)
-     ─ In each card, uncomment the <video> tag and update src.
-     ─ Videos autoplay silently on hover; pause when mouse leaves.
-     ─ Use MP4 (H.264) for best browser compatibility.
-     ─ Recommended: 1920×1080 or 1280×720, under 30MB per clip.
+     Cards use the same YouTube system as project pages: add a key
+     to assets/js/videos.js, then set data-video-key on the
+     .video-placeholder below. No local video files needed.
      ════════════════════════════════════════════════════════════ -->
 <section id="video-lab" class="video-lab-section" style="border-top:1px solid var(--border);">
   <div class="section-header"><span class="section-num">05.2</span><h2 class="section-title">Lab Videos</h2></div>
-  <p class="video-lab-intro">Recent experiments, demos, and work-in-progress footage from the lab. Hover a card to play.</p>
+  <p class="video-lab-intro">Recent experiments, demos, and work-in-progress footage from the lab. Click a card to play.</p>
 
   <div class="video-grid-lab">
 
-    <!-- ① Avatar teleoperation demo -->
-    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
+    <!-- Miruoto live -->
+    <div class="video-card">
       <div class="video-card-media">
-        <!--
-          UNCOMMENT and set src when you have the file:
-          <video src="assets/video/avatar-teleoperation.mp4" muted loop playsinline preload="none"></video>
-        -->
-        <div class="video-card-ph">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(0,153,170,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(0,153,170,0.5)"/></svg>
-          <span class="video-card-ph-label">assets/video/<br/>avatar-teleoperation.mp4</span>
+        <div class="video-placeholder" data-video-key="miruoto.landscape" style="position:absolute;inset:0;">
+          <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
         </div>
-        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
-      </div>
-      <div class="video-card-info">
-        <div class="video-card-title">Avatar Teleoperation — Quadruped</div>
-        <div class="video-card-meta">Keio KMD · 2026</div>
-        <span class="video-card-tag">Teleoperation</span>
-      </div>
-    </div>
-
-    <!-- ③ Miruoto live -->
-    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
-      <div class="video-card-media">
-        <!--
-          <video src="assets/video/miruoto-landscape.mp4" muted loop playsinline preload="none"></video>
-        -->
-        <div class="video-card-ph">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(109,79,196,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(109,79,196,0.5)"/></svg>
-          <span class="video-card-ph-label">assets/video/<br/>miruoto-landscape.mp4</span>
-        </div>
-        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
       </div>
       <div class="video-card-info">
         <div class="video-card-title">Miruoto — Tokyo 2025 Deaflympics</div>
@@ -1260,17 +1244,12 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
     </div>
 
-    <!-- ④ 7DoF impedance -->
-    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
+    <!-- 7DoF impedance teleoperation -->
+    <div class="video-card">
       <div class="video-card-media">
-        <!--
-          <video src="assets/video/iros2021-impedance.mp4" muted loop playsinline preload="none"></video>
-        -->
-        <div class="video-card-ph">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(0,153,170,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(0,153,170,0.5)"/></svg>
-          <span class="video-card-ph-label">assets/video/<br/>iros2021-impedance.mp4</span>
+        <div class="video-placeholder" data-video-key="teleoperation.demo" style="position:absolute;inset:0;">
+          <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
         </div>
-        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
       </div>
       <div class="video-card-info">
         <div class="video-card-title">7DoF Impedance Teleoperation</div>
@@ -1279,17 +1258,12 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
     </div>
 
-    <!-- ⑤ Co-Limbs -->
-    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
+    <!-- Co-Limbs -->
+    <div class="video-card">
       <div class="video-card-media">
-        <!--
-          <video src="assets/video/colimbs-siggraph.mp4" muted loop playsinline preload="none"></video>
-        -->
-        <div class="video-card-ph">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(74,170,96,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(74,170,96,0.5)"/></svg>
-          <span class="video-card-ph-label">assets/video/<br/>colimbs-siggraph.mp4</span>
+        <div class="video-placeholder" data-video-key="colimbs.demo" style="position:absolute;inset:0;">
+          <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
         </div>
-        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
       </div>
       <div class="video-card-info">
         <div class="video-card-title">Co-Limbs — SIGGRAPH Asia 2019</div>
@@ -1298,22 +1272,31 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
     </div>
 
-    <!-- ⑥ Echo robot -->
-    <div class="video-card" onmouseenter="playVid(this)" onmouseleave="pauseVid(this)">
+    <!-- Echo robot -->
+    <div class="video-card">
       <div class="video-card-media">
-        <!--
-          <video src="assets/video/echo-robot.mp4" muted loop playsinline preload="none"></video>
-        -->
-        <div class="video-card-ph">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="3" y="8" width="30" height="22" rx="2" stroke="rgba(0,153,170,0.5)" stroke-width="1.5"/><polygon points="14,14 14,24 24,19" fill="rgba(0,153,170,0.5)"/></svg>
-          <span class="video-card-ph-label">assets/video/<br/>echo-robot.mp4</span>
+        <div class="video-placeholder" data-video-key="echo.demo" style="position:absolute;inset:0;">
+          <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
         </div>
-        <div class="video-play-hint"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.7)"/></svg></div>
       </div>
       <div class="video-card-info">
         <div class="video-card-title">Echocardiography Teleoperation</div>
         <div class="video-card-meta">Waseda University · Iwata Lab · 2024</div>
         <span class="video-card-tag">Medical</span>
+      </div>
+    </div>
+
+    <!-- Reconfigurable AUV -->
+    <div class="video-card">
+      <div class="video-card-media">
+        <div class="video-placeholder" data-video-key="submarine.demo" style="position:absolute;inset:0;">
+          <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
+        </div>
+      </div>
+      <div class="video-card-info">
+        <div class="video-card-title">Reconfigurable AUV — Karst Exploration</div>
+        <div class="video-card-meta">LIRMM · Sensors (MDPI) 2022</div>
+        <span class="video-card-tag">Underwater</span>
       </div>
     </div>
 
@@ -1363,7 +1346,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
           <svg width="44" height="44" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="16" r="8" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><path d="M4 42C4 30 40 30 40 42" stroke="rgba(0,130,150,0.5)" stroke-width="1.5" fill="none"/></svg>
           <span>Guillaume Gourmelen</span>
         </div>
-        <img src="assets/gourmelen/gourmelen.jpg" alt="Guillaume Gourmelen" onerror="this.style.display='none'"/>
+        <img src="assets/img/main/gourmelen.jpg" alt="Guillaume Gourmelen" onerror="this.style.display='none'"/>
       </div>
       <div class="contact-caption">Tokyo, 2025</div>
     </div>
@@ -1523,19 +1506,11 @@ function filterTiles(btn) {
   });
 }
 
-/* ── Video lab hover play/pause ── */
-function playVid(card) {
-  const v = card.querySelector('video');
-  if (v) { v.play(); }
-}
-function pauseVid(card) {
-  const v = card.querySelector('video');
-  if (v) { v.pause(); v.currentTime = 0; }
-}
-
 function revealEmail(el){el.href='mailto:guillaume@kmd.keio.ac.jp';el.childNodes[0].textContent='guillaume@kmd.keio.ac.jp ';}
 </script>
 <script src="assets/js/thumb-loader.js"></script>
 <script src="assets/js/news-loader.js"></script>
+<script src="assets/js/videos.js"></script>
+<script src="assets/js/video-loader.js"></script>
 </body>
 </html>

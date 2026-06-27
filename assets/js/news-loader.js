@@ -35,7 +35,7 @@
     const container = document.querySelector('.news-list[data-source="news.json"]');
     if (!container) return;
     try {
-      const res = await fetch('assets/data/news.json');
+      const res = await fetch('assets/data/main/news.json');
       if (!res.ok) throw new Error('news.json fetch failed: ' + res.status);
       const items = await res.json();
       items.sort((a, b) => parseDate(b.date) - parseDate(a.date));

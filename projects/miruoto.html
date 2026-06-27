@@ -132,7 +132,21 @@ footer a{color:var(--accent);text-decoration:none;}
 .video-grid .video-wrap{margin-top:0;}
 
 /* ── Image gallery (auto-populated by gallery-loader.js) ── */
-.auto-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:3px;margin-top:32px;}
+.auto-gallery{
+  position:relative;overflow:hidden;margin-top:32px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 24px,#000 calc(100% - 24px),transparent);
+}
+.gallery-track{display:flex;gap:3px;width:max-content;}
+.auto-gallery .gallery-item{flex:0 0 220px;height:165px;aspect-ratio:auto;}
+.auto-gallery-scrolling .gallery-track{
+  animation:gallery-scroll 32s linear infinite;
+}
+.auto-gallery-scrolling:hover .gallery-track{animation-play-state:paused;}
+@keyframes gallery-scroll{
+  from{transform:translateX(0);}
+  to{transform:translateX(var(--scroll-distance));}
+}
 .gallery-item{
   aspect-ratio:4/3;overflow:hidden;
   background:var(--border);position:relative;
@@ -184,7 +198,7 @@ footer a{color:var(--accent);text-decoration:none;}
   .container{padding:0 16px;}
   .meta-strip{grid-template-columns:1fr 1fr;}
   .video-grid{grid-template-columns:1fr;}
-  .auto-gallery{grid-template-columns:1fr 1fr;}
+  .auto-gallery .gallery-item{flex:0 0 160px;height:120px;}
   .project-hero-media{padding-bottom:68%;}
 }
 
@@ -313,9 +327,10 @@ footer a{color:var(--accent);text-decoration:none;}
           <span class="video-label">Landscape · Click to play</span>
         </div>
       </div>
-      <!-- 3rd Miruoto video: once uploaded and public, change this placeholder's
+      <!-- 3rd Miruoto video: once you have the real YouTube ID, add it to
+           videos.js as 'miruoto.third', then change this placeholder's
            style="cursor:default;" + remove the opacity:0.35 line, and add
-           data-video-key="miruoto.third" (already registered in videos.js). -->
+           data-video-key="miruoto.third". -->
       <div style="flex:2;min-width:280px;aspect-ratio:16/9;position:relative;background:#0d1f30;">
         <div class="video-placeholder" style="cursor:default;">
           <div class="play-btn" style="opacity:0.35;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>

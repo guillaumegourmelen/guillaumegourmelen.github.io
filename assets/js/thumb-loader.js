@@ -21,7 +21,7 @@
   }
 
   async function findThumb(prefix) {
-    for (const ext of ['jpg', 'jpeg', 'png', 'webp']) {
+    for (const ext of ['jpg', 'jpeg', 'png', 'webp', 'gif']) {
       const url = `assets/img/projects/${prefix}-1.${ext}`;
       const found = await tryLoad(url);
       if (found) return found;
