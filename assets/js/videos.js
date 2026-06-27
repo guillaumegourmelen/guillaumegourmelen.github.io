@@ -21,5 +21,6 @@ const VIDEO_LIBRARY = {
   'submarine.demo':      'NaMhMI9PSlQ',
   'miruoto.portrait':    'db5LRZ3BhJ4',
   'miruoto.landscape':   'XdFl1PHtbGU',
+  'miruoto.third':       'bMBCkF2lrp8',
   'echo.demo':           '4J2LHxepwzU',
 };
