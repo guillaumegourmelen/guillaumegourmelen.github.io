@@ -1,0 +1,74 @@
+[
+  {
+    "date": "May 2026",
+    "tag": "Talk",
+    "category": "talk",
+    "headline": "Invited Seminar — \"From Human Skill to Robot Embodiment: Control, Learning, and Haptic Feedback for Human-Robot Systems\" · GV Lab, University of Tokyo",
+    "link_url": "",
+    "link_label": ""
+  },
+  {
+    "date": "Mar 2026",
+    "tag": "Chair",
+    "category": "chair",
+    "headline": "Session Chair — Augmented Human 2026 · Human–Robot Communication & Control",
+    "link_url": "",
+    "link_label": ""
+  },
+  {
+    "date": "Jan 2026",
+    "tag": "Position",
+    "category": "misc",
+    "headline": "Started as Project Assistant Professor at Keio University KMD, Embodied Media Project",
+    "link_url": "",
+    "link_label": ""
+  },
+  {
+    "date": "Dec 2025",
+    "tag": "Visit",
+    "category": "misc",
+    "headline": "Attended ACM SIGGRAPH Asia 2025 as a conference visitor — Hong Kong Convention and Exhibition Centre",
+    "link_url": "https://asia.siggraph.org/2025/",
+    "link_label": "Conference"
+  },
+  {
+    "date": "Nov 2025",
+    "tag": "Deploy",
+    "category": "talk",
+    "headline": "Miruoto live at Tokyo 2025 Deaflympics — table tennis (Tokyo Metropolitan Gymnasium) & badminton (Keio Arena Tokyo), funded by Tokyo Metropolitan Government",
+    "link_url": "",
+    "link_label": ""
+  },
+  {
+    "date": "Jul 2025",
+    "tag": "Talk",
+    "category": "talk",
+    "headline": "MESSPa work-in-progress poster — IEEE World Haptics Conference 2025, Suwon, South Korea",
+    "link_url": "https://2025.worldhaptics.org/work-in-progress-papers/",
+    "link_label": "Program"
+  },
+  {
+    "date": "Apr 2025",
+    "tag": "Industry",
+    "category": "misc",
+    "headline": "Joined Honda Research Institute Japan — Avatar Project, Frontier Robotics",
+    "link_url": "",
+    "link_label": ""
+  },
+  {
+    "date": "Dec 2025",
+    "tag": "Departure",
+    "category": "misc",
+    "headline": "Left Honda Research Institute Japan following employer-side issues with the work visa process",
+    "link_url": "",
+    "link_label": ""
+  },
+  {
+    "date": "Aug 2024",
+    "tag": "Paper",
+    "category": "talk",
+    "headline": "Miruoto at ACM SIGGRAPH 2024 Emerging Technologies — Denver, CO",
+    "link_url": "https://dl.acm.org/doi/10.1145/3641517.3664393",
+    "link_label": "ACM DL"
+  }
+]
