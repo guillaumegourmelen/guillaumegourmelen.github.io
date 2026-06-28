@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Consulting — Guillaume Gourmelen · Robotics &amp; Teleoperation</title>
@@ -21,6 +28,13 @@
   --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
   --shadow:rgba(13,31,48,0.07);
 }
+html[data-theme="dark"]{
+  --bg:#0d1117;--surface:#161b22;--border:#21262d;
+  --accent:#22c2d4;--accent2:#e09a30;
+  --text:#e6edf3;--muted:#4a6070;--mid:#8baabb;
+  --shadow:rgba(0,0,0,0.35);
+}
+html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
@@ -29,6 +43,17 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
 /* ═══ NAV ══════════════════════════════════════════════════════ */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,153,170,0.15);box-shadow:0 1px 24px var(--shadow);}
 .nav-logo{font-family:'Fraunces',serif;font-size:16px;color:var(--accent);letter-spacing:0.05em;text-decoration:none;}
+.theme-toggle{
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;
+  background:none;border:1px solid var(--border);
+  color:var(--mid);cursor:pointer;
+  transition:border-color 0.2s,color 0.2s;
+}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
+.theme-icon-moon{display:none;}
+html[data-theme="dark"] .theme-icon-sun{display:none;}
+html[data-theme="dark"] .theme-icon-moon{display:block;}
 .nav-back{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
 .nav-back:hover{color:var(--accent);}
 .nav-back::before{content:'←';}
@@ -333,8 +358,14 @@ footer a{color:var(--accent);text-decoration:none;}
 
 <nav>
   <a class="nav-logo" href="index.html">G. Gourmelen</a>
-  <a class="nav-back" href="index.html">Research site</a>
-  <a class="nav-cta" href="#contact">Get in touch</a>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
+      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    </button>
+    <a class="nav-back" href="index.html">Research site</a>
+    <a class="nav-cta" href="#contact">Get in touch</a>
+  </div>
 </nav>
 
 <div class="container">
@@ -877,6 +908,18 @@ footer a{color:var(--accent);text-decoration:none;}
 </div><!-- end .container -->
 
 <script>
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
 // TODO: set the dedicated consulting contact email here once decided.
 const CONTACT_EMAIL = '';
 
