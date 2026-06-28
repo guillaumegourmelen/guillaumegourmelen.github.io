@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+// Runs before paint: saved choice wins, otherwise follow the OS setting.
+// Keeping this tiny and inline (not in an external file) avoids a flash
+// of the wrong theme while a separate script file would still be loading.
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Guillaume Gourmelen — Robotics Researcher</title>
@@ -51,6 +61,17 @@
   --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
   --shadow:rgba(13,31,48,0.08);
 }
+html[data-theme="dark"]{
+  --bg:#0d1117;--surface:#161b22;--border:#21262d;
+  --accent:#22c2d4;--accent2:#e09a30;
+  --text:#e6edf3;--muted:#4a6070;--mid:#8baabb;
+  --shadow:rgba(0,0,0,0.4);
+}
+html[data-theme="dark"] body::before{opacity:0.15;}
+html[data-theme="dark"] .pub-thumb,html[data-theme="dark"] .contact-photo-frame{background:#1c2128;}
+html[data-theme="dark"] .tile-placeholder{filter:brightness(0.85);}
+html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);}
+html[data-theme="dark"] #back-top{background:var(--surface);}
 *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
 #robo-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
@@ -85,6 +106,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:fl
 .nav-burger{display:none;background:none;border:1px solid var(--border);padding:6px 9px;cursor:pointer;flex-direction:column;gap:4px;transition:border-color 0.2s;}
 .nav-burger:hover{border-color:var(--accent);}
 .nav-burger span{display:block;width:18px;height:1px;background:var(--mid);transition:transform 0.25s,opacity 0.25s;}
+
+/* ── Dark mode toggle ── */
+.theme-toggle{
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;
+  background:none;border:1px solid var(--border);
+  color:var(--mid);cursor:pointer;
+  transition:border-color 0.2s,color 0.2s;
+}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
+.theme-icon-moon{display:none;}
+html[data-theme="dark"] .theme-icon-sun{display:none;}
+html[data-theme="dark"] .theme-icon-moon{display:block;}
 
 /* LAYOUT */
 .container{max-width:960px;margin:0 auto;padding:0 32px;position:relative;z-index:3;}
@@ -543,6 +577,10 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     <span></span><span></span><span></span>
   </button>
   <div style="display:flex;align-items:center;gap:14px;">
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
+      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    </button>
     <a href="assets/data/main/CV-Gourmelen.pdf" target="_blank" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">CV ↓</a>
     <a href="consulting.html" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);text-decoration:none;border:1px solid rgba(201,120,0,0.35);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='var(--accent2)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--accent2)'">Consulting</a>
     <a href="interprete.html" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);text-decoration:none;border:1px solid rgba(0,153,170,0.35);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='var(--accent)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--accent)'">Interprétariat FR-JP</a>
@@ -770,7 +808,12 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       <div class="tile-static" data-prefix="wip">
         <!-- <img src="assets/img/showcase/wip-still.jpg" alt="Work in progress"> -->
         <div class="tile-placeholder" style="background:linear-gradient(135deg,#1a1408,#241c0c)">
-          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><rect x="6" y="6" width="26" height="26" rx="2" stroke="#c97800" stroke-width="1" stroke-dasharray="3 3"/><circle cx="19" cy="19" r="4" fill="#c97800" opacity="0.5"/></svg>
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="15" stroke="#c97800" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>
+            <path d="M20 9a11 11 0 1 0 7.8 18.8" stroke="#c97800" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="27.8" cy="27.8" r="2.2" fill="#c97800"/>
+            <path d="M20 14v6l4.5 2.5" stroke="#c97800" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
           <span class="tile-placeholder-label">Work in Progress</span>
         </div>
       </div>
@@ -823,36 +866,15 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
   <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Publications</h2></div>
   <div class="pub-list">
 
-    <!-- ── JOURNAL ── -->
-    <div class="pub-item">
-      <div class="pub-video-thumb">
-          <img src="assets/img/projects/auv.png" alt="AUV" onerror="this.style.display='none'">
-          <!--
-            Video thumbnail: drop your .mp4 here, it plays silently on hover.
-            <video src="assets/video/submarine-auv.mp4" muted loop playsinline preload="none"></video>
-          -->
-          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>auv.png</span></div>
-          <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
-        </div>
-      <div class="pub-year">2022</div>
-      <div>
-        <div class="pub-venue">Sensors (MDPI) · Journal</div>
-        <div class="pub-title"><a href="https://doi.org/10.3390/s22093379" target="_blank">A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration: Design and Experiment</a></div>
-        <div class="pub-authors">H.T. Dang, L. Lapierre, R. Zapata, B. Ropars, <strong>G. Gourmelen</strong> · LIRMM, Université de Montpellier</div>
-        <a href="https://hal.science/hal-03929843v1/document" target="_blank" class="pub-link">PDF via HAL · hal-03929843 ↗</a>
-        <button class="pub-cite-btn" onclick="copyCite(this,'@article{dang2022auv,\n  author={Dang, H.T. and Lapierre, L. and Zapata, R. and Ropars, B. and Gourmelen, G.},\n  title={A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration},\n  journal={Sensors},\n  volume={22},\n  number={9},\n  pages={3379},\n  year={2022},\n  doi={10.3390/s22093379}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
-      </div>
-    </div>
-
     <!-- ── SIGGRAPH 2024 ── -->
     <div class="pub-item">
       <div class="pub-video-thumb">
-          <img src="assets/img/miruoto.png" alt="Miruoto" onerror="this.style.display='none'">
+          <img src="assets/img/projects/miruoto-1.jpg" alt="Miruoto" onerror="this.style.display='none'">
           <!--
             Video thumbnail: drop your .mp4 here, it plays silently on hover.
             <video src="assets/video/miruoto-landscape.mp4" muted loop playsinline preload="none"></video>
           -->
-          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>miruoto.png</span></div>
+          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>miruoto-1.jpg</span></div>
           <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
         </div>
       <div class="pub-year">2024</div>
@@ -865,45 +887,24 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
     </div>
 
-    <!-- ── IROS 2021 ── -->
+    <!-- ── JOURNAL ── -->
     <div class="pub-item">
       <div class="pub-video-thumb">
-          <img src="assets/img/projects/iros2021.png" alt="IROS 2021" onerror="this.style.display='none'">
+          <img src="assets/img/projects/submarine-1.jpg" alt="AUV" onerror="this.style.display='none'">
           <!--
             Video thumbnail: drop your .mp4 here, it plays silently on hover.
-            <video src="assets/video/iros2021-impedance.mp4" muted loop playsinline preload="none"></video>
+            <video src="assets/video/submarine-auv.mp4" muted loop playsinline preload="none"></video>
           -->
-          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>iros2021.png</span></div>
+          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>submarine-1.jpg</span></div>
           <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
         </div>
-      <div class="pub-year">2021</div>
+      <div class="pub-year">2022</div>
       <div>
-        <div class="pub-venue">IEEE/RSJ IROS 2021 — Prague, Czech Republic</div>
-        <div class="pub-title"><a href="https://doi.org/10.1109/IROS51168.2021.9636418" target="_blank">Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance</a></div>
-        <div class="pub-authors"><strong>G. Gourmelen</strong>, B. Navarro, A. Cherubini, G. Ganesh · LIRMM</div>
-        <a href="https://hal.science/hal-03324747v1/document" target="_blank" class="pub-link">PDF via HAL · hal-03324747 ↗</a>
-        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2021iros,\n  author={Gourmelen, G. and Navarro, B. and Cherubini, A. and Ganesh, G.},\n  title={Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance},\n  booktitle={IEEE/RSJ IROS},\n  pages={9276--9282},\n  year={2021},\n  doi={10.1109/IROS51168.2021.9636418}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
-      </div>
-    </div>
-
-    <!-- ── SIGGRAPH Asia 2019 ── -->
-    <div class="pub-item">
-      <div class="pub-video-thumb">
-          <img src="assets/img/projects/colimbs.png" alt="Co-Limbs" onerror="this.style.display='none'">
-          <!--
-            Video thumbnail: drop your .mp4 here, it plays silently on hover.
-            <video src="assets/video/colimbs-siggraph.mp4" muted loop playsinline preload="none"></video>
-          -->
-          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>colimbs.png</span></div>
-          <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
-        </div>
-      <div class="pub-year">2019</div>
-      <div>
-        <div class="pub-venue">ACM SIGGRAPH Asia 2019 — Emerging Technologies · Brisbane, Australia</div>
-        <div class="pub-title"><a href="https://doi.org/10.1145/3355049.3360526" target="_blank">Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms</a></div>
-        <div class="pub-authors"><strong>G. Gourmelen</strong>, A. Verhulst, T. Sasaki, B. Navarro, G. Ganesh, M. Inami · LIRMM / UTokyo</div>
-        <a href="https://hal.science/hal-02407032v1/document" target="_blank" class="pub-link">PDF via HAL · hal-02407032 ↗</a>
-        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2019colimbs,\n  author={Gourmelen, G. and Verhulst, A. and Sasaki, T. and Navarro, B. and Ganesh, G. and Inami, M.},\n  title={Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms},\n  booktitle={SA: ACM SIGGRAPH Asia 2019 Emerging Technologies},\n  pages={9--10},\n  year={2019},\n  doi={10.1145/3355049.3360526}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
+        <div class="pub-venue">Sensors (MDPI) · Journal</div>
+        <div class="pub-title"><a href="https://doi.org/10.3390/s22093379" target="_blank">A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration: Design and Experiment</a></div>
+        <div class="pub-authors">H.T. Dang, L. Lapierre, R. Zapata, B. Ropars, <strong>G. Gourmelen</strong> · LIRMM, Université de Montpellier</div>
+        <a href="https://hal.science/hal-03929843v1/document" target="_blank" class="pub-link">PDF via HAL · hal-03929843 ↗</a>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@article{dang2022auv,\n  author={Dang, H.T. and Lapierre, L. and Zapata, R. and Ropars, B. and Gourmelen, G.},\n  title={A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration},\n  journal={Sensors},\n  volume={22},\n  number={9},\n  pages={3379},\n  year={2022},\n  doi={10.3390/s22093379}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
       </div>
     </div>
 
@@ -919,6 +920,48 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         <div class="pub-authors"><strong>G. Gourmelen</strong> · Funded by JST ERATO Jizai Body · NNT: 2022UMONS091</div>
         <a href="https://theses.hal.science/tel-04124264v1/document" target="_blank" class="pub-link">Full Thesis PDF · tel-04124264 ↗</a>
         <button class="pub-cite-btn" onclick="copyCite(this,'@phdthesis{gourmelen2022thesis,\n  author={Gourmelen, Guillaume},\n  title={Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans},\n  school={Université de Montpellier / LIRMM-CNRS},\n  year={2022},\n  note={NNT: 2022UMONS091, HAL: tel-04124264, JST ERATO Jizai Body}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
+      </div>
+    </div>
+
+    <!-- ── IROS 2021 ── -->
+    <div class="pub-item">
+      <div class="pub-video-thumb">
+          <img src="assets/img/projects/teleoperation-1.jpg" alt="IROS 2021" onerror="this.style.display='none'">
+          <!--
+            Video thumbnail: drop your .mp4 here, it plays silently on hover.
+            <video src="assets/video/iros2021-impedance.mp4" muted loop playsinline preload="none"></video>
+          -->
+          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>teleoperation-1.jpg</span></div>
+          <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
+        </div>
+      <div class="pub-year">2021</div>
+      <div>
+        <div class="pub-venue">IEEE/RSJ IROS 2021 — Prague, Czech Republic</div>
+        <div class="pub-title"><a href="https://doi.org/10.1109/IROS51168.2021.9636418" target="_blank">Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance</a></div>
+        <div class="pub-authors"><strong>G. Gourmelen</strong>, B. Navarro, A. Cherubini, G. Ganesh · LIRMM</div>
+        <a href="https://hal.science/hal-03324747v1/document" target="_blank" class="pub-link">PDF via HAL · hal-03324747 ↗</a>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2021iros,\n  author={Gourmelen, G. and Navarro, B. and Cherubini, A. and Ganesh, G.},\n  title={Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance},\n  booktitle={IEEE/RSJ IROS},\n  pages={9276--9282},\n  year={2021},\n  doi={10.1109/IROS51168.2021.9636418}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
+      </div>
+    </div>
+
+    <!-- ── SIGGRAPH Asia 2019 ── -->
+    <div class="pub-item">
+      <div class="pub-video-thumb">
+          <img src="assets/img/projects/colimbs-1.jpg" alt="Co-Limbs" onerror="this.style.display='none'">
+          <!--
+            Video thumbnail: drop your .mp4 here, it plays silently on hover.
+            <video src="assets/video/colimbs-siggraph.mp4" muted loop playsinline preload="none"></video>
+          -->
+          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>colimbs-1.jpg</span></div>
+          <div class="pub-play" style="position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 4,12 12,7" fill="rgba(255,255,255,0.5)"/></svg></div>
+        </div>
+      <div class="pub-year">2019</div>
+      <div>
+        <div class="pub-venue">ACM SIGGRAPH Asia 2019 — Emerging Technologies · Brisbane, Australia</div>
+        <div class="pub-title"><a href="https://doi.org/10.1145/3355049.3360526" target="_blank">Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms</a></div>
+        <div class="pub-authors"><strong>G. Gourmelen</strong>, A. Verhulst, T. Sasaki, B. Navarro, G. Ganesh, M. Inami · LIRMM / UTokyo</div>
+        <a href="https://hal.science/hal-02407032v1/document" target="_blank" class="pub-link">PDF via HAL · hal-02407032 ↗</a>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2019colimbs,\n  author={Gourmelen, G. and Verhulst, A. and Sasaki, T. and Navarro, B. and Ganesh, G. and Inami, M.},\n  title={Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms},\n  booktitle={SA: ACM SIGGRAPH Asia 2019 Emerging Technologies},\n  pages={9--10},\n  year={2019},\n  doi={10.1145/3355049.3360526}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
       </div>
     </div>
 
@@ -1504,6 +1547,18 @@ function filterTiles(btn) {
     const topics = tile.dataset.topics || '';
     tile.classList.toggle('hidden', !topics.includes(filter));
   });
+}
+
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }
 }
 
 function revealEmail(el){el.href='mailto:guillaume@kmd.keio.ac.jp';el.childNodes[0].textContent='guillaume@kmd.keio.ac.jp ';}

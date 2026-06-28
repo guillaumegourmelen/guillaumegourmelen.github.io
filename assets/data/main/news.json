@@ -25,7 +25,7 @@
   },
   {
     "date": "Dec 2025",
-    "tag": "Visit",
+    "tag": "Conf",
     "category": "misc",
     "headline": "Attended ACM SIGGRAPH Asia 2025 as a conference visitor — Hong Kong Convention and Exhibition Centre",
     "link_url": "https://asia.siggraph.org/2025/",
@@ -67,8 +67,16 @@
     "date": "Aug 2024",
     "tag": "Paper",
     "category": "talk",
-    "headline": "Miruoto at ACM SIGGRAPH 2024 Emerging Technologies — Denver, CO",
+    "headline": "Miruoto at ACM SIGGRAPH 2024 Emerging Technologies — Denver, CO, USA",
     "link_url": "https://dl.acm.org/doi/10.1145/3641517.3664393",
     "link_label": "ACM DL"
+  }
+  {
+    "date": "Jan 2025",
+    "tag": "Conf",
+    "category": "misc",
+    "headline": "Attended IEEE SII 2025 as a conference visitor — Munich, Germany ",
+    "link_url": "",
+    "link_label": "IEEE"
   }
 ]
