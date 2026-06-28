@@ -30,19 +30,21 @@
     });
   }
 
+  // Probe every extension for a given number IN PARALLEL (not one at a
+  // time) — whichever resolves first wins. This is the fix for slow page
+  // loads: previously each missing extension was a full sequential
+  // round-trip before trying the next, so a single number with no real
+  // image could cost 5 wasted round-trips before moving on.
   async function findImage(prefix, n) {
     const base = `../assets/img/projects/${prefix}-${n}`;
-    for (const ext of ['jpg', 'jpeg', 'png', 'webp', 'gif']) {
-      const url = `${base}.${ext}`;
-      const found = await tryLoad(url);
-      if (found) return found;
-    }
-    return null;
+    const exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    const results = await Promise.all(exts.map((ext) => tryLoad(`${base}.${ext}`)));
+    return results.find((r) => r !== null) || null;
   }
 
   async function initLeadImages() {
     const leads = document.querySelectorAll('[data-role="lead"][data-prefix]');
-    for (const el of leads) {
+    await Promise.all([...leads].map(async (el) => {
       const prefix = el.dataset.prefix;
       const url = await findImage(prefix, 1);
       if (url) {
@@ -50,7 +52,7 @@
         el.classList.add('has-image');
       }
       // If no image found, the lead placeholder (already in the HTML) stays visible.
-    }
+    }));
   }
 
   function buildTile(url, prefix) {
@@ -59,20 +61,25 @@
 
   async function initGalleries() {
     const galleries = document.querySelectorAll('.auto-gallery[data-prefix]');
-    for (const gallery of galleries) {
+    await Promise.all([...galleries].map(async (gallery) => {
       const prefix = gallery.dataset.prefix;
       const max = parseInt(gallery.dataset.max || '12', 10);
       const skipFirst = gallery.dataset.skipLead === 'true'; // lead image (n=1) already shown elsewhere
       const start = skipFirst ? 2 : 1;
-      const found = [];
-      for (let n = start; n <= max; n++) {
-        const url = await findImage(prefix, n);
-        if (url) found.push(url);
-        else if (n > start + 1 && found.length === 0) break; // no images at all, stop probing early
-      }
+
+      // Probe every number in the range IN PARALLEL too — all numbers
+      // fire at once instead of waiting for each one to finish before
+      // starting the next. Results keep their original index so the
+      // gallery order stays 1, 2, 3... even though requests finish
+      // out of order.
+      const numbers = [];
+      for (let n = start; n <= max; n++) numbers.push(n);
+      const results = await Promise.all(numbers.map((n) => findImage(prefix, n)));
+      const found = results.filter((url) => url !== null);
+
       if (found.length === 0) {
         gallery.style.display = 'none';
-        continue;
+        return;
       }
 
       // Build the scrolling track. Wrap in an outer mask + inner track
@@ -98,7 +105,7 @@
           gallery.classList.add('auto-gallery-scrolling');
         }
       });
-    }
+    }));
   }
 
   document.addEventListener('DOMContentLoaded', () => {
