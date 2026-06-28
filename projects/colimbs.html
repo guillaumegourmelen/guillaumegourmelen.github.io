@@ -74,6 +74,8 @@ footer a{color:var(--accent);text-decoration:none;}
   border:1px solid var(--border);
 }
 .overview-lead.has-image{background:none;border-color:transparent;}
+.overview-lead.is-portrait{aspect-ratio:3/4;}
+@media(max-width:700px){.overview-lead.is-portrait{aspect-ratio:3/4;}}
 .overview-lead-placeholder{
   position:absolute;inset:0;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:10px;color:var(--accent);opacity:0.45;
@@ -84,6 +86,7 @@ footer a{color:var(--accent);text-decoration:none;}
 @media(max-width:700px){
   .overview-layout{grid-template-columns:1fr;}
   .overview-lead{aspect-ratio:16/9;}
+  .overview-lead.is-portrait{aspect-ratio:3/4;}
 }
 
 /* ═══ TOP CAPTION BAR (replaces old full-bleed hero) ════════════ */
@@ -164,6 +167,7 @@ footer a{color:var(--accent);text-decoration:none;}
 }
 .gallery-track{display:flex;gap:3px;width:max-content;}
 .auto-gallery .gallery-item{flex:0 0 220px;height:165px;aspect-ratio:auto;}
+.auto-gallery .gallery-item.is-portrait{flex:0 0 124px;}
 .auto-gallery-scrolling .gallery-track{
   animation:gallery-scroll 32s linear infinite;
 }
@@ -226,6 +230,30 @@ footer a{color:var(--accent);text-decoration:none;}
   .auto-gallery .gallery-item{flex:0 0 160px;height:120px;}
   .project-hero-media{padding-bottom:68%;}
 }
+
+/* ═══ GALLERY LIGHTBOX ══════════════════════════════════════════
+   Click any gallery image (or the lead image) to view it enlarged;
+   click anywhere on the overlay, the image itself, or press Escape
+   to close. Created once by gallery-loader.js and reused for every
+   gallery on the page.
+   ════════════════════════════════════════════════════════════ */
+.gallery-lightbox{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(5,10,16,0.92);
+  display:flex;align-items:center;justify-content:center;
+  padding:40px;cursor:zoom-out;
+  opacity:0;visibility:hidden;
+  transition:opacity 0.25s ease;
+}
+.gallery-lightbox.open{opacity:1;visibility:visible;}
+.gallery-lightbox img{
+  max-width:100%;max-height:100%;
+  object-fit:contain;
+  box-shadow:0 12px 48px rgba(0,0,0,0.5);
+  transform:scale(0.96);
+  transition:transform 0.25s ease;
+}
+.gallery-lightbox.open img{transform:scale(1);}
 
 /* ═══ PROJECT SIDEBAR ════════════════════════════════════════════
    Persistent list of all projects, same on every project page.
@@ -336,7 +364,7 @@ footer a{color:var(--accent);text-decoration:none;}
   <!-- GALLERY -->
   <section>
     <div class="section-header"><span class="section-label">Gallery</span><h2 class="section-title">Images</h2></div>
-    <div class="auto-gallery" data-prefix="colimbs" data-skip-lead="true" data-max="12"></div>
+    <div class="auto-gallery" data-prefix="colimbs" data-max="12"></div>
   </section>
 
   <!-- VIDEO -->

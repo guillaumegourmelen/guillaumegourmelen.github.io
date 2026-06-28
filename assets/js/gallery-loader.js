@@ -48,15 +48,77 @@
       const prefix = el.dataset.prefix;
       const url = await findImage(prefix, 1);
       if (url) {
-        el.innerHTML = `<img src="${url}" alt="${el.dataset.alt || prefix}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
-        el.classList.add('has-image');
+        const img = new Image();
+        img.onload = () => {
+          // Detect orientation so portrait photos (e.g. a shoulder pad
+          // worn upright) don't get squashed/cropped into the default
+          // landscape box. Portrait images get a taller box and
+          // object-fit:contain so the full frame is always visible;
+          // landscape/square images keep the original cover behavior.
+          const isPortrait = img.naturalHeight > img.naturalWidth * 1.05;
+          el.classList.add('has-image');
+          if (isPortrait) el.classList.add('is-portrait');
+          el.innerHTML = `<img src="${url}" alt="${el.dataset.alt || prefix}" style="width:100%;height:100%;object-fit:${isPortrait ? 'contain' : 'cover'};display:block;">`;
+          el.style.cursor = 'zoom-in';
+          el.addEventListener('click', () => openLightbox(url, el.dataset.alt || prefix));
+        };
+        img.src = url;
       }
       // If no image found, the lead placeholder (already in the HTML) stays visible.
     }));
   }
 
   function buildTile(url, prefix) {
-    return `<div class="gallery-item"><img src="${url}" alt="${prefix} project photo" loading="lazy"></div>`;
+    // Orientation detected client-side once the browser has decoded the
+    // image; portrait tiles get a narrower box + object-fit:contain so
+    // nothing gets cropped into a square, instead of every tile being
+    // forced into the same wide landscape box.
+    return `<div class="gallery-item" data-full-src="${url}"><img src="${url}" alt="${prefix} project photo" loading="lazy" onload="
+      if (this.naturalHeight > this.naturalWidth * 1.05) {
+        this.parentElement.classList.add('is-portrait');
+        this.style.objectFit = 'contain';
+        this.style.background = 'var(--border)';
+      }
+    "></div>`;
+  }
+
+  // ── Lightbox: click any gallery tile to view it enlarged, click
+  // anywhere on the overlay (or the image itself) again to close. One
+  // shared overlay is created lazily on first use and reused for every
+  // gallery on the page.
+  let lightboxEl = null;
+  function getLightbox() {
+    if (lightboxEl) return lightboxEl;
+    lightboxEl = document.createElement('div');
+    lightboxEl.className = 'gallery-lightbox';
+    lightboxEl.innerHTML = '<img alt="">';
+    lightboxEl.addEventListener('click', closeLightbox);
+    document.body.appendChild(lightboxEl);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+    return lightboxEl;
+  }
+  function openLightbox(src, alt) {
+    const box = getLightbox();
+    box.querySelector('img').src = src;
+    box.querySelector('img').alt = alt || '';
+    box.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    if (!lightboxEl) return;
+    lightboxEl.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function wireLightboxClicks(gallery, prefix) {
+    gallery.querySelectorAll('.gallery-item').forEach((tile) => {
+      tile.style.cursor = 'zoom-in';
+      tile.addEventListener('click', () => {
+        openLightbox(tile.dataset.fullSrc, `${prefix} project photo`);
+      });
+    });
   }
 
   async function initGalleries() {
@@ -104,6 +166,10 @@
           track.style.setProperty('--scroll-distance', `-${singleSetWidth}px`);
           gallery.classList.add('auto-gallery-scrolling');
         }
+        // Wire click-to-enlarge AFTER any duplication above, so both
+        // copies of the tiles (original + seamless-loop duplicate) open
+        // the lightbox correctly.
+        wireLightboxClicks(gallery, prefix);
       });
     }));
   }
