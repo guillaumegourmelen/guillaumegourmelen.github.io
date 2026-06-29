@@ -10,14 +10,14 @@
 </script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>7DoF Teleoperation &amp; Impedance Adaptation — Guillaume Gourmelen</title>
+<title>Body Sublimation — Guillaume Gourmelen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet"/>
 <style>
 /* ═══ VARIABLES ═══════════════════════════════════════════════ */
 :root{
   --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
-  --accent:#0099aa;--accent2:#c97800;
+  --accent:#5b7fc4;--accent2:#c97800;
   --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
 }
 html[data-theme="dark"]{
@@ -44,7 +44,7 @@ html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);}
 html[data-theme="dark"] .theme-icon-sun{display:none;}
 html[data-theme="dark"] .theme-icon-moon{display:block;}
 
-.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:#0099aa;letter-spacing:0.05em;text-decoration:none;}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:#5b7fc4;letter-spacing:0.05em;text-decoration:none;}
 .nav-links{display:flex;gap:24px;list-style:none;flex-wrap:wrap;}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
 .nav-links a:hover{color:var(--accent);}
@@ -310,14 +310,14 @@ footer a{color:var(--accent);text-decoration:none;}
 </nav>
 
 <div class="project-topbar container">
-  <span class="project-topbar-title">7DoF Teleoperation &amp; Impedance Adaptation</span>
-  <span class="project-topbar-tag">IEEE/RSJ IROS 2021 — Prague</span>
+  <span class="project-topbar-title">Body Sublimation — Extended Hand for Out-of-Reach Manipulation</span>
+  <span class="project-topbar-tag">ACM UIST 2026 — Conditionally Accepted</span>
 </div>
 
 <div class="container page-layout">
   <aside class="project-sidebar">
     <span class="sidebar-label">All Projects</span>
-    <a href="teleoperation.html" class="sidebar-link current">7DoF Teleoperation &amp; Impedance Adaptation</a>
+    <a href="teleoperation.html" class="sidebar-link">7DoF Teleoperation &amp; Impedance Adaptation</a>
     <a href="trajectory-learning.html" class="sidebar-link">Human Trajectory &amp; Impedance Learning</a>
     <a href="honda.html" class="sidebar-link">Bimanual Avatar Teleoperation</a>
     <a href="miruoto.html" class="sidebar-link">Miruoto — Seeing Sound at the Stadium</a>
@@ -327,38 +327,37 @@ footer a{color:var(--accent);text-decoration:none;}
     <a href="colimbs.html" class="sidebar-link">Co-Limbs — Wearable Collaborative Robot Arms</a>
     <a href="echo.html" class="sidebar-link">Echocardiography Teleoperation Robot</a>
     <a href="moonshot.html" class="sidebar-link">JST Moonshot — Cybernetic Avatar</a>
-    <a href="body-sublimation.html" class="sidebar-link">Body Sublimation — Extended Hand</a>
+    <a href="body-sublimation.html" class="sidebar-link current">Body Sublimation — Extended Hand</a>
   </aside>
   <div class="page-main">
 
   <!-- META STRIP -->
   <div class="meta-strip">
-    <div class="meta-cell"><span class="meta-label">Institution</span><span class="meta-value">LIRMM-CNRS · Université de Montpellier</span></div>
-    <div class="meta-cell"><span class="meta-label">Period</span><span class="meta-value">2018 – 2022 (PhD research)</span></div>
-    <div class="meta-cell"><span class="meta-label">Role</span><span class="meta-value">Lead Researcher</span></div>
-    <div class="meta-cell"><span class="meta-label">Venue</span><span class="meta-value">IEEE/RSJ IROS 2021 — Prague</span></div>
+    <div class="meta-cell"><span class="meta-label">Institution</span><span class="meta-value">Keio University · Embodied Media Project</span></div>
+    <div class="meta-cell"><span class="meta-label">Period</span><span class="meta-value">2026</span></div>
+    <div class="meta-cell"><span class="meta-label">Role</span><span class="meta-value">Co-Author</span></div>
+    <div class="meta-cell"><span class="meta-label">Venue</span><span class="meta-value">ACM UIST 2026 — Conditionally Accepted</span></div>
   </div>
 
   <!-- OVERVIEW -->
   <section>
     <div class="section-header">
       <span class="section-label">Overview</span>
-      <h1 class="section-title">7DoF Teleoperation &amp; Impedance Adaptation</h1>
+      <h1 class="section-title">Body Sublimation</h1>
     </div>
     <div class="overview-layout">
-      <div class="overview-lead" data-role="lead" data-prefix="teleoperation" data-alt="7DoF Teleoperation &amp; Impedance Adaptation">
+      <div class="overview-lead" data-role="lead" data-prefix="body-sublimation" data-alt="Body Sublimation extended hand concept">
         <div class="overview-lead-placeholder">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="1"/><circle cx="16" cy="16" r="5" fill="none" stroke="currentColor" stroke-width="1"/><line x1="16" y1="3" x2="16" y2="11" stroke="currentColor" stroke-width="1"/><line x1="16" y1="21" x2="16" y2="29" stroke="currentColor" stroke-width="1"/></svg>
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="11" cy="16" r="7" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/><path d="M16 16h6l4-9" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="26" cy="7" r="2.5" fill="currentColor" opacity="0.6"/></svg>
           <span>Image coming soon</span>
         </div>
       </div>
       <div class="overview-text">
-        <p class="prose">This project is the central publication of my PhD thesis at LIRMM-CNRS (Université de Montpellier), funded by the JST ERATO Jizai Body project.</p>
-<p class="prose">The work addresses a core challenge in physical teleoperation: <strong>transferring not just the trajectory of human motion, but the physical interaction quality</strong> — force, stiffness, and damping — from an operator to a remote robot arm.</p>
-<p class="prose">The setup couples a <strong>Virtuose 3D haptic device</strong> (human input) to a <strong>7-DoF Franka Panda robot arm</strong> (slave), with a real-time pipeline that estimates the operator's <strong>arm impedance online during task execution</strong>, using only data already available from the haptic device — no EMG or extra instrumentation. We exploit the perturbations inherent to the assistance task (simulating an elderly or stroke patient being guided) to identify the operator's stiffness and damping, while a low/high-pass split of the operator's motion separates the intended reference trajectory from the impedance signal. Those parameters then modulate the robot's admittance controller in real time.</p>
-<p class="prose">We validated the impedance estimation against EMG ground truth, then tested the full controller in a maze-guidance task (1D and 2D perturbations) and a blind-guidance task where the operator had to react to forces from a simulated patient. Adaptive impedance significantly reduced jerk compared to a fixed-impedance robot (p &lt; 0.045).</p>
-<div class="highlight-box"><strong>Key result:</strong> Human impedance during task execution is not constant — operators vary it deliberately to guide and to be guided. By estimating this variation online, from perturbations alone, and mirroring it on the robot, the controller produced teleoperation that felt more natural and measurably reduced jerk during disturbance recovery.</div>
-        <div class="tag-row"><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Teleoperation</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Haptic Control</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Impedance Estimation</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">7-DoF Robot Arm</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Physical Assistance</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Human-in-the-Loop</span></div>
+        <p class="prose"><strong>Body Sublimation</strong> is an interaction approach that lets a user physically manipulate distant objects through a hidden robotic arm, while only ever seeing a single virtual hand — their own original hand and the robot are both visually removed via diminished reality. The goal is to reconcile two things that normally trade off against each other: the perceptual flexibility of XR (fast, unconstrained, embodied) and the physical capability of a real robot (slow, constrained, but able to actually touch the world).</p>
+        <p class="prose">The virtual hand operates in two states, named after material phase transitions: a <strong>solid state</strong>, when the hidden robotic hand matches the virtual hand's position and can grasp or manipulate real objects, and a <strong>gas state</strong>, when it doesn't — letting the virtual hand pass through obstacles, extend past the robot's workspace, or move freely while the robot autonomously handles collision avoidance out of view. The transition between states becomes the only signal the user needs about what the system can currently do, without ever showing them the robot itself.</p>
+        <p class="prose">The prototype uses a Meta Quest 3 (hand tracking, Gaussian-splat–based diminished reality, virtual hand rendering) paired with an xArm7 fitted with a PSYONIC Ability Hand as the physical end effector. A 12-participant within-subject study compared this approach against a pass-through baseline (robot and real hand both visible) across reaching, reaching-with-obstacle, and grasping tasks.</p>
+        <div class="highlight-box"><strong>Result:</strong> Removing the robot from view — and replacing it with a single coherent virtual hand whose state communicates the robot's constraints — significantly improved sense of ownership, agency, and trajectory straightness around obstacles, without hurting task performance.</div>
+        <div class="tag-row"><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Extended Reality</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Diminished Reality</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Embodiment</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Teleoperation</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Gaussian Splatting</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Human Augmentation</span></div>
       </div>
     </div>
   </section>
@@ -366,14 +365,14 @@ footer a{color:var(--accent);text-decoration:none;}
   <!-- GALLERY -->
   <section>
     <div class="section-header"><span class="section-label">Gallery</span><h2 class="section-title">Images</h2></div>
-    <div class="auto-gallery" data-prefix="teleoperation" data-max="12"></div>
+    <div class="auto-gallery" data-prefix="body-sublimation" data-max="12"></div>
   </section>
 
   <!-- VIDEO -->
   <section>
     <div class="section-header"><span class="section-label">Video</span><h2 class="section-title">Project Demo</h2></div>
     <div class="video-wrap">
-      <div class="video-placeholder" data-video-key="teleoperation.demo">
+      <div class="video-placeholder" data-video-key="body-sublimation.demo">
         <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
         <span class="video-label">Click to play</span>
       </div>
@@ -385,12 +384,12 @@ footer a{color:var(--accent);text-decoration:none;}
     <div class="section-header"><span class="section-label">Publication</span><h2 class="section-title">Reference</h2></div>
     <div class="pub-ref">
       <span class="pub-ref-label">Cite as</span>
-      G. Gourmelen, B. Navarro, A. Cherubini, G. Ganesh. "Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance." <em>IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)</em>, Prague, Czech Republic, pp. 9276–9282, 2021. <a href="https://doi.org/10.1109/IROS51168.2021.9636418" target="_blank">doi:10.1109/IROS51168.2021.9636418 ↗</a> · <a href="https://hal.science/hal-03324747v1/document" target="_blank">PDF via HAL hal-03324747 ↗</a>
+      M. Ohta, R. Ban, H. Nii, G. Gourmelen, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa. "Body Sublimation: Designing State-Changing Extended Hand for Out-of-Reach Object Manipulation." <em>ACM Symposium on User Interface Software and Technology (UIST)</em>, 2026. <em>Conditionally accepted — camera-ready in progress; full citation details to follow.</em>
     </div>
   </section>
   <footer>
     <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
-    <span>Robotics · Teleoperation · Embodiment</span>
+    <span>Extended Reality · Robotics · Embodiment</span>
   </footer>
 
 </div><!-- end .page-main -->

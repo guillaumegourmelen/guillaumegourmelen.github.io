@@ -24,4 +24,5 @@ const VIDEO_LIBRARY = {
   'miruoto.third':       'wvvZitLeObY',
   'echo.demo':           '4J2LHxepwzU',
   'teleoperation.demo':  'bMBCkF2lrp8',
+  'body-sublimation.demo': '4zXc3zHhKUU',
 };

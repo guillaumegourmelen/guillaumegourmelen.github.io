@@ -671,7 +671,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     <span class="section-num">00</span>
     <h2 class="section-title">Research at a Glance</h2>
   </div>
-  <p class="showcase-intro">Nine projects across teleoperation, haptics, human motor learning, medical robotics, soft robotics, and embodied systems — plus a running log of work in progress. Hover any tile to preview — click to open the full project page.</p>
+  <p class="showcase-intro">Ten projects across teleoperation, haptics, human motor learning, medical robotics, soft robotics, extended reality, and embodied systems — plus a running log of work in progress. Hover any tile to preview — click to open the full project page.</p>
 
   <!-- Filter pills — click to show only matching topics -->
   <div class="filter-row">
@@ -803,8 +803,21 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       <div class="tile-overlay"><div class="tile-label">Medical Echo Teleoperation<em>Waseda University · Iwata Lab</em></div></div>
     </a>
 
-    <a href="wip.html" class="showcase-tile" data-topics="all">
+    <a href="projects/body-sublimation.html" class="showcase-tile" data-topics="ai teleoperation xr">
       <span class="tile-num">10</span>
+      <div class="tile-static" data-prefix="body-sublimation">
+        <!-- <img src="assets/img/showcase/body-sublimation-still.jpg" alt="Body Sublimation"> -->
+        <div class="tile-placeholder" style="background:linear-gradient(135deg,#0d1424,#121a2e)">
+          <svg width="38" height="38" viewBox="0 0 38 38" fill="none"><circle cx="13" cy="19" r="8" stroke="#5b7fc4" stroke-width="1" stroke-dasharray="2 2"/><path d="M19 19h7l4.5-10" stroke="#5b7fc4" stroke-width="1.5" fill="none"/><circle cx="30.5" cy="9" r="3" fill="#5b7fc4" opacity="0.7"/></svg>
+          <span class="tile-placeholder-label">Body Sublimation</span>
+        </div>
+      </div>
+      <div class="tile-gif"><!-- <img src="assets/img/showcase/body-sublimation.gif" alt=""> --></div>
+      <div class="tile-overlay"><div class="tile-label">Body Sublimation<em>ACM UIST 2026 — Conditionally Accepted</em></div></div>
+    </a>
+
+    <a href="wip.html" class="showcase-tile" data-topics="all">
+      <span class="tile-num">11</span>
       <div class="tile-static" data-prefix="wip">
         <!-- <img src="assets/img/showcase/wip-still.jpg" alt="Work in progress"> -->
         <div class="tile-placeholder" style="background:linear-gradient(135deg,#1a1408,#241c0c)">
@@ -970,7 +983,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
   <!-- Under review — not yet on HAL -->
   <div style="margin-top:28px;padding:18px 22px;border:1px dashed var(--border);font-size:12px;color:var(--mid);line-height:1.9;">
     <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px;">Under Review</div>
-    <div style="margin-bottom:6px;"><strong style="color:var(--text)">Ohta M., Ban R., Nii H., Gourmelen G.</strong> et al. "Body Sublimation: Designing State-Changing Extended Hand for Embodied Out-of-Reach Interaction." <em>UIST 2026</em></div>
+    <div style="margin-bottom:6px;"><strong style="color:var(--text)">Ohta M., Ban R., Nii H., Gourmelen G., Narumi T., Sousa M., Yoshida T., Minamizawa K.</strong> "Body Sublimation: Designing State-Changing Extended Hand for Embodied Out-of-Reach Interaction." <em>UIST 2026 — conditionally accepted, pending camera-ready</em></div>
     <div style="margin-bottom:6px;"><strong style="color:var(--text)">Ren Y., Gourmelen G., Iwata H.</strong> "Hybrid Roller-Jamming Gripper for Robust Object Acquisition and Retention Under Pose Uncertainty." <em>Under Review — IEEE Access, 2026</em></div>
     <div><strong style="color:var(--text)">Vitvasin V., Gourmelen G., Iwasaki Y., Iwata H.</strong> "MESSPa: A Multi-modal Embodiment Stimulation Shoulder Pad for Preserving the Sense of Agency in a Detachable Robotic Arm." <em>Manuscript in preparation</em></div>
   </div>
@@ -1350,6 +1363,12 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 <section id="wip" class="wip-section" style="padding:52px 0;">
   <div class="section-header"><span class="section-num">05</span><h2 class="section-title">Work in Progress</h2></div>
   <div class="pub-list">
+
+    <div class="pub-item">
+      <div class="pub-thumb"><div class="pub-thumb-ph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="13" r="5" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2 2"/><path d="M13 13h4l3-7" stroke="var(--muted)" stroke-width="1.2" fill="none"/></svg><span>UIST</span></div></div>
+      <div class="pub-year">2026</div>
+      <div><div class="pub-venue" style="border-color:rgba(91,127,196,0.4);color:#5b7fc4;">Conditionally Accepted — ACM UIST 2026</div><div class="pub-title"><a href="projects/body-sublimation.html">Body Sublimation: Designing State-Changing Extended Hand for Out-of-Reach Object Manipulation</a></div><div class="pub-authors">M. Ohta, R. Ban (co-first), H. Nii, <strong>G. Gourmelen</strong>, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa · Keio University</div></div>
+    </div>
 
     <div class="pub-item">
       <div class="pub-thumb"><div class="pub-thumb-ph"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="3" fill="var(--muted)" opacity="0.3"/></svg><span>WIP</span></div></div>
