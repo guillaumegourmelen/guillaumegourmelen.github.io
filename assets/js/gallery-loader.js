@@ -58,7 +58,7 @@
           const isPortrait = img.naturalHeight > img.naturalWidth * 1.05;
           el.classList.add('has-image');
           if (isPortrait) el.classList.add('is-portrait');
-          el.innerHTML = `<img src="${url}" alt="${el.dataset.alt || prefix}" style="width:100%;height:100%;object-fit:${isPortrait ? 'contain' : 'cover'};display:block;">`;
+          el.innerHTML = `<img src="${url}" alt="${el.dataset.alt || prefix}" style="width:100%;height:100%;object-fit:contain;display:block;">`;
           el.style.cursor = 'zoom-in';
           el.addEventListener('click', () => openLightbox(url, el.dataset.alt || prefix));
         };
