@@ -13,12 +13,13 @@
 :root{
   --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
   --accent:#c97800;--accent2:#0099aa;
-  --text:#0d1f30;--muted:#8aaabf;--mid:#3d6880;
+  --text:#0d1f30;--muted:#547790;--mid:#3d6880;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
 ::selection{background:var(--accent);color:#fff;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 
 /* ═══ NAV ══════════════════════════════════════════════════════ */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.06);box-shadow:0 1px 24px rgba(13,31,48,0.06);}

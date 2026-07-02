@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+// Runs before paint: saved choice wins, otherwise follow the OS setting.
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About — Guillaume Gourmelen</title>
+<meta name="description" content="Guillaume Gourmelen — Project Assistant Professor at Keio University KMD, Embodied Media Project. Research in teleoperation, embodiment, and human-robot skill transfer. Tokyo, Japan."/>
+<meta name="author" content="Guillaume Gourmelen"/>
+
+<meta property="og:type" content="profile"/>
+<meta property="og:title" content="About — Guillaume Gourmelen"/>
+<meta property="og:description" content="Project Assistant Professor, Keio University KMD · Teleoperation · Embodiment · JST Moonshot"/>
+<meta property="og:image" content="https://guillaumegourmelen.github.io/assets/img/main/gourmelen.jpg"/>
+<meta property="og:url" content="https://guillaumegourmelen.github.io/about.html"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="About — Guillaume Gourmelen"/>
+<meta name="twitter:description" content="Project Assistant Professor, Keio University KMD · Teleoperation · Embodiment"/>
+<meta name="twitter:image" content="https://guillaumegourmelen.github.io/assets/img/main/gourmelen.jpg"/>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person",
+"name":"Guillaume Gourmelen",
+"jobTitle":"Project Assistant Professor",
+"affiliation":{"@type":"Organization","name":"Keio University Graduate School of Media Design"},
+"url":"https://guillaumegourmelen.github.io/about.html",
+"email":"guillaume@kmd.keio.ac.jp",
+"knowsLanguage":["fr","en","ja","it"],
+"sameAs":[
+  "https://scholar.google.com/citations?user=GC2dxjQAAAAJ",
+  "https://cv.hal.science/guillaume-gourmelen",
+  "https://www.linkedin.com/in/guillaume-gourmelen-71b655161/"
+]}
+</script>
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d1f30'/><text x='16' y='22' text-anchor='middle' font-family='serif' font-size='16' font-weight='300' fill='%230099aa'>GG</text></svg>"/>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap&subset=latin" rel="stylesheet"/>
+<style>
+/* ═══ VARIABLES ════════════════════════════════════════════════ */
+:root{
+  --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
+  --accent:#0099aa;--accent2:#c97800;
+  --text:#0d1f30;--muted:#547790;--mid:#3d6880;
+  --shadow:rgba(13,31,48,0.07);
+}
+html[data-theme="dark"]{
+  --bg:#0d1117;--surface:#161b22;--border:#21262d;
+  --accent:#22c2d4;--accent2:#e09a30;
+  --text:#e6edf3;--muted:#7590a0;--mid:#8baabb;
+  --shadow:rgba(0,0,0,0.35);
+}
+html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);}
+html[data-theme="dark"] .about-photo-frame{background:#1c2128;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
+::selection{background:var(--accent);color:#fff;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* ═══ NAV ══════════════════════════════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,153,170,0.15);box-shadow:0 1px 24px var(--shadow);}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:var(--accent);letter-spacing:0.05em;text-decoration:none;}
+.theme-toggle{display:flex;align-items:center;justify-content:center;width:30px;height:30px;background:none;border:1px solid var(--border);color:var(--mid);cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
+.theme-icon-moon{display:none;}
+html[data-theme="dark"] .theme-icon-sun{display:none;}
+html[data-theme="dark"] .theme-icon-moon{display:block;}
+.nav-back{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+.nav-back:hover{color:var(--accent);}
+.nav-back::before{content:'←';}
+
+/* ═══ LAYOUT ═══════════════════════════════════════════════════ */
+.container{max-width:820px;margin:0 auto;padding:0 32px;}
+section{padding:56px 0;border-top:1px solid var(--border);}
+.section-header{display:flex;align-items:baseline;gap:20px;margin-bottom:32px;}
+.section-num{font-size:11px;color:var(--accent2);letter-spacing:0.1em;}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(22px,3.2vw,32px);font-weight:300;letter-spacing:-0.01em;color:var(--text);}
+
+/* ═══ HERO / MASTHEAD ═════════════════════════════════════════
+   Photo + name + one-line identity + quick facts. Prose-first,
+   modeled after typical academic bio pages.
+   ═══════════════════════════════════════════════════════════ */
+.about-hero{padding:128px 0 56px;display:grid;grid-template-columns:168px 1fr;gap:40px;align-items:start;}
+.about-photo-frame{width:168px;height:200px;border:1px solid var(--border);overflow:hidden;position:relative;background:#e8f0f5;flex-shrink:0;}
+.about-photo-frame>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;display:block;z-index:1;}
+.about-photo-ph{position:absolute;inset:0;z-index:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;}
+.about-photo-ph svg{opacity:0.4;}
+.about-photo-ph span{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;opacity:0.6;text-align:center;padding:0 10px;}
+.about-eyebrow{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.about-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--accent);}
+.about-name{font-family:'Fraunces',serif;font-size:clamp(30px,4.5vw,44px);font-weight:300;letter-spacing:-0.01em;color:var(--text);line-height:1.05;margin-bottom:12px;}
+.about-role{font-size:13px;color:var(--mid);line-height:1.85;max-width:520px;}
+.about-role strong{color:var(--text);font-weight:500;}
+.about-quicklinks{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+.about-quicklinks a{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--mid);text-decoration:none;padding:8px 14px;border:1px solid var(--border);background:var(--surface);transition:border-color 0.2s,color 0.2s;}
+.about-quicklinks a:hover{border-color:var(--accent);color:var(--accent);}
+.about-quicklinks a.cta{border-color:var(--accent);color:var(--accent);}
+
+/* ═══ RESEARCH PROSE + THEMES ═══════════════════════════════════ */
+.about-text{color:var(--mid);line-height:1.9;font-size:13px;max-width:640px;}
+.about-text p+p{margin-top:16px;}
+.about-text strong{color:var(--text);font-weight:500;}
+.theme-list{display:flex;flex-direction:column;gap:9px;margin-top:28px;}
+.theme-tag{padding:9px 15px;border:1px solid var(--border);font-size:11px;letter-spacing:0.08em;color:var(--mid);background:var(--surface);transition:border-color 0.2s,color 0.2s;}
+.theme-tag:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ═══ TIMELINE ═══════════════════════════════════════════════ */
+.tl-list{display:flex;flex-direction:column;}
+.tl-item{padding:20px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:150px 1fr;gap:20px;}
+.tl-item:last-child{border-bottom:none;}
+.tl-period{font-size:11px;color:var(--muted);padding-top:2px;line-height:1.7;}
+.tl-org{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.tl-role{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--text);margin-bottom:5px;}
+.tl-desc{font-size:12px;color:var(--mid);line-height:1.8;max-width:480px;}
+
+/* ═══ PUBLICATIONS (selected) ══════════════════════════════════ */
+.pub-list{display:flex;flex-direction:column;gap:22px;}
+.pub-item{padding-bottom:22px;border-bottom:1px solid var(--border);}
+.pub-item:last-child{border-bottom:none;padding-bottom:0;}
+.pub-venue{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:6px;}
+.pub-title{font-size:14px;color:var(--text);margin-bottom:5px;line-height:1.5;}
+.pub-title a{color:inherit;text-decoration:none;border-bottom:1px solid var(--border);}
+.pub-title a:hover{border-color:var(--accent);color:var(--accent);}
+.pub-authors{font-size:12px;color:var(--mid);margin-bottom:6px;}
+.pub-authors strong{color:var(--text);}
+.pub-link{font-size:11px;color:var(--accent);text-decoration:none;}
+.pub-link:hover{opacity:0.8;}
+.pub-cite-btn{display:inline-flex;align-items:center;gap:5px;margin-top:7px;margin-left:12px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:2px 8px;cursor:pointer;transition:color 0.2s,border-color 0.2s;font-family:'DM Mono',monospace;}
+.pub-cite-btn:hover{color:var(--accent);border-color:var(--accent);}
+.pub-cite-btn.copied{color:#2d8a4e;border-color:rgba(45,138,78,0.4);}
+.pub-cite-btn svg{flex-shrink:0;}
+.pub-more{margin-top:18px;font-size:11px;}
+.pub-more a{color:var(--accent);text-decoration:none;}
+.pub-more a:hover{opacity:0.8;}
+
+/* ═══ EDUCATION / AWARDS / LANGUAGES ═══════════════════════════ */
+.facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+.facts-block h3{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:16px;}
+.facts-item{margin-bottom:16px;}
+.facts-item:last-child{margin-bottom:0;}
+.facts-item-title{font-size:13px;color:var(--text);margin-bottom:2px;}
+.facts-item-sub{font-size:11px;color:var(--muted);}
+.lang-row{display:flex;justify-content:space-between;font-size:12px;color:var(--mid);padding:8px 0;border-bottom:1px solid var(--border);}
+.lang-row:last-child{border-bottom:none;}
+.lang-row strong{color:var(--text);font-weight:500;}
+.lang-row span{color:var(--muted);font-size:11px;}
+
+footer{padding:28px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;flex-wrap:wrap;gap:10px;}
+footer a{color:var(--accent);text-decoration:none;}
+
+/* ═══ RESPONSIVE ════════════════════════════════════════════════ */
+@media(max-width:640px){
+  nav{padding:14px 16px;}
+  .container{padding:0 16px;}
+  .about-hero{grid-template-columns:1fr;padding-top:104px;}
+  .about-photo-frame{width:140px;height:168px;}
+  .facts-grid{grid-template-columns:1fr;gap:28px;}
+  .tl-item{grid-template-columns:1fr;gap:4px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">G. Gourmelen</a>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
+      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    </button>
+    <a class="nav-back" href="index.html">Research site</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ═══ HERO / MASTHEAD ═══════════════════════════════════════ -->
+  <div class="about-hero">
+    <div>
+      <div class="about-photo-frame">
+        <div class="about-photo-ph">
+          <svg width="40" height="40" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="16" r="8" stroke="rgba(0,130,150,0.5)" stroke-width="1.5"/><path d="M4 42C4 30 40 30 40 42" stroke="rgba(0,130,150,0.5)" stroke-width="1.5" fill="none"/></svg>
+          <span>Guillaume Gourmelen</span>
+        </div>
+        <img src="assets/img/main/gourmelen.jpg" alt="Guillaume Gourmelen" loading="lazy" onerror="this.style.display='none'"/>
+      </div>
+    </div>
+    <div>
+      <span class="about-eyebrow">About</span>
+      <h1 class="about-name">Guillaume Gourmelen</h1>
+      <p class="about-role">I am a robotics researcher working on <strong>physical human–robot interaction</strong> — how robots can sense and reproduce human motor skill, not just motion. I am currently <strong>Project Assistant Professor</strong> at the Embodied Media Project, Keio University Graduate School of Media Design (KMD), under Prof. Kouta Minamizawa, within Japan's <strong>JST Moonshot</strong> avatar robotics program. Based in Tokyo.</p>
+      <div class="about-quicklinks">
+        <a href="assets/data/main/CV-Gourmelen.pdf" target="_blank">CV (PDF)</a>
+        <a href="https://cv.hal.science/guillaume-gourmelen" target="_blank">HAL profile</a>
+        <a href="https://scholar.google.com/citations?user=GC2dxjQAAAAJ" target="_blank">Google Scholar</a>
+        <a class="cta" href="#" onclick="revealEmail(this);return false;">Click to reveal email</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ RESEARCH ═══════════════════════════════════════════════ -->
+  <section id="research">
+    <div class="section-header"><span class="section-num">01</span><h2 class="section-title">Research</h2></div>
+    <div class="about-text">
+      <p>My work sits at the intersection of <strong>teleoperation, haptics, and embodiment</strong>: building systems that let a robot pick up not just where a human's hand goes, but how it moves — the compliance, timing, and force behind a skilled physical action — and reproduce that on the robot side.</p>
+      <p>I hold a <strong>PhD from the University of Montpellier / LIRMM-CNRS</strong> (2022), completed under the JST ERATO Jizai Body project. Before Keio, I was a researcher at <strong>Honda Research Institute Japan</strong> (Avatar Project) and a Research Associate at <strong>Waseda University's Iwata Laboratory</strong>.</p>
+    </div>
+    <div class="theme-list">
+      <div class="theme-tag">Teleoperation &amp; physical skill transfer</div>
+      <div class="theme-tag">Embodiment &amp; sense of agency in human–robot systems</div>
+      <div class="theme-tag">Extended &amp; supernumerary robotic limbs</div>
+      <div class="theme-tag">XR + robotics — avatar and diminished-reality systems</div>
+      <div class="theme-tag">Accessible technology</div>
+      <div class="theme-tag">Medical robotics — teleoperated echocardiography</div>
+    </div>
+  </section>
+
+  <!-- ═══ TIMELINE ═══════════════════════════════════════════════ -->
+  <section id="timeline">
+    <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Timeline</h2></div>
+    <div class="tl-list">
+
+      <div class="tl-item">
+        <div class="tl-period">Jan 2026 — Present</div>
+        <div>
+          <div class="tl-org">Keio University · KMD · Tokyo</div>
+          <div class="tl-role">Project Assistant Professor</div>
+          <div class="tl-desc">Embodied Media Project (Prof. Minamizawa) — JST Moonshot Cybernetic Avatar Program.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-period">Apr – Dec 2025</div>
+        <div>
+          <div class="tl-org">Honda Research Institute Japan · Wako, Saitama</div>
+          <div class="tl-role">Researcher — Avatar Project</div>
+          <div class="tl-desc">Bimanual teleoperation with force-feedback haptic control; shared autonomy for human–robot interfaces.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-period">Apr 2023 – Apr 2025</div>
+        <div>
+          <div class="tl-org">Waseda University · Iwata Laboratory · Tokyo</div>
+          <div class="tl-role">Research Associate</div>
+          <div class="tl-desc">Miruoto (SIGGRAPH 2024) — sound visualization for Deaf and hard-of-hearing sports spectators, deployed at the Tokyo 2025 Deaflympics. Haptic teleoperation for an echocardiography medical robot.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-period">Dec 2018 – Nov 2022</div>
+        <div>
+          <div class="tl-org">LIRMM-CNRS · Université de Montpellier · France</div>
+          <div class="tl-role">PhD Researcher — JST ERATO "Jizai Body"</div>
+          <div class="tl-desc">Thesis: <em>Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans.</em> Real-time impedance estimation and haptic teleoperation.</div>
+        </div>
+      </div>
+
+    </div>
+    <p class="pub-more"><a href="index.html#experience">Full experience timeline on the research site →</a></p>
+  </section>
+
+  <!-- ═══ SELECTED PUBLICATIONS ═════════════════════════════════ -->
+  <section id="publications">
+    <div class="section-header"><span class="section-num">03</span><h2 class="section-title">Selected Publications</h2></div>
+    <div class="pub-list">
+
+      <div class="pub-item">
+        <div class="pub-venue">UIST 2026 — conditionally accepted, pending camera-ready</div>
+        <div class="pub-title">Body Sublimation: Designing State-Changing Extended Hand for Embodied Out-of-Reach Interaction</div>
+        <div class="pub-authors">Ohta M., Ban R., Nii H., <strong>Gourmelen G.</strong>, Narumi T., Sousa M., Yoshida T., Minamizawa K.</div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-venue">ACM SIGGRAPH 2024 — Emerging Technologies</div>
+        <div class="pub-title"><a href="https://doi.org/10.1145/3641517.3664393" target="_blank">Miruoto: Sports Event Atmosphere Visual Rendering through Real-Time Image and Sound Processing</a></div>
+        <div class="pub-authors"><strong>G. Gourmelen</strong>, S. Toriya, E. Miya, N. Shioura, H. Iwata</div>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2024miruoto,\n  author={Gourmelen, G. and Toriya, S. and Miya, E. and Shioura, N. and Iwata, H.},\n  title={Miruoto: Sports Event Atmosphere Visual Rendering through Real-Time Image and Sound Processing},\n  booktitle={ACM SIGGRAPH 2024 Emerging Technologies},\n  year={2024},\n  doi={10.1145/3641517.3664393}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-venue">PhD Thesis · Université de Montpellier / LIRMM-CNRS · 2022</div>
+        <div class="pub-title"><a href="https://theses.hal.science/tel-04124264v1" target="_blank">Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans</a></div>
+        <div class="pub-authors"><strong>G. Gourmelen</strong> · JST ERATO Jizai Body</div>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@phdthesis{gourmelen2022thesis,\n  author={Gourmelen, Guillaume},\n  title={Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans},\n  school={Université de Montpellier / LIRMM-CNRS},\n  year={2022},\n  note={NNT: 2022UMONS091, HAL: tel-04124264, JST ERATO Jizai Body}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-venue">IEEE/RSJ IROS 2021</div>
+        <div class="pub-title"><a href="https://doi.org/10.1109/IROS51168.2021.9636418" target="_blank">Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance</a></div>
+        <div class="pub-authors"><strong>G. Gourmelen</strong>, B. Navarro, A. Cherubini, G. Ganesh</div>
+        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2021iros,\n  author={Gourmelen, G. and Navarro, B. and Cherubini, A. and Ganesh, G.},\n  title={Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance},\n  booktitle={IEEE/RSJ IROS},\n  pages={9276--9282},\n  year={2021},\n  doi={10.1109/IROS51168.2021.9636418}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
+      </div>
+
+    </div>
+    <p class="pub-more"><a href="index.html#publications">Full publication list on the research site →</a></p>
+  </section>
+
+  <!-- ═══ EDUCATION / AWARDS / LANGUAGES ══════════════════════════ -->
+  <section id="facts">
+    <div class="section-header"><span class="section-num">04</span><h2 class="section-title">Education &amp; Recognition</h2></div>
+    <div class="facts-grid">
+      <div class="facts-block">
+        <h3>Education</h3>
+        <div class="facts-item">
+          <div class="facts-item-title">PhD, Robotics</div>
+          <div class="facts-item-sub">LIRMM-CNRS / Université de Montpellier · 2018–2022</div>
+        </div>
+        <div class="facts-item">
+          <div class="facts-item-title">Engineering Degree, Electronics / Robotics / Industrial CS</div>
+          <div class="facts-item-sub">Polytech Montpellier · 2015–2018</div>
+        </div>
+        <div class="facts-item">
+          <div class="facts-item-title">Preparatory Classes, Mathematics</div>
+          <div class="facts-item-sub">Avignon University · 2013–2015</div>
+        </div>
+      </div>
+      <div class="facts-block">
+        <h3>Awards</h3>
+        <div class="facts-item">
+          <div class="facts-item-title">Silver Medal — Mobile Robotics</div>
+          <div class="facts-item-sub">WorldSkills France · 2018</div>
+        </div>
+        <div class="facts-item">
+          <div class="facts-item-title">Bronze Medal — Mobile Robotics</div>
+          <div class="facts-item-sub">EuroSkills Budapest · 2018</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:36px;">
+      <h3 style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:14px;">Languages</h3>
+      <div class="lang-row"><strong>French</strong><span>Native</span></div>
+      <div class="lang-row"><strong>English</strong><span>Fluent</span></div>
+      <div class="lang-row"><strong>Japanese</strong><span>JLPT N1</span></div>
+      <div class="lang-row"><strong>Italian</strong><span>Intermediate</span></div>
+      <div class="lang-row"><strong>Japanese Sign Language</strong><span>Beginner</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Guillaume Gourmelen · Tokyo, Japan · <a href="index.html">Research site</a> · <a href="consulting.html" style="color:var(--accent2)">Consulting ↗</a></span>
+    <span>Robotics · Teleoperation · Embodiment</span>
+  </footer>
+
+</div><!-- end .container -->
+
+<script>
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
+function revealEmail(el){
+  el.href = 'mailto:guillaume@kmd.keio.ac.jp';
+  el.textContent = 'guillaume@kmd.keio.ac.jp';
+}
+
+function copyCite(btn, bibtex) {
+  navigator.clipboard.writeText(bibtex).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 14 14" fill="none"><polyline points="2,7 5,11 12,3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX';
+    }, 2200);
+  });
+}
+</script>
+</body>
+</html>
