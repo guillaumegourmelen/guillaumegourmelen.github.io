@@ -150,6 +150,43 @@ section{padding:72px 0;border-top:1px solid var(--border);}
 .hero-meta-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);}
 .hero-meta-value{font-size:13px;color:var(--text);}
 .hero-meta-value a{color:var(--accent);text-decoration:none;}
+
+/* Affiliations logo strip */
+.affil-row{margin-top:32px;}
+.affil-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.affil-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.affil-item{
+  display:flex;align-items:center;justify-content:center;
+  height:42px;padding:6px 16px;
+  background:#ffffff;border-radius:6px;
+  border:1px solid var(--border);
+  box-shadow:0 2px 8px var(--shadow);
+  transition:border-color 0.2s,box-shadow 0.2s,transform 0.2s;
+  position:relative;
+}
+.affil-item img{
+  height:20px;width:auto;max-width:100px;object-fit:contain;
+  filter:grayscale(1);opacity:0.6;
+  transition:filter 0.2s,opacity 0.2s;
+  display:block;
+}
+.affil-item:hover{border-color:var(--accent);box-shadow:0 4px 16px rgba(0,153,170,0.18);transform:translateY(-1px);}
+.affil-item:hover img{filter:grayscale(0);opacity:1;}
+.affil-item.current{border-color:var(--accent);box-shadow:0 4px 16px rgba(0,153,170,0.18);}
+.affil-item.current img{filter:grayscale(0);opacity:1;}
+.affil-item.current::after{
+  content:'now';
+  position:absolute;top:-8px;right:-6px;
+  font-size:8px;letter-spacing:0.08em;text-transform:uppercase;
+  background:var(--accent);color:#fff;
+  border-radius:3px;
+  padding:2px 5px;line-height:1;
+}
+/* Dark mode: white cards need to sit forward off the black bg like little
+   printed badges rather than blending into a flat rectangle — drop the
+   border in favor of a softer, wider shadow for separation. */
+html[data-theme="dark"] .affil-item{border-color:transparent;box-shadow:0 6px 20px rgba(0,0,0,0.55);}
+html[data-theme="dark"] .affil-item:hover,html[data-theme="dark"] .affil-item.current{border-color:var(--accent);box-shadow:0 6px 20px rgba(0,0,0,0.5),0 0 0 1px rgba(34,194,212,0.25);}
 .hero-scroll{margin-top:64px;display:flex;align-items:center;gap:12px;color:var(--muted);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;}
 .hero-scroll-line{width:60px;height:1px;background:var(--accent);animation:scrollLine 2s ease-in-out infinite;}
 @keyframes scrollLine{0%,100%{width:60px;opacity:0.4;}50%{width:100px;opacity:1;}}
@@ -568,6 +605,8 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
   .showcase-grid{grid-template-columns:repeat(2,1fr);}
   .tile-overlay{opacity:1;background:linear-gradient(to top,rgba(10,20,30,0.75) 0%,transparent 60%);}
   .hero-meta{gap:24px;}
+  .affil-item{height:36px;padding:5px 12px;}
+  .affil-item img{height:16px;}
   .meta-strip{grid-template-columns:1fr 1fr;}
 }
 </style>
@@ -636,6 +675,33 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       <div class="hero-meta-item">
         <span class="hero-meta-label">Scholar</span>
         <span class="hero-meta-value"><a href="https://scholar.google.com/citations?user=GC2dxjQAAAAJ" target="_blank">Google Scholar ↗</a></span>
+      </div>
+    </div>
+    <!-- Affiliations logo strip: Polytech Montpellier -> TUAT -> Tokyo U -> LIRMM -> Waseda -> Honda -> Keio (current) -->
+    <div class="affil-row fade-in">
+      <div class="affil-label">Affiliation History</div>
+      <div class="affil-strip">
+        <span class="affil-item" title="Polytech Montpellier">
+          <img src="assets/img/logos/polytech-montpellier.jpg" alt="Polytech Montpellier"/>
+        </span>
+        <span class="affil-item" title="Tokyo University of Agriculture and Technology">
+          <img src="assets/img/logos/tuat.png" alt="Tokyo University of Agriculture and Technology"/>
+        </span>
+        <span class="affil-item" title="The University of Tokyo">
+          <img src="assets/img/logos/tokyo-u.png" alt="The University of Tokyo"/>
+        </span>
+        <span class="affil-item" title="LIRMM – CNRS / Université de Montpellier">
+          <img src="assets/img/logos/lirmm.jpg" alt="LIRMM"/>
+        </span>
+        <span class="affil-item" title="Waseda University">
+          <img src="assets/img/logos/waseda.png" alt="Waseda University"/>
+        </span>
+        <span class="affil-item" title="Honda Research Institute Japan">
+          <img src="assets/img/logos/honda.png" alt="Honda"/>
+        </span>
+        <span class="affil-item current" title="Keio University — current">
+          <img src="assets/img/logos/keio.png" alt="Keio University"/>
+        </span>
       </div>
     </div>
     <!-- Social presence row -->
