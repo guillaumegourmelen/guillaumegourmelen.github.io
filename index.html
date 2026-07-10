@@ -276,8 +276,10 @@ html[data-theme="dark"] .affil-item:hover,html[data-theme="dark"] .affil-item.cu
 [id^="exp-"]{scroll-margin-top:88px;}
 .exp-period{font-size:11px;color:var(--muted);padding-top:4px;line-height:1.8;}
 .exp-period .dur{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);display:block;margin-top:2px;}
-.exp-org{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
-.exp-org-logo{height:18px;width:18px;object-fit:contain;background:#fff;border-radius:4px;padding:2px;flex-shrink:0;box-shadow:0 1px 4px var(--shadow);}
+.exp-logos{display:flex;flex-direction:column;align-items:flex-start;gap:10px;margin-top:20px;}
+.exp-logo-main{height:60px;width:auto;max-width:150px;object-fit:contain;background:#fff;border-radius:7px;padding:9px 12px;box-shadow:0 3px 12px var(--shadow);}
+.exp-logo-sub{height:32px;width:auto;max-width:110px;object-fit:contain;background:#fff;border-radius:5px;padding:5px 8px;box-shadow:0 2px 8px var(--shadow);}
+.exp-org{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;}
 .exp-desc .li-logo{height:13px;width:13px;object-fit:contain;background:#fff;border-radius:3px;padding:1px;vertical-align:middle;margin-right:6px;box-shadow:0 1px 3px var(--shadow);}
 .exp-role{font-family:'Fraunces',serif;font-size:19px;font-weight:300;margin-bottom:7px;color:var(--text);}
 .exp-desc{font-size:12px;color:var(--mid);line-height:1.8;max-width:520px;}
@@ -691,11 +693,11 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         <a class="affil-item" href="#exp-tuat-internship" title="Tokyo University of Agriculture and Technology">
           <img src="assets/img/logos/tuat.png" alt="Tokyo University of Agriculture and Technology"/>
         </a>
-        <a class="affil-item" href="#exp-tokyo-u" title="The University of Tokyo">
-          <img src="assets/img/logos/tokyo-u.png" alt="The University of Tokyo"/>
-        </a>
         <a class="affil-item" href="#exp-lirmm-phd" title="LIRMM – CNRS / Université de Montpellier">
           <img src="assets/img/logos/lirmm.jpg" alt="LIRMM"/>
+        </a>
+        <a class="affil-item" href="#exp-tokyo-u" title="The University of Tokyo">
+          <img src="assets/img/logos/tokyo-u.png" alt="The University of Tokyo"/>
         </a>
         <a class="affil-item" href="#exp-waseda" title="Waseda University">
           <img src="assets/img/logos/waseda.png" alt="Waseda University"/>
@@ -1075,9 +1077,12 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
   <div class="exp-list">
 
     <div class="exp-item" id="exp-keio">
-      <div class="exp-period">Jan 2026 — Present<span class="dur">Ongoing</span></div>
       <div>
-        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/keio.png" alt="Keio University logo"/>Keio University · Graduate School of Media Design · KMD · Tokyo (Takeshiba)</div>
+        <div class="exp-period">Jan 2026 — Present<span class="dur">Ongoing</span></div>
+        <div class="exp-logos"><img class="exp-logo-main" src="assets/img/logos/keio.png" alt="Keio University logo"/></div>
+      </div>
+      <div>
+        <div class="exp-org">Keio University · Graduate School of Media Design · KMD · Tokyo (Takeshiba)</div>
         <div class="exp-role">Project Assistant Professor</div>
         <div class="exp-desc">Embodied Media Lab (Prof. Minamizawa) — JST Moonshot Cybernetic Avatar Program.
           <ul>
@@ -1091,9 +1096,12 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <div class="exp-item" id="exp-honda">
-      <div class="exp-period">Apr – Dec 2025<span class="dur">9 months</span></div>
       <div>
-        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/honda.png" alt="Honda logo"/>Honda Research Institute Japan · Frontier Robotics · Wako, Saitama</div>
+        <div class="exp-period">Apr – Dec 2025<span class="dur">9 months</span></div>
+        <div class="exp-logos"><img class="exp-logo-main" src="assets/img/logos/honda.png" alt="Honda logo"/></div>
+      </div>
+      <div>
+        <div class="exp-org">Honda Research Institute Japan · Frontier Robotics · Wako, Saitama</div>
         <div class="exp-role">Permanent Researcher — Avatar Project</div>
         <div class="exp-desc">
           <ul>
@@ -1105,9 +1113,12 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <div class="exp-item" id="exp-waseda">
-      <div class="exp-period">Apr 2023 – Apr 2025<span class="dur">2 years</span></div>
       <div>
-        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/waseda.png" alt="Waseda University logo"/>Waseda University · Iwata Laboratory · Tokyo</div>
+        <div class="exp-period">Apr 2023 – Apr 2025<span class="dur">2 years</span></div>
+        <div class="exp-logos"><img class="exp-logo-main" src="assets/img/logos/waseda.png" alt="Waseda University logo"/></div>
+      </div>
+      <div>
+        <div class="exp-org">Waseda University · Iwata Laboratory · Tokyo</div>
         <div class="exp-role">Research Associate</div>
         <div class="exp-desc">
           <ul>
@@ -1121,36 +1132,51 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <div class="exp-item" id="exp-polytech-ater">
-      <div class="exp-period">Sep 2022 – Mar 2023<span class="dur">7 months</span></div>
       <div>
-        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/polytech-montpellier.jpg" alt="Polytech Montpellier logo"/>Polytech Montpellier · Dept. Electronics, Robotics &amp; Industrial CS · France</div>
+        <div class="exp-period">Sep 2022 – Mar 2023<span class="dur">7 months</span></div>
+        <div class="exp-logos"><img class="exp-logo-main" src="assets/img/logos/polytech-montpellier.jpg" alt="Polytech Montpellier logo"/></div>
+      </div>
+      <div>
+        <div class="exp-org">Polytech Montpellier · Dept. Electronics, Robotics &amp; Industrial CS · France</div>
         <div class="exp-role">Lecturer (ATER)</div>
         <div class="exp-desc">270+ hours of instruction to cohorts of 40–60 students: Medical Robotics, C/C++ Programming, Python, Linear Systems &amp; Automation, IoT &amp; Embedded Networks, AI Foundations, Electronics Practicals.</div>
       </div>
     </div>
 
     <div class="exp-item" id="exp-lirmm-phd">
-      <div class="exp-period">Dec 2018 – Nov 2022<span class="dur">4 years</span></div>
       <div>
-        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/lirmm.jpg" alt="LIRMM logo"/>LIRMM-CNRS · Université de Montpellier · France</div>
+        <div class="exp-period">Dec 2018 – Nov 2022<span class="dur">4 years</span></div>
+        <div class="exp-logos">
+          <img class="exp-logo-main" src="assets/img/logos/lirmm.jpg" alt="LIRMM logo"/>
+          <img class="exp-logo-sub" src="assets/img/logos/cnrs.png" alt="CNRS logo — PhD funding body"/>
+        </div>
+      </div>
+      <div>
+        <div class="exp-org">LIRMM-CNRS · Université de Montpellier · France</div>
         <div class="exp-role">PhD Researcher — JST ERATO "Jizai Body"</div>
         <div class="exp-desc">Thesis: <em>Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans.</em> Real-time impedance estimation, haptic teleoperation, deep learning for human–robot interaction. Also: engineering project advisor and teaching assistant (2019–2021).</div>
       </div>
     </div>
 
     <div class="exp-item" id="exp-tokyo-u">
-      <div class="exp-period">2019 (3 visits)<span class="dur">~3 months</span></div>
       <div>
-        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/tokyo-u.png" alt="The University of Tokyo logo"/>Inami-Hiyama Living Lab · University of Tokyo · JST ERATO</div>
+        <div class="exp-period">2019 (3 visits)<span class="dur">~3 months</span></div>
+        <div class="exp-logos"><img class="exp-logo-main" src="assets/img/logos/tokyo-u.png" alt="The University of Tokyo logo"/></div>
+      </div>
+      <div>
+        <div class="exp-org">Inami-Hiyama Living Lab · University of Tokyo · JST ERATO</div>
         <div class="exp-role">Invited Researcher</div>
         <div class="exp-desc">Force control for wearable supernumerary robot arm — published in SIGGRAPH Asia 2019 (Co-Limbs).</div>
       </div>
     </div>
 
     <div class="exp-item" id="exp-polytech-mea">
-      <div class="exp-period">Sep 2015 – Aug 2018<span class="dur">3 years</span></div>
       <div>
-        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/polytech-montpellier.jpg" alt="Polytech Montpellier logo"/>Polytech Montpellier · MEA — Microelectronics &amp; Automation · France</div>
+        <div class="exp-period">Sep 2015 – Aug 2018<span class="dur">3 years</span></div>
+        <div class="exp-logos"><img class="exp-logo-main" src="assets/img/logos/polytech-montpellier.jpg" alt="Polytech Montpellier logo"/></div>
+      </div>
+      <div>
+        <div class="exp-org">Polytech Montpellier · MEA — Microelectronics &amp; Automation · France</div>
         <div class="exp-role">Engineering Degree — Electronics &amp; Robotics</div>
         <div class="exp-desc">
           <ul>
@@ -1186,6 +1212,12 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     <div class="review-item">
       <div class="review-venue">ACM VRST</div>
       <div class="review-meta">ACM Symposium on Virtual Reality Software and Technology</div>
+      <div class="review-years">Reviewer</div>
+    </div>
+
+    <div class="review-item">
+      <div class="review-venue">IEEE ISMAR 2026</div>
+      <div class="review-meta">IEEE International Symposium on Mixed and Augmented Reality</div>
       <div class="review-years">Reviewer</div>
     </div>
 
