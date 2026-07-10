@@ -155,6 +155,7 @@ section{padding:72px 0;border-top:1px solid var(--border);}
 .affil-row{margin-top:32px;}
 .affil-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
 .affil-strip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.affil-strip a{text-decoration:none;}
 .affil-item{
   display:flex;align-items:center;justify-content:center;
   height:42px;padding:6px 16px;
@@ -272,9 +273,12 @@ html[data-theme="dark"] .affil-item:hover,html[data-theme="dark"] .affil-item.cu
 /* EXPERIENCE */
 .exp-list{display:flex;flex-direction:column;}
 .exp-item{padding:26px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:170px 1fr;gap:22px;}
+[id^="exp-"]{scroll-margin-top:88px;}
 .exp-period{font-size:11px;color:var(--muted);padding-top:4px;line-height:1.8;}
 .exp-period .dur{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);display:block;margin-top:2px;}
-.exp-org{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;}
+.exp-org{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.exp-org-logo{height:18px;width:18px;object-fit:contain;background:#fff;border-radius:4px;padding:2px;flex-shrink:0;box-shadow:0 1px 4px var(--shadow);}
+.exp-desc .li-logo{height:13px;width:13px;object-fit:contain;background:#fff;border-radius:3px;padding:1px;vertical-align:middle;margin-right:6px;box-shadow:0 1px 3px var(--shadow);}
 .exp-role{font-family:'Fraunces',serif;font-size:19px;font-weight:300;margin-bottom:7px;color:var(--text);}
 .exp-desc{font-size:12px;color:var(--mid);line-height:1.8;max-width:520px;}
 .exp-desc strong{color:var(--text);}
@@ -681,27 +685,27 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     <div class="affil-row fade-in">
       <div class="affil-label">Affiliation History</div>
       <div class="affil-strip">
-        <span class="affil-item" title="Polytech Montpellier">
+        <a class="affil-item" href="#exp-polytech-mea" title="Polytech Montpellier">
           <img src="assets/img/logos/polytech-montpellier.jpg" alt="Polytech Montpellier"/>
-        </span>
-        <span class="affil-item" title="Tokyo University of Agriculture and Technology">
+        </a>
+        <a class="affil-item" href="#exp-tuat-internship" title="Tokyo University of Agriculture and Technology">
           <img src="assets/img/logos/tuat.png" alt="Tokyo University of Agriculture and Technology"/>
-        </span>
-        <span class="affil-item" title="The University of Tokyo">
+        </a>
+        <a class="affil-item" href="#exp-tokyo-u" title="The University of Tokyo">
           <img src="assets/img/logos/tokyo-u.png" alt="The University of Tokyo"/>
-        </span>
-        <span class="affil-item" title="LIRMM – CNRS / Université de Montpellier">
+        </a>
+        <a class="affil-item" href="#exp-lirmm-phd" title="LIRMM – CNRS / Université de Montpellier">
           <img src="assets/img/logos/lirmm.jpg" alt="LIRMM"/>
-        </span>
-        <span class="affil-item" title="Waseda University">
+        </a>
+        <a class="affil-item" href="#exp-waseda" title="Waseda University">
           <img src="assets/img/logos/waseda.png" alt="Waseda University"/>
-        </span>
-        <span class="affil-item" title="Honda Research Institute Japan">
+        </a>
+        <a class="affil-item" href="#exp-honda" title="Honda Research Institute Japan">
           <img src="assets/img/logos/honda.png" alt="Honda"/>
-        </span>
-        <span class="affil-item current" title="Keio University — current">
+        </a>
+        <a class="affil-item current" href="#exp-keio" title="Keio University — current">
           <img src="assets/img/logos/keio.png" alt="Keio University"/>
-        </span>
+        </a>
       </div>
     </div>
     <!-- Social presence row -->
@@ -1070,10 +1074,10 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
   <div class="section-header"><span class="section-num">03</span><h2 class="section-title">Experience</h2></div>
   <div class="exp-list">
 
-    <div class="exp-item">
+    <div class="exp-item" id="exp-keio">
       <div class="exp-period">Jan 2026 — Present<span class="dur">Ongoing</span></div>
       <div>
-        <div class="exp-org">Keio University · Graduate School of Media Design · KMD · Tokyo (Takeshiba)</div>
+        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/keio.png" alt="Keio University logo"/>Keio University · Graduate School of Media Design · KMD · Tokyo (Takeshiba)</div>
         <div class="exp-role">Project Assistant Professor</div>
         <div class="exp-desc">Embodied Media Lab (Prof. Minamizawa) — JST Moonshot Cybernetic Avatar Program.
           <ul>
@@ -1086,10 +1090,10 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
     </div>
 
-    <div class="exp-item">
+    <div class="exp-item" id="exp-honda">
       <div class="exp-period">Apr – Dec 2025<span class="dur">9 months</span></div>
       <div>
-        <div class="exp-org">Honda Research Institute Japan · Frontier Robotics · Wako, Saitama</div>
+        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/honda.png" alt="Honda logo"/>Honda Research Institute Japan · Frontier Robotics · Wako, Saitama</div>
         <div class="exp-role">Permanent Researcher — Avatar Project</div>
         <div class="exp-desc">
           <ul>
@@ -1100,10 +1104,10 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
     </div>
 
-    <div class="exp-item">
+    <div class="exp-item" id="exp-waseda">
       <div class="exp-period">Apr 2023 – Apr 2025<span class="dur">2 years</span></div>
       <div>
-        <div class="exp-org">Waseda University · Iwata Laboratory · Tokyo</div>
+        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/waseda.png" alt="Waseda University logo"/>Waseda University · Iwata Laboratory · Tokyo</div>
         <div class="exp-role">Research Associate</div>
         <div class="exp-desc">
           <ul>
@@ -1116,30 +1120,44 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
     </div>
 
-    <div class="exp-item">
+    <div class="exp-item" id="exp-polytech-ater">
       <div class="exp-period">Sep 2022 – Mar 2023<span class="dur">7 months</span></div>
       <div>
-        <div class="exp-org">Polytech Montpellier · Dept. Electronics, Robotics &amp; Industrial CS · France</div>
+        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/polytech-montpellier.jpg" alt="Polytech Montpellier logo"/>Polytech Montpellier · Dept. Electronics, Robotics &amp; Industrial CS · France</div>
         <div class="exp-role">Lecturer (ATER)</div>
         <div class="exp-desc">270+ hours of instruction to cohorts of 40–60 students: Medical Robotics, C/C++ Programming, Python, Linear Systems &amp; Automation, IoT &amp; Embedded Networks, AI Foundations, Electronics Practicals.</div>
       </div>
     </div>
 
-    <div class="exp-item">
+    <div class="exp-item" id="exp-lirmm-phd">
       <div class="exp-period">Dec 2018 – Nov 2022<span class="dur">4 years</span></div>
       <div>
-        <div class="exp-org">LIRMM-CNRS · Université de Montpellier · France</div>
+        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/lirmm.jpg" alt="LIRMM logo"/>LIRMM-CNRS · Université de Montpellier · France</div>
         <div class="exp-role">PhD Researcher — JST ERATO "Jizai Body"</div>
         <div class="exp-desc">Thesis: <em>Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans.</em> Real-time impedance estimation, haptic teleoperation, deep learning for human–robot interaction. Also: engineering project advisor and teaching assistant (2019–2021).</div>
       </div>
     </div>
 
-    <div class="exp-item">
+    <div class="exp-item" id="exp-tokyo-u">
       <div class="exp-period">2019 (3 visits)<span class="dur">~3 months</span></div>
       <div>
-        <div class="exp-org">Inami-Hiyama Living Lab · University of Tokyo · JST ERATO</div>
+        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/tokyo-u.png" alt="The University of Tokyo logo"/>Inami-Hiyama Living Lab · University of Tokyo · JST ERATO</div>
         <div class="exp-role">Invited Researcher</div>
         <div class="exp-desc">Force control for wearable supernumerary robot arm — published in SIGGRAPH Asia 2019 (Co-Limbs).</div>
+      </div>
+    </div>
+
+    <div class="exp-item" id="exp-polytech-mea">
+      <div class="exp-period">Sep 2015 – Aug 2018<span class="dur">3 years</span></div>
+      <div>
+        <div class="exp-org"><img class="exp-org-logo" src="assets/img/logos/polytech-montpellier.jpg" alt="Polytech Montpellier logo"/>Polytech Montpellier · MEA — Microelectronics &amp; Automation · France</div>
+        <div class="exp-role">Engineering Degree — Electronics &amp; Robotics</div>
+        <div class="exp-desc">
+          <ul>
+            <li id="exp-tuat-internship"><img class="li-logo" src="assets/img/logos/tuat.png" alt="TUAT logo"/>3-month internship, GV Lab (Prof. Gentiane Venture), Tokyo University of Agriculture and Technology (TUAT)</li>
+            <li id="exp-lirmm-explore"><img class="li-logo" src="assets/img/logos/lirmm.jpg" alt="LIRMM logo"/>4-month internship, LIRMM Explore team — design and development of an autonomous underwater vehicle (AUV)</li>
+          </ul>
+        </div>
       </div>
     </div>
 
