@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Work in Progress — Guillaume Gourmelen</title>
@@ -15,6 +22,12 @@
   --accent:#c97800;--accent2:#0099aa;
   --text:#0d1f30;--muted:#547790;--mid:#3d6880;
 }
+html[data-theme="dark"]{
+  --bg:#0d1117;--surface:#161b22;--border:#21262d;
+  --accent:#e09a30;--accent2:#22c2d4;
+  --text:#e6edf3;--muted:#7590a0;--mid:#8baabb;
+}
+html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);}
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
@@ -24,35 +37,50 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
 /* ═══ NAV ══════════════════════════════════════════════════════ */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.06);box-shadow:0 1px 24px rgba(13,31,48,0.06);}
 .nav-logo{font-family:'Fraunces',serif;font-size:16px;color:var(--accent2);letter-spacing:0.05em;text-decoration:none;}
+.theme-toggle{display:flex;align-items:center;justify-content:center;width:30px;height:30px;background:none;border:1px solid var(--border);color:var(--mid);cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
+.theme-icon-moon{display:none;}
+html[data-theme="dark"] .theme-icon-sun{display:none;}
+html[data-theme="dark"] .theme-icon-moon{display:block;}
 .nav-back{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
 .nav-back:hover{color:var(--accent);}
 .nav-back::before{content:'←';}
 
 /* ═══ LAYOUT ═══════════════════════════════════════════════════ */
-.container{max-width:780px;margin:0 auto;padding:0 32px;position:relative;}
-.page-header{margin-top:96px;margin-bottom:48px;}
+.container{max-width:960px;margin:0 auto;padding:0 32px;position:relative;}
+
+/* ═══ TOP CAPTION BAR ════════════════════════════════════════ */
+.project-topbar{margin-top:72px;padding:14px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.project-topbar-title{font-family:'Fraunces',serif;font-size:15px;color:var(--text);}
+.project-topbar-tag{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--accent);color:var(--accent);}
+
+/* ═══ PROJECT SIDEBAR (same as every project page) ════════════ */
+.page-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start;max-width:1180px;margin:0 auto;}
+.project-sidebar{position:sticky;top:88px;padding-top:40px;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 110px);overflow-y:auto;}
+.sidebar-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;padding-left:12px;}
+.sidebar-link{display:block;padding:9px 12px;font-size:11.5px;line-height:1.5;color:var(--mid);text-decoration:none;border-left:2px solid transparent;transition:color 0.2s,border-color 0.2s,background 0.2s;}
+.sidebar-link:hover{color:var(--text);background:rgba(13,31,48,0.03);}
+.sidebar-link.current{color:var(--text);font-weight:500;border-left-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent);}
+.page-main{min-width:0;}
+
+/* ═══ PAGE HEADER ═══════════════════════════════════════════ */
+.page-header{margin-top:40px;margin-bottom:8px;}
 .page-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:block;}
-.page-title{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,42px);font-weight:300;letter-spacing:-0.01em;color:var(--text);margin-bottom:18px;}
-.page-intro{font-size:14px;color:var(--mid);max-width:600px;line-height:1.9;}
+.page-title{font-family:'Fraunces',serif;font-size:clamp(26px,3.6vw,38px);font-weight:300;letter-spacing:-0.01em;color:var(--text);margin-bottom:16px;}
+.page-intro{font-size:13px;color:var(--mid);max-width:580px;line-height:1.9;}
 
 /* ═══ MONTH ENTRIES ════════════════════════════════════════════ */
-.month-entry{padding:48px 0;border-top:1px solid var(--border);}
-.month-entry:first-of-type{border-top:1px solid var(--border);}
-.month-header{display:flex;align-items:baseline;gap:14px;margin-bottom:20px;flex-wrap:wrap;}
+.month-entry{padding:44px 0;border-top:1px solid var(--border);}
+.month-header{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;flex-wrap:wrap;}
 .month-tag{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--accent);color:var(--accent);}
-.month-title{font-family:'Fraunces',serif;font-size:18px;font-weight:300;color:var(--text);}
-.month-note{font-size:13px;color:var(--mid);line-height:1.95;max-width:620px;margin-bottom:20px;}
+.month-title{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--text);}
+.month-note{font-size:12px;color:var(--mid);line-height:1.9;max-width:640px;margin-bottom:18px;}
 .month-note strong{color:var(--text);font-weight:500;}
 
-/* ── Video embed (reuses the same look as project pages) ── */
+/* ── Video embed (same look/behavior as project pages) ── */
 .video-wrap{position:relative;width:100%;padding-bottom:56.25%;background:#0d1f30;margin-top:8px;}
 .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
-.video-placeholder{
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
-  background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#1a1408 0%,#241c0c 100%);
-  cursor:pointer;transition:opacity 0.2s;
-}
+.video-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#1a1408 0%,#241c0c 100%);cursor:pointer;transition:opacity 0.2s;}
 .video-placeholder:hover{opacity:0.85;}
 .video-placeholder[style*="cursor:default"]{cursor:default;}
 .play-btn{width:52px;height:52px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.4);display:flex;align-items:center;justify-content:center;transition:border-color 0.2s,transform 0.2s;}
@@ -60,14 +88,25 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:fl
 .play-btn svg{margin-left:3px;}
 .video-label{font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
 
+/* ── Still image variant (same box, no play button) ── */
+.image-wrap{position:relative;width:100%;padding-bottom:56.25%;background:#0d1f30;margin-top:8px;overflow:hidden;}
+.image-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+
 /* ── Multi-video grid within one month ── */
 .month-video-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:8px;}
 .month-video-grid .video-wrap{margin-top:0;}
 
-footer{padding:36px 0 56px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;flex-wrap:wrap;gap:10px;}
-footer a{color:var(--accent2);text-decoration:none;}
+footer{padding:28px 0 56px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;flex-wrap:wrap;gap:10px;}
+footer a{color:var(--accent);text-decoration:none;}
 
 /* ═══ RESPONSIVE ════════════════════════════════════════════════ */
+@media(max-width:900px){
+  .page-layout{grid-template-columns:1fr;gap:0;}
+  .project-sidebar{position:static;top:auto;padding-top:0;max-height:none;flex-direction:row;overflow-x:auto;overflow-y:visible;gap:8px;margin-top:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .sidebar-label{display:none;}
+  .sidebar-link{white-space:nowrap;border-left:none;border-bottom:2px solid transparent;padding:8px 12px;flex-shrink:0;}
+  .sidebar-link.current{border-left-color:transparent;border-bottom-color:var(--accent);}
+}
 @media(max-width:640px){
   nav{padding:14px 16px;}
   .container{padding:0 16px;}
@@ -79,10 +118,35 @@ footer a{color:var(--accent2);text-decoration:none;}
 
 <nav>
   <a class="nav-logo" href="index.html">G. Gourmelen</a>
+  <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
+    <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  </button>
   <a class="nav-back" href="index.html#research">All Projects</a>
 </nav>
 
-<div class="container">
+<div class="project-topbar container">
+  <span class="project-topbar-title">Work in Progress</span>
+  <span class="project-topbar-tag">Updated roughly monthly</span>
+</div>
+
+<div class="container page-layout">
+  <aside class="project-sidebar">
+    <span class="sidebar-label">All Projects</span>
+    <a href="projects/teleoperation.html" class="sidebar-link">7DoF Teleoperation &amp; Impedance Adaptation</a>
+    <a href="projects/trajectory-learning.html" class="sidebar-link">Human Trajectory &amp; Impedance Learning</a>
+    <a href="projects/honda.html" class="sidebar-link">Bimanual Avatar Teleoperation</a>
+    <a href="projects/miruoto.html" class="sidebar-link">Miruoto — Seeing Sound at the Stadium</a>
+    <a href="projects/submarine.html" class="sidebar-link">Reconfigurable AUV for Karst Exploration</a>
+    <a href="projects/soft-grasp.html" class="sidebar-link">Hybrid Roller–Jamming Gripper</a>
+    <a href="projects/3arm.html" class="sidebar-link">MESSPa — Embodiment Stimulation Shoulder Pad</a>
+    <a href="projects/colimbs.html" class="sidebar-link">Co-Limbs — Wearable Collaborative Robot Arms</a>
+    <a href="projects/echo.html" class="sidebar-link">Echocardiography Teleoperation Robot</a>
+    <a href="projects/moonshot.html" class="sidebar-link">JST Moonshot — Cybernetic Avatar</a>
+    <a href="projects/body-sublimation.html" class="sidebar-link">Body Sublimation — Extended Hand</a>
+    <a href="wip.html" class="sidebar-link current">Work in Progress</a>
+  </aside>
+  <div class="page-main">
 
   <div class="page-header">
     <span class="page-label">Work in Progress</span>
@@ -96,7 +160,20 @@ footer a{color:var(--accent2);text-decoration:none;}
        "wip.2026-06.g1-control", then reference it here with
        data-video-key. Leave data-video-key off and use
        style="cursor:default" for a "coming soon" placeholder slot.
+       For a still image instead of video, use <div class="image-wrap">
+       with a plain <img> inside.
        ═══════════════════════════════════════════════════════════ -->
+
+  <div class="month-entry">
+    <div class="month-header">
+      <span class="month-tag">July 2026</span>
+      <span class="month-title">AcroYoga Motion Tracking — computer vision for partner acrobatics</span>
+    </div>
+    <p class="month-note">A side project born out of my own AcroYoga practice: real-time multi-person pose tracking that automatically identifies who's base and who's flyer, counts and times pops (launches), and tracks full-body motion and player identity across the whole session — turning a hobby into something I can actually look at afterward.</p>
+    <div class="image-wrap">
+      <img src="assets/img/projects/WIP-2.png" alt="AcroYoga motion tracking dashboard showing base/flyer roles, pop counting, and multi-person pose tracking" loading="lazy"/>
+    </div>
+  </div>
 
   <div class="month-entry">
     <div class="month-header">
@@ -128,12 +205,26 @@ footer a{color:var(--accent2);text-decoration:none;}
 
   <footer>
     <span>Guillaume Gourmelen · <a href="index.html">Back to home</a></span>
-    <span>Updated roughly monthly</span>
+    <span>Robotics · Teleoperation · Embodiment</span>
   </footer>
 
-</div><!-- end .container -->
+  </div><!-- end .page-main -->
+</div><!-- end .container.page-layout -->
 
 <script src="assets/js/videos.js" defer></script>
 <script src="assets/js/video-loader.js" defer></script>
+<script>
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }
+}
+</script>
 </body>
 </html>
