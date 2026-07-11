@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Teaching, Talks &amp; Service — Guillaume Gourmelen</title>
+<meta name="description" content="Guillaume Gourmelen — university teaching, invited talks, and peer review / academic service in robotics, teleoperation, and human-robot interaction."/>
+<meta name="author" content="Guillaume Gourmelen"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Teaching, Talks &amp; Service — Guillaume Gourmelen"/>
+<meta property="og:description" content="University teaching, invited talks, and peer review in robotics and human-robot interaction."/>
+<meta property="og:url" content="https://guillaumegourmelen.github.io/service.html"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d1f30'/><text x='16' y='22' text-anchor='middle' font-family='serif' font-size='16' font-weight='300' fill='%230099aa'>GG</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap&subset=latin" rel="stylesheet"/>
+<style>
+/* ═══ VARIABLES ════════════════════════════════════════════════ */
+:root{
+  --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
+  --accent:#0099aa;--accent2:#c97800;
+  --text:#0d1f30;--muted:#547790;--mid:#3d6880;
+  --shadow:rgba(13,31,48,0.07);
+}
+html[data-theme="dark"]{
+  --bg:#0d1117;--surface:#161b22;--border:#21262d;
+  --accent:#22c2d4;--accent2:#e09a30;
+  --text:#e6edf3;--muted:#7590a0;--mid:#8baabb;
+  --shadow:rgba(0,0,0,0.35);
+}
+html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
+::selection{background:var(--accent);color:#fff;}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+/* ═══ NAV ══════════════════════════════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,153,170,0.15);box-shadow:0 1px 24px var(--shadow);}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:var(--accent);letter-spacing:0.05em;text-decoration:none;}
+.theme-toggle{display:flex;align-items:center;justify-content:center;width:30px;height:30px;background:none;border:1px solid var(--border);color:var(--mid);cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
+.theme-icon-moon{display:none;}
+html[data-theme="dark"] .theme-icon-sun{display:none;}
+html[data-theme="dark"] .theme-icon-moon{display:block;}
+.nav-back{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
+.nav-back:hover{color:var(--accent);}
+.nav-back::before{content:'←';}
+
+/* ═══ LAYOUT ═══════════════════════════════════════════════════ */
+.container{max-width:960px;margin:0 auto;padding:0 32px;}
+section{padding:56px 0;border-top:1px solid var(--border);}
+section:first-of-type{border-top:none;}
+.section-header{display:flex;align-items:baseline;gap:20px;margin-bottom:32px;}
+.section-num{font-size:11px;color:var(--accent2);letter-spacing:0.1em;}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(22px,3.2vw,32px);font-weight:300;letter-spacing:-0.01em;color:var(--text);}
+
+/* ═══ PAGE HEADER ═══════════════════════════════════════════ */
+.page-header{padding:128px 0 40px;}
+.page-eyebrow{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.page-eyebrow::before{content:'';display:block;width:28px;height:1px;background:var(--accent);}
+.page-title{font-family:'Fraunces',serif;font-size:clamp(28px,4.2vw,40px);font-weight:300;letter-spacing:-0.01em;color:var(--text);margin-bottom:14px;}
+.page-intro{font-size:13px;color:var(--mid);max-width:600px;line-height:1.9;}
+
+/* ═══ PEER REVIEW ══════════════════════════════════════════════ */
+.review-intro{font-size:13px;color:var(--mid);line-height:1.9;max-width:580px;margin-bottom:32px;}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+.review-item{padding:16px 18px;background:var(--surface);border:1px solid var(--border);display:flex;flex-direction:column;gap:4px;transition:border-color 0.3s,box-shadow 0.3s;}
+.review-item:hover{border-color:rgba(0,153,170,0.35);box-shadow:0 2px 14px rgba(0,153,170,0.07);}
+.review-venue{font-family:'Fraunces',serif;font-size:15px;font-weight:300;color:var(--text);}
+.review-meta{font-size:11px;color:var(--muted);}
+.review-years{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);}
+.review-item.chair-item{border-color:rgba(201,120,0,0.3);}
+.review-item.chair-item .review-venue{color:var(--accent2);}
+
+/* ═══ TEACHING ═════════════════════════════════════════════════ */
+.teaching-intro{font-size:13px;color:var(--mid);line-height:1.9;max-width:600px;margin-bottom:40px;}
+.teaching-block{margin-bottom:48px;}
+.teaching-block:last-child{margin-bottom:0;}
+.teaching-org{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;display:flex;align-items:center;gap:14px;}
+.teaching-org::after{content:'';flex:1;height:1px;background:var(--border);}
+.course-list{display:flex;flex-direction:column;}
+.course-item{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--border);}
+.course-item:last-child{border-bottom:none;}
+.course-name{font-size:12px;color:var(--text);}
+.course-level{font-size:10px;color:var(--muted);letter-spacing:0.04em;}
+.teaching-quote{margin-top:36px;padding:20px 24px;border-left:3px solid var(--accent);background:rgba(0,153,170,0.03);font-size:13px;color:var(--mid);line-height:1.9;font-style:italic;max-width:640px;}
+.teaching-quote cite{display:block;margin-top:10px;font-size:11px;font-style:normal;color:var(--muted);letter-spacing:0.05em;}
+
+/* ═══ TALKS ════════════════════════════════════════════════════ */
+.talks-list{display:flex;flex-direction:column;}
+.talk-item{display:grid;grid-template-columns:90px 1fr auto;gap:0 18px;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);transition:background 0.2s;}
+.talk-item:hover{background:rgba(0,153,170,0.03);}
+.talk-date{font-size:11px;color:var(--muted);}
+.talk-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--accent);}
+.talk-body{display:flex;flex-direction:column;gap:2px;}
+.talk-title{font-size:12px;color:var(--text);}
+.talk-event{font-size:11px;color:var(--muted);}
+.talk-link{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);text-decoration:none;border:1px solid rgba(0,153,170,0.3);padding:4px 10px;white-space:nowrap;transition:all 0.2s;flex-shrink:0;}
+.talk-link:hover{background:var(--accent);color:#fff;}
+
+footer{padding:28px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;flex-wrap:wrap;gap:10px;}
+footer a{color:var(--accent);text-decoration:none;}
+
+/* ═══ RESPONSIVE ════════════════════════════════════════════════ */
+@media(max-width:640px){
+  nav{padding:14px 16px;}
+  .container{padding:0 16px;}
+  .review-grid{grid-template-columns:1fr;}
+  .course-item{grid-template-columns:1fr auto;gap:10px;}
+  .talk-item{grid-template-columns:70px 1fr;gap:0 10px;}
+  .talk-link{display:none;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">G. Gourmelen</a>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
+      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    </button>
+    <a class="nav-back" href="index.html">Research site</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <span class="page-eyebrow">Academic Service</span>
+    <h1 class="page-title">Teaching, Talks &amp; Peer Review</h1>
+    <p class="page-intro">University courses, invited talks, and reviewing / chairing work — moved here to keep the <a href="index.html" style="color:var(--accent);">main research page</a> focused on research itself.</p>
+  </div>
+
+<section id="teaching">
+  <div class="section-header"><span class="section-num">01</span><h2 class="section-title">Teaching</h2></div>
+
+  <p class="teaching-intro">Over 300 hours of university-level instruction across France and Japan, from introductory programming to advanced robotics and embedded systems.</p>
+
+  <!-- ── Keio University ── -->
+  <div class="teaching-block" style="margin-top:44px;">
+    <div class="teaching-org">Keio University · KMD · Tokyo — 2026–present</div>
+    <div class="course-list">
+      <div class="course-item">
+        <div class="course-name">Statistics for Research</div>
+        <div class="course-level">Graduate seminar</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">How to Design and Run Research Experiments</div>
+        <div class="course-level">Graduate seminar</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">In-Lab Robotics Presentations</div>
+        <div class="course-level">Lab internal · ongoing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Polytech Montpellier ── -->
+  <div class="teaching-block">
+    <div class="teaching-org">Polytech Montpellier · France — Sep 2022 – Mar 2023 · 270+ hours total during ATER</div>
+    <div class="course-list">
+      <div class="course-item">
+        <div class="course-name">Medical Robotics</div>
+        <div class="course-level">Engineering · M2</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">Linear Systems &amp; Automation (Control Theory) — Hands-on</div>
+        <div class="course-level">Engineering · Licence 3</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">Embedded Networks — Hands-on</div>
+        <div class="course-level">Engineering · Licence 3</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">AI Foundations (Supervised Learning, Neural Networks)</div>
+        <div class="course-level">Engineering · M2</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">Electronics Practicals (Analog / Digital Circuits) — Hands-on</div>
+        <div class="course-level">Engineering · Licence 3</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">Linux &amp; Embedded Systems — IoT, Linux &amp; Embedded Systems assembly. Taught as a vacation contract during my PhD (2 × 60h equiv. TD).</div>
+        <div class="course-level">Engineering · Licence 3</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">Introduction to Programming (Python)</div>
+        <div class="course-level">Engineering · Licence 3</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">C / C++ Programming</div>
+        <div class="course-level">Engineering · Licence 3</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Université de Montpellier ── -->
+  <div class="teaching-block">
+    <div class="teaching-org">Université de Montpellier — 2019–2022 · PhD monitorat (ATER)</div>
+    <div class="course-list">
+      <div class="course-item">
+        <div class="course-name">Introduction to Programming (Python)</div>
+        <div class="course-level">Licence 1st year</div>
+      </div>
+      <div class="course-item">
+        <div class="course-name">Signals &amp; Systems</div>
+        <div class="course-level">Licence 2nd year</div>
+      </div>
+    </div>
+  </div>
+
+  <p style="font-size:12px;color:var(--muted);margin-top:20px;line-height:1.8;">
+    Courses available to offer: Introduction to Robotics · Robot Programming · Autonomous Systems · Embedded Systems &amp; IoT · Machine Learning / Deep Learning · Human–Robot Interaction · Computer Vision · Digital Literacy.
+  </p>
+</section>
+
+<section id="talks">
+  <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Talks &amp; Presentations</h2></div>
+  <p style="font-size:13px;color:var(--mid);line-height:1.9;max-width:580px;margin-bottom:32px;">Invited talks, session chairs, and conference presentations. Video links added as recordings become available.</p>
+  <div class="talks-list">
+
+    <div class="talk-item">
+      <div class="talk-date">May 2026</div>
+      <div class="talk-body">
+        <span class="talk-title">From Human Skill to Robot Embodiment: Control, Learning, and Haptic Feedback for Human-Robot Systems</span>
+        <span class="talk-event">Invited Seminar · GV Lab, The University of Tokyo</span>
+      </div>
+      <a href="https://www.gvlab.jp/seminar.htm" target="_blank" class="talk-link">Details ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Mar 2026</div>
+      <div class="talk-body">
+        <span class="talk-title">Session Chair — Human–Robot Communication &amp; Control</span>
+        <span class="talk-event">Augmented Human 2026 · ACM International Conference</span>
+      </div>
+      <span style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(201,120,0,0.4);padding:4px 8px;white-space:nowrap;">Chair</span>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Dec 2025</div>
+      <div class="talk-body">
+        <span class="talk-title">Conference Visitor</span>
+        <span class="talk-event">ACM SIGGRAPH Asia 2025 · Hong Kong Convention and Exhibition Centre</span>
+      </div>
+      <a href="https://asia.siggraph.org/2025/" target="_blank" class="talk-link">Conference ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Jul 2025</div>
+      <div class="talk-body">
+        <span class="talk-title">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad — Work-in-Progress Poster (WP1.26)</span>
+        <span class="talk-event">IEEE World Haptics Conference 2025 · Suwon, South Korea</span>
+      </div>
+      <a href="https://2025.worldhaptics.org/work-in-progress-papers/" target="_blank" class="talk-link">Program ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Sep 2024</div>
+      <div class="talk-body">
+        <span class="talk-title">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</span>
+        <span class="talk-event">第42回日本ロボット学会学術講演会 (RSJ2024) · Osaka Institute of Technology, Umeda Campus</span>
+      </div>
+      <span style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);border:1px solid var(--border);padding:4px 8px;white-space:nowrap;">Link TBD</span>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Sep 2024</div>
+      <div class="talk-body">
+        <span class="talk-title">スポーツ観戦中の聴覚障害者の活気増幅を目指した高揚状態可知化システム「ミルオト」の開発 (Miruoto: a system to convey match excitement to Deaf spectators)</span>
+        <span class="talk-event">第29回日本バーチャルリアリティ学会大会 (VRSJ 2024) · Meijo University, Nagoya — poster 2B2-08</span>
+      </div>
+      <a href="https://conference.vrsj.org/ac2024/program/program-flash02.html" target="_blank" class="talk-link">Program ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Aug 2024</div>
+      <div class="talk-body">
+        <span class="talk-title">Miruoto: Sports Event Atmosphere Visual Rendering through Real-Time Image and Sound Processing</span>
+        <span class="talk-event">ACM SIGGRAPH 2024 Emerging Technologies · Denver, CO</span>
+      </div>
+      <a href="https://dl.acm.org/doi/10.1145/3641517.3664393" target="_blank" class="talk-link">Paper ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Oct 2021</div>
+      <div class="talk-body">
+        <span class="talk-title">Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance</span>
+        <span class="talk-event">IEEE/RSJ IROS 2021 · Prague, Czech Republic</span>
+      </div>
+      <a href="https://hal.science/hal-03324747v1/document" target="_blank" class="talk-link">PDF ↗</a>
+    </div>
+
+    <div class="talk-item">
+      <div class="talk-date">Nov 2019</div>
+      <div class="talk-body">
+        <span class="talk-title">Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms</span>
+        <span class="talk-event">ACM SIGGRAPH Asia 2019 Emerging Technologies · Brisbane, Australia</span>
+      </div>
+      <a href="https://hal.science/hal-02407032v1/document" target="_blank" class="talk-link">PDF ↗</a>
+    </div>
+
+  </div>
+</section>
+
+<section id="reviewing">
+  <div class="section-header"><span class="section-num">03</span><h2 class="section-title">Peer Review &amp; Service</h2></div>
+  <p class="review-intro">I review for the following international conferences in robotics and intelligent systems. I am also Session Chair at Augmented Human 2026.</p>
+
+  <div class="review-grid">
+
+    <div class="review-item chair-item">
+      <div class="review-venue">Augmented Human 2026 — Session Chair</div>
+      <div class="review-meta">ACM International Conference on Augmented Human Technology</div>
+      <div class="review-years">Session Chair · Human–Robot Communication &amp; Control</div>
+    </div>
+
+    <div class="review-item">
+      <div class="review-venue">IEEE IROS</div>
+      <div class="review-meta">IEEE/RSJ International Conference on Intelligent Robots and Systems</div>
+      <div class="review-years">Reviewer · multiple years</div>
+    </div>
+
+    <div class="review-item">
+      <div class="review-venue">ACM VRST</div>
+      <div class="review-meta">ACM Symposium on Virtual Reality Software and Technology</div>
+      <div class="review-years">Reviewer</div>
+    </div>
+
+    <div class="review-item">
+      <div class="review-venue">IEEE ISMAR 2026</div>
+      <div class="review-meta">IEEE International Symposium on Mixed and Augmented Reality</div>
+      <div class="review-years">Reviewer</div>
+    </div>
+
+  </div>
+
+  <p style="font-size:11px;color:var(--muted);margin-top:18px;line-height:1.7;">Reviewing scope: robotics, teleoperation, haptics, human-robot interaction, embodied systems.</p>
+</section>
+
+  <footer>
+    <span>Guillaume Gourmelen · <a href="index.html">Research site</a> · <a href="about.html" style="color:var(--accent2)">Short Bio ↗</a></span>
+    <span>Teaching · Talks · Peer Review</span>
+  </footer>
+
+</div><!-- end .container -->
+
+<script>
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }
+}
+</script>
+</body>
+</html>
