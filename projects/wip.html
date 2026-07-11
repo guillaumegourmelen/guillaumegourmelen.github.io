@@ -148,12 +148,12 @@ footer a{color:var(--accent);text-decoration:none;}
 <body>
 
 <nav>
-  <a class="nav-logo" href="index.html">G. Gourmelen</a>
+  <a class="nav-logo" href="../index.html">G. Gourmelen</a>
   <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
     <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
     <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
   </button>
-  <a class="nav-back" href="index.html#research">All Projects</a>
+  <a class="nav-back" href="../index.html#research">All Projects</a>
 </nav>
 
 <div class="project-topbar container">
@@ -162,21 +162,7 @@ footer a{color:var(--accent);text-decoration:none;}
 </div>
 
 <div class="container page-layout">
-  <aside class="project-sidebar">
-    <span class="sidebar-label">All Projects</span>
-    <a href="projects/teleoperation.html" class="sidebar-link">7DoF Teleoperation &amp; Impedance Adaptation</a>
-    <a href="projects/trajectory-learning.html" class="sidebar-link">Human Trajectory &amp; Impedance Learning</a>
-    <a href="projects/honda.html" class="sidebar-link">Bimanual Avatar Teleoperation</a>
-    <a href="projects/miruoto.html" class="sidebar-link">Miruoto — Seeing Sound at the Stadium</a>
-    <a href="projects/submarine.html" class="sidebar-link">Reconfigurable AUV for Karst Exploration</a>
-    <a href="projects/soft-grasp.html" class="sidebar-link">Hybrid Roller–Jamming Gripper</a>
-    <a href="projects/3arm.html" class="sidebar-link">MESSPa — Embodiment Stimulation Shoulder Pad</a>
-    <a href="projects/colimbs.html" class="sidebar-link">Co-Limbs — Wearable Collaborative Robot Arms</a>
-    <a href="projects/echo.html" class="sidebar-link">Echocardiography Teleoperation Robot</a>
-    <a href="projects/moonshot.html" class="sidebar-link">JST Moonshot — Cybernetic Avatar</a>
-    <a href="projects/body-sublimation.html" class="sidebar-link">Body Sublimation — Extended Hand</a>
-    <a href="wip.html" class="sidebar-link current">Work in Progress</a>
-  </aside>
+  <aside class="project-sidebar" data-auto-sidebar></aside>
   <div class="page-main">
 
   <div class="page-header">
@@ -204,7 +190,7 @@ footer a{color:var(--accent);text-decoration:none;}
     </div>
     <p class="month-note">A side project born out of my own AcroYoga practice: real-time multi-person pose tracking that automatically identifies who's base and who's flyer, counts and times pops (launches), and tracks full-body motion and player identity across the whole session — turning a hobby into something I can actually look at afterward.</p>
     <div class="image-wrap">
-      <img src="assets/img/projects/WIP-2.png" alt="AcroYoga motion tracking dashboard showing base/flyer roles, pop counting, and multi-person pose tracking" loading="lazy" onclick="openLightbox(this.src)"/>
+      <img src="../assets/img/projects/WIP-2.png" alt="AcroYoga motion tracking dashboard showing base/flyer roles, pop counting, and multi-person pose tracking" loading="lazy" onclick="openLightbox(this.src)"/>
     </div>
   </div>
 
@@ -237,7 +223,7 @@ footer a{color:var(--accent);text-decoration:none;}
   </div>
 
   <footer>
-    <span>Guillaume Gourmelen · <a href="index.html">Back to home</a></span>
+    <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
     <span>Robotics · Teleoperation · Embodiment</span>
   </footer>
 
@@ -248,8 +234,9 @@ footer a{color:var(--accent);text-decoration:none;}
   <img id="wip-lightbox-img" src="" alt=""/>
 </div>
 
-<script src="assets/js/videos.js" defer></script>
-<script src="assets/js/video-loader.js" defer></script>
+<script src="../assets/js/videos.js" defer></script>
+<script src="../assets/js/video-loader.js" defer></script>
+<script src="../assets/js/sidebar-loader.js" defer></script>
 <script>
 function toggleTheme(){
   const html = document.documentElement;
@@ -278,5 +265,6 @@ function closeLightbox(){
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
+<script data-goatcounter="https://gourmelen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
