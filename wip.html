@@ -88,9 +88,40 @@ html[data-theme="dark"] .theme-icon-moon{display:block;}
 .play-btn svg{margin-left:3px;}
 .video-label{font-size:10px;letter-spacing:0.13em;text-transform:uppercase;color:rgba(255,255,255,0.55);}
 
-/* ── Still image variant (same box, no play button) ── */
-.image-wrap{position:relative;width:100%;padding-bottom:56.25%;background:#0d1f30;margin-top:8px;overflow:hidden;}
-.image-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+/* ── Still image variant: shown at its natural aspect ratio (no
+   cropping), click to enlarge — same lightbox behavior as the
+   project pages' galleries. ── */
+.image-wrap{
+  margin-top:8px;background:#0d1f30;
+  display:flex;justify-content:center;
+  cursor:zoom-in;overflow:hidden;
+}
+.image-wrap img{
+  display:block;width:auto;height:auto;
+  max-width:100%;max-height:640px;
+  transition:transform 0.4s;
+}
+.image-wrap:hover img{transform:scale(1.02);}
+
+/* ── Lightbox (click any .image-wrap image to open, full-size,
+   uncropped; click anywhere or press Escape to close) ── */
+.wip-lightbox{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(5,10,16,0.92);
+  display:flex;align-items:center;justify-content:center;
+  padding:40px;cursor:zoom-out;
+  opacity:0;visibility:hidden;
+  transition:opacity 0.25s ease;
+}
+.wip-lightbox.open{opacity:1;visibility:visible;}
+.wip-lightbox img{
+  max-width:100%;max-height:100%;
+  object-fit:contain;
+  box-shadow:0 12px 48px rgba(0,0,0,0.5);
+  transform:scale(0.96);
+  transition:transform 0.25s ease;
+}
+.wip-lightbox.open img{transform:scale(1);}
 
 /* ── Multi-video grid within one month ── */
 .month-video-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:8px;}
@@ -161,7 +192,9 @@ footer a{color:var(--accent);text-decoration:none;}
        data-video-key. Leave data-video-key off and use
        style="cursor:default" for a "coming soon" placeholder slot.
        For a still image instead of video, use <div class="image-wrap">
-       with a plain <img> inside.
+       with a plain <img onclick="openLightbox(this.src)"> inside —
+       it displays at its natural (uncropped) aspect ratio and
+       enlarges on click, same as the project page galleries.
        ═══════════════════════════════════════════════════════════ -->
 
   <div class="month-entry">
@@ -171,7 +204,7 @@ footer a{color:var(--accent);text-decoration:none;}
     </div>
     <p class="month-note">A side project born out of my own AcroYoga practice: real-time multi-person pose tracking that automatically identifies who's base and who's flyer, counts and times pops (launches), and tracks full-body motion and player identity across the whole session — turning a hobby into something I can actually look at afterward.</p>
     <div class="image-wrap">
-      <img src="assets/img/projects/WIP-2.png" alt="AcroYoga motion tracking dashboard showing base/flyer roles, pop counting, and multi-person pose tracking" loading="lazy"/>
+      <img src="assets/img/projects/WIP-2.png" alt="AcroYoga motion tracking dashboard showing base/flyer roles, pop counting, and multi-person pose tracking" loading="lazy" onclick="openLightbox(this.src)"/>
     </div>
   </div>
 
@@ -211,6 +244,10 @@ footer a{color:var(--accent);text-decoration:none;}
   </div><!-- end .page-main -->
 </div><!-- end .container.page-layout -->
 
+<div id="wip-lightbox" class="wip-lightbox" onclick="closeLightbox()" role="dialog" aria-modal="true" aria-hidden="true">
+  <img id="wip-lightbox-img" src="" alt=""/>
+</div>
+
 <script src="assets/js/videos.js" defer></script>
 <script src="assets/js/video-loader.js" defer></script>
 <script>
@@ -225,6 +262,21 @@ function toggleTheme(){
     localStorage.setItem('theme', 'dark');
   }
 }
+function openLightbox(src){
+  const lb = document.getElementById('wip-lightbox');
+  const img = document.getElementById('wip-lightbox-img');
+  img.src = src;
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  const lb = document.getElementById('wip-lightbox');
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>
 </body>
 </html>
