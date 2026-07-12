@@ -198,13 +198,25 @@ html[data-theme="dark"] .affil-item:hover,html[data-theme="dark"] .affil-item.cu
 /* ── SHOWCASE
    Each tile: .tile-static (always visible) + .tile-gif (fades in on hover).
    Hover-to-play: pure CSS transition, zero JS.
-   To activate: uncomment <img> tags and point to your files. ── */
+   To activate: uncomment <img> tags and point to your files.
+
+   Title/venue label is always visible at a light baseline (so the grid
+   is legible without hovering, and touch devices — which have no
+   hover — see the same thing desktop does at rest). Hover deepens the
+   scrim for contrast, lifts the card, and reveals an explicit "open"
+   arrow badge as an unambiguous click affordance. ── */
 .showcase-section{padding:72px 0;}
 .showcase-intro{font-size:13px;color:var(--mid);max-width:600px;line-height:1.9;margin-bottom:40px;}
-.showcase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;}
-.showcase-tile{position:relative;aspect-ratio:16/9;overflow:hidden;display:block;text-decoration:none;cursor:pointer;background:#0d1f30;}
-.tile-static{position:absolute;inset:0;z-index:1;transition:transform 0.5s ease;will-change:transform;}
-.showcase-tile:hover .tile-static{transform:scale(1.05);}
+.showcase-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.showcase-tile{
+  position:relative;aspect-ratio:16/9;overflow:hidden;display:block;
+  text-decoration:none;cursor:pointer;background:#0d1f30;
+  border-radius:9px;border:1px solid rgba(255,255,255,0.07);
+  transition:transform 0.3s ease,box-shadow 0.3s ease,border-color 0.3s ease;
+}
+.showcase-tile:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(4,10,18,0.4);border-color:rgba(0,153,170,0.45);}
+.tile-static{position:absolute;inset:0;z-index:1;transition:transform 0.6s ease;will-change:transform;}
+.showcase-tile:hover .tile-static{transform:scale(1.06);}
 .tile-static img{width:100%;height:100%;object-fit:cover;display:block;}
 .tile-static.has-thumb .tile-placeholder{display:none;}
 .tile-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
@@ -213,12 +225,27 @@ html[data-theme="dark"] .affil-item:hover,html[data-theme="dark"] .affil-item.cu
 .tile-gif{position:absolute;inset:0;z-index:2;opacity:0;transition:opacity 0.4s ease;pointer-events:none;}
 .showcase-tile:hover .tile-gif{opacity:1;}
 .tile-gif img{width:100%;height:100%;object-fit:cover;display:block;}
-.tile-num{position:absolute;top:9px;left:10px;font-size:10px;color:rgba(255,255,255,0.3);z-index:4;transition:opacity 0.3s;}
+.tile-num{position:absolute;top:10px;left:11px;font-size:10px;letter-spacing:0.05em;color:rgba(255,255,255,0.55);z-index:4;text-shadow:0 1px 3px rgba(0,0,0,0.6);transition:opacity 0.3s;}
 .showcase-tile:hover .tile-num{opacity:0;}
-.tile-overlay{position:absolute;inset:0;z-index:3;background:linear-gradient(to top,rgba(10,20,30,0.88) 0%,rgba(10,20,30,0.2) 55%,transparent 100%);opacity:0;transition:opacity 0.35s ease;display:flex;flex-direction:column;justify-content:flex-end;padding:13px 11px;}
-.showcase-tile:hover .tile-overlay{opacity:1;}
-.tile-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.92);line-height:1.45;}
-.tile-label em{display:block;font-style:normal;color:var(--accent);font-size:8px;margin-top:3px;letter-spacing:0.15em;}
+.tile-overlay{
+  position:absolute;inset:0;z-index:3;
+  background:linear-gradient(to top,rgba(6,13,21,0.88) 0%,rgba(6,13,21,0.38) 42%,transparent 72%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:14px 13px;
+  transition:background 0.35s ease;
+}
+.showcase-tile:hover .tile-overlay{background:linear-gradient(to top,rgba(6,13,21,0.94) 0%,rgba(6,13,21,0.5) 50%,transparent 82%);}
+.tile-label{font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:rgba(255,255,255,0.96);line-height:1.5;text-shadow:0 1px 4px rgba(0,0,0,0.55);}
+.tile-label em{display:block;font-style:normal;color:var(--accent2);font-size:8.5px;margin-top:4px;letter-spacing:0.14em;opacity:0.95;text-shadow:0 1px 4px rgba(0,0,0,0.55);}
+.tile-arrow{
+  position:absolute;top:10px;right:10px;z-index:5;
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(6,13,21,0.5);backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,0.9);
+  opacity:0;transform:translate(-3px,3px) scale(0.85);
+  transition:opacity 0.25s ease,transform 0.25s ease,background 0.25s ease;
+}
+.showcase-tile:hover .tile-arrow{opacity:1;transform:translate(0,0) scale(1);background:var(--accent);}
 
 /* ABOUT */
 .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;}
@@ -609,7 +636,6 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
   .review-grid{grid-template-columns:1fr;}
   .course-item{grid-template-columns:1fr auto;gap:10px;}
   .showcase-grid{grid-template-columns:repeat(2,1fr);}
-  .tile-overlay{opacity:1;background:linear-gradient(to top,rgba(10,20,30,0.75) 0%,transparent 60%);}
   .hero-meta{gap:24px;}
   .affil-item{height:36px;padding:5px 12px;}
   .affil-item img{height:16px;}
@@ -753,7 +779,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     <span class="section-num">00</span>
     <h2 class="section-title">Research at a Glance</h2>
   </div>
-  <p class="showcase-intro">Ten projects across teleoperation, haptics, human motor learning, medical robotics, soft robotics, extended reality, and embodied systems — plus a running log of work in progress. Hover any tile to preview — click to open the full project page.</p>
+  <p class="showcase-intro">Ten projects across teleoperation, haptics, human motor learning, medical robotics, soft robotics, extended reality, and embodied systems — plus a running log of work in progress. Click any tile to open the full project page.</p>
 
   <!-- Filter pills — click to show only matching topics -->
   <div class="filter-row">
@@ -779,6 +805,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/teleoperation.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">7DoF Teleoperation &amp; Impedance Adaptation<em>IEEE IROS 2021</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/trajectory-learning.html" class="showcase-tile" data-topics="teleoperation haptics">
@@ -792,6 +819,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/trajectory.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">Human Trajectory &amp; Impedance Learning<em>PhD Thesis · LIRMM 2022</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/honda.html" class="showcase-tile" data-topics="teleoperation haptics">
@@ -805,6 +833,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/honda.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">Bimanual Avatar Teleoperation<em>Honda Research Institute Japan</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/miruoto.html" class="showcase-tile" data-topics="ai">
@@ -818,6 +847,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/miruoto.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">Miruoto — Seeing Sound at the Stadium<em>Tokyo 2025 Deaflympics</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/submarine.html" class="showcase-tile" data-topics="underwater">
@@ -831,6 +861,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/submarine.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">Reconfigurable AUV · Karst Exploration<em>Sensors (MDPI) 2022</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/soft-grasp.html" class="showcase-tile" data-topics="haptics">
@@ -844,6 +875,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/softgrasp.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">Hybrid Roller–Jamming Grasping<em>Under Review — IEEE Access</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/3arm.html" class="showcase-tile" data-topics="wearable haptics">
@@ -857,6 +889,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/3arm.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">MESSPa — Detachable Arm Embodiment<em>Waseda University · Iwata Lab</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/colimbs.html" class="showcase-tile" data-topics="wearable haptics">
@@ -870,6 +903,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/colimbs.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">Co-Limbs — Wearable Robot Arms<em>ACM SIGGRAPH Asia 2019</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/echo.html" class="showcase-tile" data-topics="medical teleoperation haptics">
@@ -883,6 +917,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/echo.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">Medical Echo Teleoperation<em>Waseda University · Iwata Lab</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/body-sublimation.html" class="showcase-tile" data-topics="ai teleoperation xr">
@@ -896,6 +931,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/body-sublimation.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">Body Sublimation<em>ACM UIST 2026 — Conditionally Accepted</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
     <a href="projects/wip.html" class="showcase-tile" data-topics="all">
@@ -914,6 +950,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
       <div class="tile-gif"><!-- <img src="assets/img/showcase/wip.gif" alt=""> --></div>
       <div class="tile-overlay"><div class="tile-label">Work in Progress<em>Monthly updates &amp; videos</em></div></div>
+      <span class="tile-arrow"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </a>
 
   </div>
@@ -924,7 +961,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
   <div class="section-header"><span class="section-num">01</span><h2 class="section-title">About</h2></div>
   <div class="about-grid">
     <div class="about-text">
-      <p>I am a French robotics researcher based in Tokyo. I currently serve as <strong>Project Assistant Professor</strong> at the Embodied Media Project, Keio University Graduate School of Media Design (KMD), where I lead the Robotics and Vision Augmentation team under Prof. Kouta Minamizawa.</p>
+      <p>I am a French robotics researcher based in Tokyo. I currently serve as <strong>Project Assistant Professor</strong> at the Embodied Media Project, Keio University Graduate School of Media Design (KMD), where I lead the Robotics and Vision Augmentation team under Prof. Kouta Minamizawa. I am also a <strong>Guest Researcher</strong> at <strong>Waseda University's Iwata Laboratory</strong>.</p>
       <p>My research addresses <strong>physical human–robot interaction</strong>: developing systems that enable robots to understand and replicate human motor intent — not just trajectories, but dynamic compliance, force profiles, and embodied skill. Three threads define my work: <strong>impedance-aware teleoperation</strong>, <strong>wearable supernumerary robotics</strong>, and <strong>AI-driven accessibility</strong>.</p>
       <p>I hold a <strong>PhD from the University of Montpellier / LIRMM-CNRS</strong> (2022), funded by the JST ERATO Jizai Body project. Before Keio, I was a permanent researcher at <strong>Honda Research Institute Japan</strong> (Avatar Project, 2025) and Research Associate at <strong>Waseda University Iwata Lab</strong> (2023–2025). <a href="about.html" style="color:var(--accent);text-decoration:none;">Full bio, awards &amp; languages ↗</a></p>
     </div>
@@ -1091,6 +1128,18 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
             <li>Design interaction paradigms combining AI, transparent screens, and haptic feedback</li>
           </ul>
         </div>
+      </div>
+    </div>
+
+    <div class="exp-item" id="exp-waseda-guest">
+      <div>
+        <div class="exp-period">2025 — Present<span class="dur">Ongoing</span></div>
+        <div class="exp-logos"><img class="exp-logo-main" src="assets/img/logos/waseda.png" alt="Waseda University logo"/></div>
+      </div>
+      <div>
+        <div class="exp-org">Waseda University · Iwata Laboratory · Tokyo</div>
+        <div class="exp-role">Guest Researcher</div>
+        <div class="exp-desc">Ongoing collaborative research with the Iwata Lab following my time there as Research Associate. <a href="https://www.jubi-party.jp/people" target="_blank" style="color:var(--accent);">Listed on the lab's people page ↗</a></div>
       </div>
     </div>
 
