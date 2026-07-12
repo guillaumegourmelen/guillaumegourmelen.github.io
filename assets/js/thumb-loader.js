@@ -20,18 +20,25 @@
     });
   }
 
+  // Probe every extension for this tile IN PARALLEL — same fix already
+  // applied in gallery-loader.js. Previously this awaited one extension
+  // at a time, so any prefix not saved as .jpg (e.g. body-sublimation's
+  // .png) paid for 1-2 full failed round-trips before finding the real
+  // file. Now all candidates fire at once; whichever resolves first wins.
   async function findThumb(prefix) {
-    for (const ext of ['jpg', 'jpeg', 'png', 'webp', 'gif']) {
-      const url = `assets/img/projects/${prefix}-1.${ext}`;
-      const found = await tryLoad(url);
-      if (found) return found;
-    }
-    return null;
+    const exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    const results = await Promise.all(
+      exts.map((ext) => tryLoad(`assets/img/projects/${prefix}-1.${ext}`))
+    );
+    return results.find((url) => url !== null) || null;
   }
 
-  document.addEventListener('DOMContentLoaded', async () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const tiles = document.querySelectorAll('.tile-static[data-prefix]');
-    for (const tile of tiles) {
+    // Also run every tile's lookup in parallel instead of one-by-one —
+    // previously the whole grid waited on tile 1 to fully resolve before
+    // tile 2 even started probing.
+    Promise.all([...tiles].map(async (tile) => {
       const prefix = tile.dataset.prefix;
       const url = await findThumb(prefix);
       if (url) {
@@ -46,6 +53,6 @@
         tile.classList.add('has-thumb');
       }
       // If no image found, the existing .tile-placeholder stays visible.
-    }
+    }));
   });
 })();
