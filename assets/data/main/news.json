@@ -1,5 +1,45 @@
 [
   {
+    "date": "Aug 2026",
+    "tag": "Grant",
+    "category": "Grant",
+    "headline": "Awarded JSPS KAKENHI Grant-in-Aid for Early-Career Scientists (Startup) — \"Human Impedance Aware Vision Language Action Model Trained on Perturbation-Based Impedance Estimation\"",
+    "link_url": "https://www.jsps.go.jp/english/e-grants/grants09_startup.html",
+    "link_label": "KAKENHI Startup"
+  },
+  {
+    "date": "Aug 2026",
+    "tag": "Talk",
+    "category": "talk",
+    "headline": "Invited Seminar — Department of Mechanical Engineering, The Hong Kong Polytechnic University (host: Prof. Alarcon)",
+    "link_url": "https://www.polyu.edu.hk/me/news-and-events/events/2026/8/0805-me-seminar/",
+    "link_label": "Event page"
+  },
+  {
+    "date": "Aug 2026",
+    "tag": "Conf",
+    "category": "misc",
+    "headline": "Conference Visitor — IEEE RO-MAN 2026, Kitakyushu International Convention Zone, Fukuoka, Japan",
+    "link_url": "https://ro-man2026.org/",
+    "link_label": "Conference"
+  },
+  {
+    "date": "Aug 2026",
+    "tag": "Paper",
+    "category": "talk",
+    "headline": "Hybrid Roller–Jamming Gripper for Object Acquisition and Retention Under Pose Uncertainty — preprint now on arXiv (still under review at IEEE Access)",
+    "link_url": "https://arxiv.org/abs/2608.20962",
+    "link_label": "arXiv"
+  },
+  {
+    "date": "Jul 2026",
+    "tag": "Review",
+    "category": "misc",
+    "headline": "Reviewer for IEEE Transactions on Haptics",
+    "link_url": "",
+    "link_label": ""
+  },
+  {
     "date": "Jun 2026",
     "tag": "Grant",
     "category": "Grant",

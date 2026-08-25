@@ -25,4 +25,5 @@ const VIDEO_LIBRARY = {
   'echo.demo':           '4J2LHxepwzU',
   'teleoperation.demo':  'bMBCkF2lrp8',
   'body-sublimation.demo': '4zXc3zHhKUU',
+  'wip.2026-07.g1-ik-spacemouse': 'WnSGyovosfc',
 };
