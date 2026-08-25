@@ -53,6 +53,10 @@ html[data-theme="dark"] .theme-icon-moon{display:block;}
 .nav-back{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
 .nav-back:hover{color:var(--accent);}
 .nav-back::before{content:'←';}
+.nav-menu{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.nav-menu-link{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.nav-menu-link:hover{color:var(--accent);}
+@media(max-width:780px){.nav-menu-link{display:none;}}
 
 /* ═══ LAYOUT ═══════════════════════════════════════════════════ */
 .container{max-width:960px;margin:0 auto;padding:0 32px;}
@@ -124,6 +128,16 @@ footer a{color:var(--accent);text-decoration:none;}
 
 <nav>
   <a class="nav-logo" href="index.html">G. Gourmelen</a>
+  <div class="nav-menu">
+    <a class="nav-menu-link" href="index.html#research">Research</a>
+    <a class="nav-menu-link" href="index.html#about">About</a>
+    <a class="nav-menu-link" href="index.html#news">News</a>
+    <a class="nav-menu-link" href="index.html#publications">Publications</a>
+    <a class="nav-menu-link" href="index.html#experience">Experience</a>
+    <a class="nav-menu-link" href="index.html#video-lab">Videos</a>
+    <a class="nav-menu-link" href="index.html#wip">WIP</a>
+    <a class="nav-menu-link" href="index.html#contact">Contact</a>
+  </div>
   <div style="display:flex;align-items:center;gap:10px;">
     <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
       <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
@@ -138,7 +152,6 @@ footer a{color:var(--accent);text-decoration:none;}
   <div class="page-header">
     <span class="page-eyebrow">Academic Service</span>
     <h1 class="page-title">Teaching, Talks &amp; Peer Review</h1>
-    <p class="page-intro">University courses, invited talks, and reviewing / chairing work — moved here to keep the <a href="index.html" style="color:var(--accent);">main research page</a> focused on research itself.</p>
   </div>
 
 <section id="teaching">
