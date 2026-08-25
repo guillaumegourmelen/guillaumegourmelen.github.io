@@ -1,6 +1,14 @@
 [
   {
     "date": "Aug 2026",
+    "tag": "Paper",
+    "category": "talk",
+    "headline": "Body Sublimation: Designing State-Changing Extended Hand for Out-of-Reach Object Manipulation — officially accepted at ACM UIST 2026, Detroit, MI, USA",
+    "link_url": "projects/body-sublimation.html",
+    "link_label": "Project page"
+  },
+  {
+    "date": "Aug 2026",
     "tag": "Grant",
     "category": "Grant",
     "headline": "Awarded JSPS KAKENHI Grant-in-Aid for Early-Career Scientists (Startup) — \"Human Impedance Aware Vision Language Action Model Trained on Perturbation-Based Impedance Estimation\"",
