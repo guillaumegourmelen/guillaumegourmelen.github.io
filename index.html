@@ -275,6 +275,9 @@ html[data-theme="dark"] .affil-item:hover,html[data-theme="dark"] .affil-item.cu
 .news-tag.misc{color:var(--mid);}
 .news-headline{font-size:12px;color:var(--text);}
 .news-sub{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap;}
+.news-toggle-row{display:flex;justify-content:center;padding-top:12px;}
+.news-toggle-btn{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:6px 16px;cursor:pointer;transition:all 0.2s;font-family:inherit;}
+.news-toggle-btn:hover{color:var(--accent);border-color:var(--accent);}
 .news-sub a{color:var(--accent);text-decoration:none;}
 
 /* PUBLICATIONS */
@@ -1000,8 +1003,8 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     <!-- ── UIST 2026 ── -->
     <div class="pub-item">
       <div class="pub-video-thumb">
-          <img src="assets/img/projects/body-sublimation-1.jpg" alt="Body Sublimation" loading="lazy" onerror="this.style.display='none'">
-          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>body-sublimation-1.jpg</span></div>
+          <img src="assets/img/projects/body-sublimation-1.png" alt="Body Sublimation" loading="lazy" onerror="this.style.display='none'">
+          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>body-sublimation-1.png</span></div>
         </div>
       <div class="pub-year">2026</div>
       <div>
@@ -1601,6 +1604,51 @@ function revealEmail(el){el.href='mailto:guillaume@kmd.keio.ac.jp';el.childNodes
 </script>
 <script src="assets/js/thumb-loader.js" defer></script>
 <script src="assets/js/news-loader.js" defer></script>
+<script>
+// Collapse the Updates/News list to a rolling window of recent items,
+// with a toggle to expand/collapse the rest. Works regardless of how
+// news-loader.js renders items, as long as it appends .news-item
+// children into .news-list.
+(function(){
+  var VISIBLE_COUNT = 6;
+  var list = document.querySelector('.news-list');
+  if (!list) return;
+
+  function setup(){
+    var items = list.querySelectorAll('.news-item');
+    if (!items.length || list.dataset.rollingSetup) return;
+    if (items.length <= VISIBLE_COUNT) return; // nothing to collapse
+    list.dataset.rollingSetup = '1';
+
+    items.forEach(function(item, i){
+      if (i >= VISIBLE_COUNT) item.style.display = 'none';
+    });
+
+    var row = document.createElement('div');
+    row.className = 'news-toggle-row';
+    var btn = document.createElement('button');
+    btn.className = 'news-toggle-btn';
+    var hiddenCount = items.length - VISIBLE_COUNT;
+    btn.textContent = 'Show ' + hiddenCount + ' more update' + (hiddenCount === 1 ? '' : 's');
+    var expanded = false;
+    btn.addEventListener('click', function(){
+      expanded = !expanded;
+      items.forEach(function(item, i){
+        if (i >= VISIBLE_COUNT) item.style.display = expanded ? '' : 'none';
+      });
+      btn.textContent = expanded ? 'Show fewer updates' : ('Show ' + hiddenCount + ' more update' + (hiddenCount === 1 ? '' : 's'));
+    });
+    row.appendChild(btn);
+    list.parentNode.insertBefore(row, list.nextSibling);
+  }
+
+  // news-loader.js populates the list asynchronously (fetches news.json),
+  // so watch for its children to appear rather than assuming a fixed delay.
+  var observer = new MutationObserver(function(){ setup(); });
+  observer.observe(list, { childList: true });
+  setup(); // in case it's already populated
+})();
+</script>
 <script src="assets/js/videos.js" defer></script>
 <script src="assets/js/video-loader.js" defer></script>
 <script data-goatcounter="https://gourmelen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
