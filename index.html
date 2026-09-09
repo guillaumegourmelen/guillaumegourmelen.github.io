@@ -288,6 +288,12 @@ html[data-theme="dark"] .affil-item:hover,html[data-theme="dark"] .affil-item.cu
 .pub-link{display:inline-block;margin-top:7px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,153,170,0.35);padding-bottom:1px;}
 .pub-year{font-size:12px;color:var(--muted);padding-top:4px;}
 .pub-venue{display:inline-block;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:6px;padding:2px 8px;border:1px solid rgba(201,120,0,0.35);}
+.pub-cat{display:inline-block;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;margin-right:6px;padding:2px 7px;border:1px solid;}
+.pub-cat-journal{color:#4aaa60;border-color:rgba(74,170,96,0.4);}
+.pub-cat-paper{color:#0099aa;border-color:rgba(0,153,170,0.4);}
+.pub-cat-poster{color:#9d6fc4;border-color:rgba(157,111,196,0.4);}
+.pub-cat-national{color:#c97800;border-color:rgba(201,120,0,0.4);}
+.pub-cat-thesis{color:var(--mid);border-color:rgba(61,104,128,0.35);}
 .pub-title{font-family:'Fraunces',serif;font-size:17px;font-weight:300;color:var(--text);margin-bottom:6px;transition:color 0.2s;line-height:1.3;}
 .pub-authors{font-size:12px;color:var(--muted);}
 .pub-authors strong{color:var(--mid);}
@@ -1008,7 +1014,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2026</div>
       <div>
-        <div class="pub-venue">ACM UIST 2026 — Detroit, MI, USA</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-paper">Paper</span>ACM UIST 2026 — Detroit, MI, USA</div>
         <div class="pub-title"><a href="projects/body-sublimation.html">Body Sublimation: Designing State-Changing Extended Hand for Out-of-Reach Object Manipulation</a></div>
         <div class="pub-authors">M. Ohta, R. Ban (co-first), H. Nii, <strong>G. Gourmelen</strong>, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa · Keio University</div>
         <a href="assets/pdf/VRSJ2026_BodySublimation_poster.pdf" target="_blank" class="pub-link">Also presented as a poster at VRSJ2026, Toyama ↗</a>
@@ -1023,7 +1029,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2026</div>
       <div>
-        <div class="pub-venue">第31回日本バーチャルリアリティ学会大会（VRSJ2026）· Toyama, Japan</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-poster">Poster</span><span class="pub-cat pub-cat-national">National Conf.</span>第31回日本バーチャルリアリティ学会大会（VRSJ2026）· Toyama, Japan</div>
         <div class="pub-title">Speculative Memory: A Design Study on the Presentation of "Possible" Worlds and Their Acceptance</div>
         <div class="pub-authors">R. Nakamura, S. Wakisaka, Xavian Wang, <strong>G. Gourmelen</strong>, K. Minamizawa · Keio University Graduate School of Media Design</div>
         <a href="assets/pdf/Speculative_Memory_VRSJ2026_poster.pdf" target="_blank" class="pub-link">Poster PDF ↗</a> <a href="https://www.youtube.com/watch?v=hvpPxqLOZa8" target="_blank" class="pub-link">Video ↗</a>
@@ -1038,7 +1044,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2025</div>
       <div>
-        <div class="pub-venue">日本ロボット学会学術講演会2025（RSJ2025）· National Conference, Japan · Tokyo</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-national">National Conf.</span>日本ロボット学会学術講演会2025（RSJ2025）· Tokyo</div>
         <div class="pub-title"><a href="projects/echo.html">着座式心エコー検査ロボットのビジュアルサーボ戦略―医師による検査断面の品質補正技能を獲得可能な模倣学習モデルの提案―</a></div>
         <div class="pub-authors">山内勇輝, 大井啓奨, <strong>Guillaume Gourmelen</strong>, 志田優樹, 岩田浩康 · Waseda University · <em style="font-style:normal;color:var(--muted);">Visual Servoing Strategy for a Seated Echocardiography Robot: An Imitation Learning Model for Acquiring Physicians' Examination-Plane Quality Correction Skill</em></div>
         <a href="https://jglobal.jst.go.jp/detail?JGLOBAL_ID=202502243047981407" target="_blank" class="pub-link">J-GLOBAL record · paper no. 2M2-02 ↗</a>
@@ -1053,7 +1059,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2025</div>
       <div>
-        <div class="pub-venue">IEEE World Haptics Conference 2025 (WHC 2025) · Work-in-Progress Poster · Suwon, South Korea</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-poster">Poster</span>IEEE World Haptics Conference 2025 (WHC 2025) · Suwon, South Korea</div>
         <div class="pub-title"><a href="projects/3arm.html">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</a></div>
         <div class="pub-authors">Vitvasin Vimolmongkolporn, <strong>Guillaume Gourmelen</strong>, Yukiko Iwasaki, Hiroyasu Iwata · Waseda University</div>
         <a href="https://2025.worldhaptics.org/work-in-progress-papers/" target="_blank" class="pub-link">Conference program · paper no. WP1.25 ↗</a>
@@ -1074,7 +1080,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2024</div>
       <div>
-        <div class="pub-venue">ACM SIGGRAPH 2024 — Emerging Technologies · Denver, USA</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-paper">Paper</span>ACM SIGGRAPH 2024 — Emerging Technologies · Denver, USA</div>
         <div class="pub-title"><a href="https://doi.org/10.1145/3641517.3664393" target="_blank">Miruoto: Sports Event Atmosphere Visual Rendering through Real-Time Image and Sound Processing</a></div>
         <div class="pub-authors"><strong>G. Gourmelen</strong>, S. Toriya, E. Miya, N. Shioura, H. Iwata · Waseda University</div>
         <a href="https://miruoto.jp/en/top" target="_blank" class="pub-link">Official project site, miruoto.jp ↗</a> <a href="https://conference.vrsj.org/ac2024/program/doc/2B2-08.pdf" target="_blank" class="pub-link">Also presented at VRSJ2024 (national conference, Japan), no. 2B2-08 ↗</a>
@@ -1089,7 +1095,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2024</div>
       <div>
-        <div class="pub-venue">第42回日本ロボット学会学術講演会（RSJ2024）· National Conference, Japan · Osaka</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-national">National Conf.</span>第42回日本ロボット学会学術講演会（RSJ2024）· Osaka</div>
         <div class="pub-title"><a href="projects/3arm.html">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</a></div>
         <div class="pub-authors"><strong>Guillaume Gourmelen</strong>, Vitvasin Vimolmongkolporn, Yukiko Iwasaki, Hiroyasu Iwata · Waseda University</div>
         <a href="https://ac.rsj-web.org/2024/" target="_blank" class="pub-link">Conference site · paper no. 2G2-02 ↗</a> <span style="color:var(--muted);font-size:11px;">(RSJ proceedings, members-only)</span>
@@ -1110,7 +1116,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2022</div>
       <div>
-        <div class="pub-venue">Sensors (MDPI) · Journal</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-journal">Journal</span>Sensors (MDPI)</div>
         <div class="pub-title"><a href="https://doi.org/10.3390/s22093379" target="_blank">A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration: Design and Experiment</a></div>
         <div class="pub-authors">H.T. Dang, L. Lapierre, R. Zapata, B. Ropars, <strong>G. Gourmelen</strong> · LIRMM, Université de Montpellier</div>
         <a href="https://hal.science/hal-03929843v1/document" target="_blank" class="pub-link">PDF via HAL · hal-03929843 ↗</a>
@@ -1125,7 +1131,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2022</div>
       <div>
-        <div class="pub-venue">PhD Thesis · Université de Montpellier / LIRMM-CNRS</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-thesis">Thesis</span>PhD Thesis · Université de Montpellier / LIRMM-CNRS</div>
         <div class="pub-title"><a href="https://theses.hal.science/tel-04124264v1" target="_blank">Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans</a></div>
         <div class="pub-authors"><strong>G. Gourmelen</strong> · Funded by JST ERATO Jizai Body · NNT: 2022UMONS091</div>
         <a href="https://theses.hal.science/tel-04124264v1/document" target="_blank" class="pub-link">Full Thesis PDF · tel-04124264 ↗</a>
@@ -1146,7 +1152,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2021</div>
       <div>
-        <div class="pub-venue">IEEE/RSJ IROS 2021 — Prague, Czech Republic</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-paper">Paper</span>IEEE/RSJ IROS 2021 — Prague, Czech Republic</div>
         <div class="pub-title"><a href="https://doi.org/10.1109/IROS51168.2021.9636418" target="_blank">Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance</a></div>
         <div class="pub-authors"><strong>G. Gourmelen</strong>, B. Navarro, A. Cherubini, G. Ganesh · LIRMM</div>
         <a href="https://hal.science/hal-03324747v1/document" target="_blank" class="pub-link">PDF via HAL · hal-03324747 ↗</a>
@@ -1167,7 +1173,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         </div>
       <div class="pub-year">2019</div>
       <div>
-        <div class="pub-venue">ACM SIGGRAPH Asia 2019 — Emerging Technologies · Brisbane, Australia</div>
+        <div class="pub-venue"><span class="pub-cat pub-cat-paper">Paper</span>ACM SIGGRAPH Asia 2019 — Emerging Technologies · Brisbane, Australia</div>
         <div class="pub-title"><a href="https://doi.org/10.1145/3355049.3360526" target="_blank">Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms</a></div>
         <div class="pub-authors"><strong>G. Gourmelen</strong>, A. Verhulst, T. Sasaki, B. Navarro, G. Ganesh, M. Inami · LIRMM / UTokyo</div>
         <a href="https://hal.science/hal-02407032v1/document" target="_blank" class="pub-link">PDF via HAL · hal-02407032 ↗</a>
@@ -1181,6 +1187,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
   <div style="margin-top:28px;padding:18px 22px;border:1px dashed var(--border);font-size:12px;color:var(--mid);line-height:1.9;">
     <div style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px;">Under Review</div>
     <div style="margin-bottom:6px;"><strong style="color:var(--text)">Ren Y., Gourmelen G., Iwata H.</strong> "Hybrid Roller-Jamming Gripper for Robust Object Acquisition and Retention Under Pose Uncertainty." <em>Under Review — IEEE Access, 2026</em> · <a href="https://arxiv.org/abs/2608.20962" target="_blank" style="color:var(--accent);">arXiv:2608.20962 ↗</a></div>
+    <div><strong style="color:var(--text)">Vimolmongkolporn V., Gourmelen G., Iwasaki Y., Iwata H.</strong> "MESSPa: A Multi-modal Embodiment Stimulation Shoulder Pad for Preserving the Sense of Agency in a Detachable Robotic Arm." <em>Under Review — 2026 IEEE-RAS International Conference on Humanoid Robots (Humanoids 2026), Santa Clara, CA, USA</em></div>
   </div>
 </section>
 
