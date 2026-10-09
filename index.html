@@ -308,6 +308,7 @@
       .about-grid { grid-template-columns: 1fr; }
       .pub-item { grid-template-columns: 72px 1fr; gap: 12px; }
       .pub-item .pub-year { display: none; }
+      .pub-thumb { width: 72px; height: 54px; }
       .exp-item { grid-template-columns: 1fr; gap: 4px; }
       .contact-grid { grid-template-columns: 1fr; }
       .contact-photo-frame { width: 100%; height: 220px; }
@@ -330,6 +331,16 @@
     .pub-venue-badge.wip { border-color: rgba(0,153,170,0.4); color: var(--accent); }
     .contact-photo-frame > img { position: absolute; inset: 0; z-index: 1; }
     .contact-photo-frame .contact-photo-placeholder { position: absolute; inset: 0; z-index: 0; }
+
+    /* ─── Publication filters ─────────────────────────────────────── */
+    .pub-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: -32px 0 24px; }
+    .pub-filter { font: inherit; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 12px; border: 1px solid var(--border); background: var(--surface); color: var(--mid); cursor: pointer; transition: border-color 0.2s, color 0.2s, background 0.2s; }
+    .pub-filter:hover { border-color: var(--accent); color: var(--accent); }
+    .pub-filter[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: #fff; }
+    .pub-filter .count { opacity: 0.7; margin-left: 6px; }
+    .pub-item[hidden] { display: none; }
+    .about-text a, .exp-desc a { color: var(--accent); text-decoration: none; }
+    .about-text a:hover, .exp-desc a:hover { text-decoration: underline; }
 
     /* ─── Accessibility ─────────────────────────────────────────────── */
     .skip-link { position: absolute; left: 16px; top: -48px; z-index: 200; padding: 8px 14px; background: var(--text); color: #fff; font-size: 12px; text-decoration: none; }
@@ -384,7 +395,7 @@
         <div class="about-text">
           <p>I am a French robotics researcher based in Tokyo, currently serving as <strong>Project Assistant Professor</strong> at the Embodied Media Project (KMD), Keio University, and <strong>Visiting Researcher</strong> at Waseda University (Iwata Lab) and Honda Research Institute Japan.</p>
           <p>My research focuses on <strong>teleoperation, embodiment, and human-in-the-loop control</strong> — specifically on how humans can seamlessly transfer motor skills to robotic systems through intuitive interfaces, haptic feedback, and impedance adaptation. At Honda, I developed <strong>bimanual teleoperation</strong> systems for next-generation avatar platforms.</p>
-          <p>I hold a <strong>PhD from the University of Montpellier / LIRMM</strong> (2022), funded by the JST ERATO project. I am now focused on applied academic research in teleoperation and human motor control — contributing to the <strong>JST Moonshot program</strong> on VR, neurosciences and robotics at KMD.</p>
+          <p>I hold a <strong>PhD from the University of Montpellier / LIRMM</strong> (2022, <a href="https://theses.hal.science/tel-04124264v1/document" target="_blank" rel="noopener">thesis PDF on HAL ↗</a>), funded by the JST ERATO project. I am now focused on applied academic research in teleoperation and human motor control — contributing to the <strong>JST Moonshot program</strong> on VR, neurosciences and robotics at KMD.</p>
           <p>I collaborate closely with the Inami Lab at UTokyo — where my work on supernumerary robotic limbs (Co-Limbs) originated.</p>
           <p>I am fluent in <strong>French, English, and Japanese</strong> (日本語)</p>
         </div>
@@ -445,7 +456,15 @@
     <!-- ─── PUBLICATIONS ──────────────────────────────────────────── -->
     <section id="publications">
       <div class="section-header"><span class="section-num">03</span><h2 class="section-title">Publications</h2></div>
-      <div class="pub-list">
+      <!-- Filter buttons match each .pub-item's data-type: journal / conference / demo / domestic -->
+      <div class="pub-filters" role="group" aria-label="Filter publications">
+        <button type="button" class="pub-filter" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="pub-filter" data-filter="journal" aria-pressed="false">Journal</button>
+        <button type="button" class="pub-filter" data-filter="conference" aria-pressed="false">Conference</button>
+        <button type="button" class="pub-filter" data-filter="demo" aria-pressed="false">Demo · E-Tech</button>
+        <button type="button" class="pub-filter" data-filter="domestic" aria-pressed="false">Japan national</button>
+      </div>
+      <div class="pub-list" id="pub-list">
 
         <!--
           PHOTO STRUCTURE (correct, no double-render bug):
@@ -458,7 +477,7 @@
         -->
 
         <!-- WHC 2025 -->
-        <div class="pub-item">
+        <div class="pub-item" data-type="conference">
           <div class="pub-thumb">
             <img src="assets/img/messpa.webp" width="288" height="311" loading="lazy" decoding="async" alt="MESSPa" onerror="this.style.display='none'">
             <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg></div>
@@ -473,7 +492,7 @@
         </div>
 
         <!-- RSJ 2024 -->
-        <div class="pub-item">
+        <div class="pub-item" data-type="domestic">
           <div class="pub-thumb">
             <img src="assets/img/messpa.webp" width="288" height="311" loading="lazy" decoding="async" alt="MESSPa RSJ" onerror="this.style.display='none'">
             <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg></div>
@@ -488,7 +507,7 @@
         </div>
 
         <!-- SIGGRAPH 2024 -->
-        <div class="pub-item">
+        <div class="pub-item" data-type="demo">
           <div class="pub-thumb">
             <img src="assets/img/miruoto.webp" width="477" height="216" loading="lazy" decoding="async" alt="Miruoto" onerror="this.style.display='none'">
             <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg></div>
@@ -503,7 +522,7 @@
         </div>
 
         <!-- VRSJ 2024 -->
-        <div class="pub-item">
+        <div class="pub-item" data-type="domestic">
           <div class="pub-thumb">
             <img src="assets/img/miruoto.webp" width="477" height="216" loading="lazy" decoding="async" alt="Miruoto VRSJ" onerror="this.style.display='none'">
             <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg></div>
@@ -518,7 +537,7 @@
         </div>
 
         <!-- Sensors 2022 -->
-        <div class="pub-item">
+        <div class="pub-item" data-type="journal">
           <div class="pub-thumb">
             <img src="assets/img/auv.png" loading="lazy" decoding="async" alt="AUV" onerror="this.style.display='none'">
             <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg></div>
@@ -533,7 +552,7 @@
         </div>
 
         <!-- IROS 2021 -->
-        <div class="pub-item">
+        <div class="pub-item" data-type="conference">
           <div class="pub-thumb">
             <img src="assets/img/iros2021.webp" width="424" height="216" loading="lazy" decoding="async" alt="IROS 2021" onerror="this.style.display='none'">
             <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg></div>
@@ -548,7 +567,7 @@
         </div>
 
         <!-- SIGGRAPH Asia 2019 -->
-        <div class="pub-item">
+        <div class="pub-item" data-type="demo">
           <div class="pub-thumb">
             <img src="assets/img/colimbs.webp" width="313" height="216" loading="lazy" decoding="async" alt="Co-Limbs" onerror="this.style.display='none'">
             <div class="pub-thumb-placeholder"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="2" y="2" width="24" height="24" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 20 L8 14 L13 18 L18 12 L26 20" stroke="var(--muted)" stroke-width="1" fill="none"/><circle cx="8" cy="9" r="2" fill="var(--muted)"/></svg></div>
@@ -721,7 +740,7 @@
           <div>
             <div class="exp-org">LIRMM · Université de Montpellier · France</div>
             <div class="exp-role">PhD Researcher — JST ERATO "Jizai Body"</div>
-            <div class="exp-desc">Thesis: "Embodied robot systems: control and learning for skill-transfer from humans." Admittance control of 7DoF robot arm, teleoperation with 3DoF haptic feedback, human arm impedance estimation during HRI, and human intention prediction via deep learning from movement and visual data.</div>
+            <div class="exp-desc">Thesis: <a href="https://theses.hal.science/tel-04124264v1/document" target="_blank" rel="noopener">"Embodied robot systems: control and learning for skill-transfer from humans" ↗</a>. Admittance control of 7DoF robot arm, teleoperation with 3DoF haptic feedback, human arm impedance estimation during HRI, and human intention prediction via deep learning from movement and visual data.</div>
           </div>
         </div>
         <div class="exp-item">
@@ -891,6 +910,18 @@
   reduceMotion.matches?frame():start();
 
   function revealEmail(el){const u='guillaume',d=['keio','jp'].join('.');const email=u+'@'+d;el.href='mailto:'+email;el.childNodes[0].textContent=email+' ';}
+
+  const pubItems=document.querySelectorAll('#pub-list .pub-item[data-type]');
+  const pubFilters=document.querySelectorAll('.pub-filter');
+  pubFilters.forEach(btn=>{
+    const f=btn.dataset.filter;
+    const n=f==='all'?pubItems.length:[...pubItems].filter(i=>i.dataset.type===f).length;
+    btn.insertAdjacentHTML('beforeend',`<span class="count">${n}</span>`);
+    btn.addEventListener('click',()=>{
+      pubFilters.forEach(b=>b.setAttribute('aria-pressed',String(b===btn)));
+      pubItems.forEach(i=>{i.hidden=f!=='all'&&i.dataset.type!==f;});
+    });
+  });
 
   document.querySelectorAll('.project-video-placeholder[data-video]').forEach(btn=>{
     btn.addEventListener('click',()=>{
