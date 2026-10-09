@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Body Sublimation — Guillaume Gourmelen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/project.css"/>
+<style>
+:root{--accent:#5b7fc4;--accent2:#c97800;}
+.video-placeholder{background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#081825 0%,#0d2a38 100%);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">G. Gourmelen</a>
+  <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
+      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  </button>
+  <a class="nav-back" href="../index.html#research">All Projects</a>
+</nav>
+
+<div class="project-topbar container">
+  <span class="project-topbar-title">Body Sublimation — Extended Hand for Out-of-Reach Manipulation</span>
+  <span class="project-topbar-tag">ACM UIST 2026 — Detroit, MI, USA</span>
+</div>
+
+<div class="container page-layout">
+  <aside class="project-sidebar" data-auto-sidebar></aside>
+  <div class="page-main">
+
+  <!-- META STRIP -->
+  <div class="meta-strip">
+    <div class="meta-cell"><span class="meta-label">Institution</span><span class="meta-value">Keio University · Embodied Media Project</span></div>
+    <div class="meta-cell"><span class="meta-label">Period</span><span class="meta-value">2026</span></div>
+    <div class="meta-cell"><span class="meta-label">Role</span><span class="meta-value">Co-Author</span></div>
+    <div class="meta-cell"><span class="meta-label">Venue</span><span class="meta-value">ACM UIST 2026 — Detroit, MI, USA</span></div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section>
+    <div class="section-header">
+      <span class="section-label">Overview</span>
+      <h1 class="section-title">Body Sublimation</h1>
+    </div>
+    <div class="overview-layout">
+      <div class="overview-lead" data-role="lead" data-prefix="body-sublimation" data-alt="Body Sublimation extended hand concept">
+        <div class="overview-lead-placeholder">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="11" cy="16" r="7" stroke="currentColor" stroke-width="1" stroke-dasharray="2 2"/><path d="M16 16h6l4-9" stroke="currentColor" stroke-width="1.3" fill="none"/><circle cx="26" cy="7" r="2.5" fill="currentColor" opacity="0.6"/></svg>
+          <span>Image coming soon</span>
+        </div>
+      </div>
+      <div class="overview-text">
+        <p class="prose"><strong>Body Sublimation</strong> is an interaction approach that lets a user physically manipulate distant objects through a hidden robotic arm, while only ever seeing a single virtual hand — their own original hand and the robot are both visually removed via diminished reality. The goal is to reconcile two things that normally trade off against each other: the perceptual flexibility of XR (fast, unconstrained, embodied) and the physical capability of a real robot (slow, constrained, but able to actually touch the world).</p>
+        <p class="prose">The virtual hand operates in two states, named after material phase transitions: a <strong>solid state</strong>, when the hidden robotic hand matches the virtual hand's position and can grasp or manipulate real objects, and a <strong>gas state</strong>, when it doesn't — letting the virtual hand pass through obstacles, extend past the robot's workspace, or move freely while the robot autonomously handles collision avoidance out of view. The transition between states becomes the only signal the user needs about what the system can currently do, without ever showing them the robot itself.</p>
+        <p class="prose">The prototype uses a Meta Quest 3 (hand tracking, Gaussian-splat–based diminished reality, virtual hand rendering) paired with an xArm7 fitted with a PSYONIC Ability Hand as the physical end effector. A 12-participant within-subject study compared this approach against a pass-through baseline (robot and real hand both visible) across reaching, reaching-with-obstacle, and grasping tasks.</p>
+        <div class="highlight-box"><strong>Result:</strong> Removing the robot from view — and replacing it with a single coherent virtual hand whose state communicates the robot's constraints — significantly improved sense of ownership, agency, and trajectory straightness around obstacles, without hurting task performance.</div>
+        <div class="tag-row"><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Extended Reality</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Diminished Reality</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Embodiment</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Teleoperation</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Gaussian Splatting</span><span class="tag" style="border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;">Human Augmentation</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section>
+    <div class="section-header"><span class="section-label">Gallery</span><h2 class="section-title">Images</h2></div>
+    <div class="auto-gallery" data-prefix="body-sublimation" data-max="12"></div>
+  </section>
+
+  <!-- VIDEO -->
+  <section>
+    <div class="section-header"><span class="section-label">Video</span><h2 class="section-title">Project Demo</h2></div>
+    <div class="video-wrap">
+      <div class="video-placeholder" data-video-key="body-sublimation.demo">
+        <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
+        <span class="video-label">Click to play</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICATION REFERENCE -->
+  <section>
+    <div class="section-header"><span class="section-label">Publication</span><h2 class="section-title">Reference</h2></div>
+    <div class="pub-ref">
+      <span class="pub-ref-label">Cite as</span>
+      M. Ohta, R. Ban, H. Nii, G. Gourmelen, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa. "Body Sublimation: Designing State-Changing Extended Hand for Out-of-Reach Object Manipulation." <em>ACM Symposium on User Interface Software and Technology (UIST)</em>, Detroit, MI, USA, 2026.
+    </div>
+    <div class="pub-ref" style="margin-top:10px;">
+      <span class="pub-ref-label">Also presented as</span>
+      太田雅啓，伴玲吾，新居英明，Guillaume Gourmelen，鳴海拓志，Mauricio Sousa，吉田貴寿，南澤孝太.「Body Sublimation: XRとロボットによる身体化感覚を保った物体操作のための身体レンダリング手法」<em>第31回日本バーチャルリアリティ学会大会（VRSJ2026）</em>, 富山県立大学 射水キャンパス, 2026年9月. <a href="../assets/pdf/VRSJ2026_BodySublimation_poster.pdf" target="_blank">Poster PDF ↗</a> · <a href="https://conference.vrsj.org/ac2026/index.html" target="_blank">Conference site ↗</a>
+    </div>
+  </section>
+  <footer>
+    <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
+    <span>Extended Reality · Robotics · Embodiment</span>
+  </footer>
+
+</div><!-- end .page-main -->
+
+</div><!-- end .container -->
+
+<script src="../assets/js/videos.js" defer></script>
+<script src="../assets/js/video-loader.js" defer></script>
+<script src="../assets/js/gallery-loader.js" defer></script>
+<script src="../assets/js/sidebar-loader.js" defer></script>
+<script>
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }
+}
+</script>
+<script data-goatcounter="https://gourmelen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

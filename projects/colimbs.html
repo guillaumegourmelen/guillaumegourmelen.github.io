@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Co-Limbs — Wearable Collaborative Robot Arms — Guillaume Gourmelen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/project.css"/>
+<style>
+:root{--accent:#4aaa60;--accent2:#c97800;}
+.video-placeholder{background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#0c150c 0%,#121e12 100%);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">G. Gourmelen</a>
+  <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
+      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  </button>
+  <a class="nav-back" href="../index.html#research">All Projects</a>
+</nav>
+
+<div class="project-topbar container">
+  <span class="project-topbar-title">Co-Limbs — Wearable Collaborative Robot Arms</span>
+  <span class="project-topbar-tag">ACM SIGGRAPH Asia 2019 — Emerging Technologies · Brisbane</span>
+</div>
+
+<div class="container page-layout">
+  <aside class="project-sidebar" data-auto-sidebar></aside>
+  <div class="page-main">
+
+  <!-- META STRIP -->
+  <div class="meta-strip">
+    <div class="meta-cell"><span class="meta-label">Institution</span><span class="meta-value">LIRMM-CNRS / Inami-Hiyama Lab, UTokyo</span></div>
+    <div class="meta-cell"><span class="meta-label">Period</span><span class="meta-value">2019</span></div>
+    <div class="meta-cell"><span class="meta-label">Role</span><span class="meta-value">Lead Researcher</span></div>
+    <div class="meta-cell"><span class="meta-label">Venue</span><span class="meta-value">ACM SIGGRAPH Asia 2019 — Emerging Technologies · Brisbane</span></div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section>
+    <div class="section-header">
+      <span class="section-label">Overview</span>
+      <h1 class="section-title">Co-Limbs — Wearable Collaborative Robot Arms</h1>
+    </div>
+    <div class="overview-layout">
+      <div class="overview-lead" data-role="lead" data-prefix="colimbs" data-alt="Co-Limbs worn on the shoulders">
+        <div class="overview-lead-placeholder">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="8" r="3" stroke="currentColor" stroke-width="1.2"/><path d="M16 11 L16 19 M16 19 L9 26 M16 19 L23 26" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+          <span>Image coming soon</span>
+        </div>
+      </div>
+      <div class="overview-text">
+        <p class="prose"><strong>Co-Limbs</strong> (Collaborative Limbs) is a control interface for wearable supernumerary robotic arms, built around a single core principle: <strong>no dedicated hand controller</strong>. Because servo-driven wearable arms are normally stiff and non-backdrivable, positioning them usually needs joysticks or limb tracking. Co-Limbs instead lets a first-time user move the arms by hand, immediately, with no training.</p>
+<p class="prose">Each arm carries a <strong>6-axis force sensor</strong> on a forearm handle. The measured wrench is transformed into world coordinates and converted to a target velocity through an assumed mass-damper dynamics (admittance control), then to joint velocities via inverse kinematics. This makes the otherwise rigid, servo-driven arms feel back-drivable: push or pull the handle, and the arm moves with you.</p>
+<p class="prose">Three modes were demonstrated: <strong>Passive Assist</strong> (the user positions the arm by hand for a task, e.g. holding an umbrella), <strong>Power Assist</strong> (the arm shares a load with the user, e.g. lifting a box), and <strong>Playback</strong> (the arm replays a movement it was guided through, e.g. fanning). Demonstrated live at <strong>ACM SIGGRAPH Asia 2019 Emerging Technologies</strong> in Brisbane.</p>
+<div class="highlight-box"><strong>Key insight:</strong> Wearable extra arms don't need a dedicated controller if they're built to be physically collaborative. A force sensor and admittance control let the user guide the arm the way they'd guide a held tool — turning a third arm from something to consciously operate into something to simply move.</div>
+        <div class="tag-row"><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">Supernumerary Limbs</span><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">Admittance Control</span><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">Force Sensing</span><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">Wearable Robotics</span><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">Embodiment</span><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">SIGGRAPH</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section>
+    <div class="section-header"><span class="section-label">Gallery</span><h2 class="section-title">Images</h2></div>
+    <div class="auto-gallery" data-prefix="colimbs" data-max="12"></div>
+  </section>
+
+  <!-- VIDEO -->
+  <section>
+    <div class="section-header"><span class="section-label">Video</span><h2 class="section-title">Project Demo</h2></div>
+    <div class="video-wrap">
+      <div class="video-placeholder" data-video-key="colimbs.demo">
+        <div class="play-btn"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
+        <span class="video-label">Click to play</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICATION REFERENCE -->
+  <section>
+    <div class="section-header"><span class="section-label">Publication</span><h2 class="section-title">Reference</h2></div>
+    <div class="pub-ref">
+      <span class="pub-ref-label">Cite as</span>
+      G. Gourmelen, A. Verhulst, T. Sasaki, B. Navarro, G. Ganesh, M. Inami. "Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms." <em>SA '19: ACM SIGGRAPH Asia 2019 Emerging Technologies</em>, Brisbane, Australia, pp. 9–10, 2019. <a href="https://doi.org/10.1145/3355049.3360526" target="_blank">doi:10.1145/3355049.3360526 ↗</a> · <a href="https://hal.science/hal-02407032v1/document" target="_blank">PDF via HAL hal-02407032 ↗</a>
+    </div>
+  </section>
+  <footer>
+    <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
+    <span>Robotics · Teleoperation · Embodiment</span>
+  </footer>
+
+</div><!-- end .page-main -->
+
+</div><!-- end .container -->
+
+<script src="../assets/js/videos.js" defer></script>
+<script src="../assets/js/video-loader.js" defer></script>
+<script src="../assets/js/gallery-loader.js" defer></script>
+<script src="../assets/js/sidebar-loader.js" defer></script>
+<script>
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }
+}
+</script>
+<script data-goatcounter="https://gourmelen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

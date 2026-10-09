@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  var saved = localStorage.getItem('theme');
+  var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+})();
+</script>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Human Trajectory &amp; Impedance Learning — Guillaume Gourmelen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../assets/css/project.css"/>
+<style>
+:root{--accent:#4aaa60;--accent2:#c97800;}
+.video-placeholder{background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#0d1a08 0%,#182610 100%);}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="../index.html">G. Gourmelen</a>
+  <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
+      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  </button>
+  <a class="nav-back" href="../index.html#research">All Projects</a>
+</nav>
+
+<div class="project-topbar container">
+  <span class="project-topbar-title">Human Trajectory &amp; Impedance Learning</span>
+  <span class="project-topbar-tag">PhD Thesis · LIRMM-CNRS / Univ. Montpellier, 2022</span>
+</div>
+
+<div class="container page-layout">
+  <aside class="project-sidebar" data-auto-sidebar></aside>
+  <div class="page-main">
+
+  <!-- META STRIP -->
+  <div class="meta-strip">
+    <div class="meta-cell"><span class="meta-label">Institution</span><span class="meta-value">LIRMM-CNRS · Université de Montpellier</span></div>
+    <div class="meta-cell"><span class="meta-label">Period</span><span class="meta-value">2018 – 2022</span></div>
+    <div class="meta-cell"><span class="meta-label">Role</span><span class="meta-value">PhD Researcher — JST ERATO</span></div>
+    <div class="meta-cell"><span class="meta-label">Venue</span><span class="meta-value">PhD Thesis · LIRMM-CNRS / Univ. Montpellier, 2022</span></div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section>
+    <div class="section-header">
+      <span class="section-label">Overview</span>
+      <h1 class="section-title">Human Trajectory &amp; Impedance Learning</h1>
+    </div>
+    <div class="overview-layout">
+      <div class="overview-lead" data-role="lead" data-prefix="trajectory-learning" data-alt="Human Trajectory &amp; Impedance Learning">
+        <div class="overview-lead-placeholder">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M4 27 Q9 16 14 20 Q19 24 24 9" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>
+          <span>Image coming soon</span>
+        </div>
+      </div>
+      <div class="overview-text">
+        <p class="prose">This page covers my PhD thesis as a whole — <em>Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans</em> (LIRMM-CNRS / Université de Montpellier, 2022, NNT: 2022UMONS091), conducted within the JST ERATO Jizai Body project. The thesis is centred on one core question: how can a robot reproduce not just a human's <strong>trajectory</strong>, but their <strong>physical interaction quality</strong> — the stiffness and damping they apply, and how these change moment to moment during a task.</p>
+<p class="prose">The main experimental contribution — online estimation of human arm impedance from a haptic device alone, and its use to drive a robot's admittance controller during assistive teleoperation — was published at IEEE IROS 2021 and is detailed on the <a href="teleoperation.html">7DoF Teleoperation &amp; Impedance Adaptation</a> page. The thesis manuscript situates that result within a broader review of human motor control, impedance estimation methods, and teleoperation architectures, and discusses extensions and follow-up directions explored during the PhD.</p>
+<div class="highlight-box"><strong>Note:</strong> This page and the <a href="teleoperation.html">7DoF Teleoperation</a> page describe the same underlying study (IEEE IROS 2021) from two angles — this one as part of the full thesis, the other as the standalone conference paper. There is no second, separate experiment.</div>
+        <div class="tag-row"><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">PhD Thesis</span><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">Impedance Estimation</span><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">Admittance Control</span><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">Human Motor Control</span><span class="tag" style="border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;">JST ERATO</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section>
+    <div class="section-header"><span class="section-label">Gallery</span><h2 class="section-title">Images</h2></div>
+    <div class="auto-gallery" data-prefix="trajectory-learning" data-max="12"></div>
+  </section>
+
+  <!-- THESIS -->
+  <section>
+    <div class="section-header"><span class="section-label">Thesis</span><h2 class="section-title">Full Manuscript</h2></div>
+    <p class="prose">The complete thesis manuscript — including the literature review, the IROS 2021 study in full, and discussion of follow-up directions — is openly available via HAL. For the experimental demo video, see the <a href="teleoperation.html">7DoF Teleoperation</a> project page.</p>
+  </section>
+
+  <!-- PUBLICATION REFERENCE -->
+  <section>
+    <div class="section-header"><span class="section-label">Publication</span><h2 class="section-title">Reference</h2></div>
+    <div class="pub-ref">
+      <span class="pub-ref-label">Cite as</span>
+      G. Gourmelen. <em>Embodied Robot Systems: Control and Learning for Skill-Transfer from Humans.</em> PhD Thesis, Université de Montpellier / LIRMM-CNRS, 2022. JST ERATO Jizai Body Project. NNT: 2022UMONS091. <a href="https://theses.hal.science/tel-04124264v1/document" target="_blank">Full PDF · tel-04124264 ↗</a>
+    </div>
+  </section>
+  <footer>
+    <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
+    <span>Robotics · Teleoperation · Embodiment</span>
+  </footer>
+
+</div><!-- end .page-main -->
+
+</div><!-- end .container -->
+
+<script src="../assets/js/videos.js" defer></script>
+<script src="../assets/js/video-loader.js" defer></script>
+<script src="../assets/js/gallery-loader.js" defer></script>
+<script src="../assets/js/sidebar-loader.js" defer></script>
+<script>
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }
+}
+</script>
+<script data-goatcounter="https://gourmelen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
