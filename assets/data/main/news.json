@@ -1,5 +1,21 @@
 [
   {
+    "date": "Oct 2026",
+    "tag": "Paper",
+    "category": "talk",
+    "headline": "MESSPa: A Multi-modal Embodiment Stimulation Shoulder Pad for Preserving the Sense of Agency in a Detachable Robotic Arm — accepted at IEEE-RAS Humanoids 2026, Santa Clara, CA, USA",
+    "link_url": "projects/3arm.html",
+    "link_label": "Project page"
+  },
+  {
+    "date": "Sep 2026",
+    "tag": "Paper",
+    "category": "talk",
+    "headline": "Hybrid Roller–Jamming Gripper for Robust Object Acquisition and Retention Under Pose Uncertainty — accepted at IEEE Access",
+    "link_url": "projects/soft-grasp.html",
+    "link_label": "Project page"
+  },
+  {
     "date": "Sep 2026",
     "tag": "Poster",
     "category": "talk",
