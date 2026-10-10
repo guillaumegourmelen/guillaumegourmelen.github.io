@@ -1,0 +1,64 @@
+/* ═══════════════════════════════════════════════════════════════
+   Shared site navigation — used on every page via nav-loader.js,
+   which renders a <nav data-auto-nav> placeholder into the same
+   header markup/behaviour everywhere (index, project pages, about,
+   consulting, service, interprete). Keeping this in one file means
+   the nav never drifts out of sync between pages again.
+   ═══════════════════════════════════════════════════════════════ */
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,153,170,0.15);box-shadow:0 1px 24px rgba(13,31,48,0.08);}
+html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);box-shadow:0 1px 24px rgba(0,0,0,0.4);}
+
+/* Hardcoded (not var(--accent)) so the logo stays the site's teal brand
+   color on every page, even ones that override --accent for their own
+   theming (each project page, WIP's orange theme, etc.). */
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:#0099aa;letter-spacing:0.05em;text-decoration:none;flex-shrink:0;}
+html[data-theme="dark"] .nav-logo{color:#22c2d4;}
+
+.nav-tools{display:flex;align-items:center;gap:14px;}
+
+.theme-toggle{display:flex;align-items:center;justify-content:center;width:30px;height:30px;background:none;border:1px solid var(--border);color:var(--mid);cursor:pointer;transition:border-color 0.2s,color 0.2s;flex-shrink:0;}
+.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
+.theme-icon-moon{display:none;}
+html[data-theme="dark"] .theme-icon-sun{display:none;}
+html[data-theme="dark"] .theme-icon-moon{display:block;}
+
+.nav-pill{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;white-space:nowrap;transition:all 0.2s;}
+.nav-pill:hover{border-color:var(--accent);color:var(--accent);}
+.nav-pill.active{border-color:var(--accent);color:var(--accent);}
+.nav-pill-accent2{color:var(--accent2);border-color:rgba(201,120,0,0.35);}
+.nav-pill-accent2:hover{background:var(--accent2);color:#fff;}
+.nav-pill-accent{color:var(--accent);border-color:rgba(0,153,170,0.35);}
+.nav-pill-accent:hover{background:var(--accent);color:#fff;}
+
+.nav-cta{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 16px;background:var(--accent);color:#fff;text-decoration:none;transition:opacity 0.2s;white-space:nowrap;}
+.nav-cta:hover{opacity:0.85;}
+
+.nav-links{display:flex;gap:18px;list-style:none;flex-wrap:wrap;justify-content:flex-end;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-links a.active{color:var(--accent);}
+.nav-links a.active::after{content:'';display:block;height:1px;background:var(--accent);margin-top:2px;}
+
+.nav-burger{display:none;background:none;border:1px solid var(--border);padding:6px 9px;cursor:pointer;flex-direction:column;gap:4px;transition:border-color 0.2s;}
+.nav-burger:hover{border-color:var(--accent);}
+.nav-burger span{display:block;width:18px;height:1px;background:var(--mid);transition:transform 0.25s,opacity 0.25s;}
+.theme-toggle:focus-visible,.nav-burger:focus-visible{outline-offset:1px;}
+.nav-links .mobile-only{display:none;}
+
+@media(max-width:780px){
+  nav{padding:12px 16px;}
+  .nav-burger{display:flex;}
+  .nav-pills{display:none;}
+  .nav-links{
+    display:none;flex-direction:column;gap:0;flex-wrap:nowrap;
+    position:fixed;top:52px;left:0;right:0;z-index:99;
+    background:var(--bg);border-bottom:1px solid var(--border);
+    padding:8px 0;box-shadow:0 8px 24px rgba(13,31,48,0.12);
+    max-height:calc(100vh - 52px);overflow-y:auto;
+  }
+  .nav-links.open{display:flex;}
+  .nav-links li{border-bottom:1px solid var(--border);}
+  .nav-links a{display:block;padding:12px 20px;font-size:11px;letter-spacing:0.12em;}
+  .nav-links .mobile-only{display:block;}
+}

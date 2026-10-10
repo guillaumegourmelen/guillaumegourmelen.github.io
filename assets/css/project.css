@@ -21,28 +21,7 @@ html[data-theme="dark"] .tile-placeholder{filter:brightness(0.85);}
 html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
 
-/* ═══ NAV ══════════════════════════════════════════════════════ */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.06);box-shadow:0 1px 24px rgba(13,31,48,0.06);}
-html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);}
-.theme-toggle{
-  display:flex;align-items:center;justify-content:center;
-  width:30px;height:30px;
-  background:none;border:1px solid var(--border);
-  color:var(--mid);cursor:pointer;
-  transition:border-color 0.2s,color 0.2s;
-}
-.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
-.theme-icon-moon{display:none;}
-html[data-theme="dark"] .theme-icon-sun{display:none;}
-html[data-theme="dark"] .theme-icon-moon{display:block;}
-
-.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:var(--accent);letter-spacing:0.05em;text-decoration:none;}
-.nav-links{display:flex;gap:24px;list-style:none;flex-wrap:wrap;}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
-.nav-links a:hover{color:var(--accent);}
-.nav-back{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color 0.2s;}
-.nav-back:hover{color:var(--accent);}
-.nav-back::before{content:'←';}
+/* NAV: see assets/css/nav.css (shared across every page via nav-loader.js) */
 
 /* ═══ LAYOUT ═══════════════════════════════════════════════════ */
 .container{max-width:960px;margin:0 auto;padding:0 32px;position:relative;}
@@ -215,8 +194,6 @@ footer a{color:var(--accent);text-decoration:none;}
 
 /* ═══ RESPONSIVE ════════════════════════════════════════════== */
 @media(max-width:700px){
-  nav{padding:14px 16px;flex-wrap:wrap;gap:8px;}
-  .nav-links{gap:12px;}
   .container{padding:0 16px;}
   .meta-strip{grid-template-columns:1fr 1fr;}
   .video-grid{grid-template-columns:1fr;}
