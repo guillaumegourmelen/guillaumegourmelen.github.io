@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../assets/css/project.css"/>
+<link rel="stylesheet" href="../assets/css/nav.css"/>
 <style>
 :root{--accent:#5b7fc4;--accent2:#c97800;}
 .video-placeholder{background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#081825 0%,#0d2a38 100%);}
@@ -22,14 +23,8 @@
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="../index.html">G. Gourmelen</a>
-  <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
-      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-  </button>
-  <a class="nav-back" href="../index.html#research">All Projects</a>
-</nav>
+<nav data-auto-nav data-root="../"></nav>
+<script src="../assets/js/nav-loader.js"></script>
 
 <div class="project-topbar container">
   <span class="project-topbar-title">Body Sublimation — Extended Hand for Out-of-Reach Manipulation</span>
@@ -93,11 +88,11 @@
     <div class="section-header"><span class="section-label">Publication</span><h2 class="section-title">Reference</h2></div>
     <div class="pub-ref">
       <span class="pub-ref-label">Cite as</span>
-      M. Ohta, R. Ban, H. Nii, G. Gourmelen, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa. "Body Sublimation: Designing State-Changing Extended Hand for Out-of-Reach Object Manipulation." <em>ACM Symposium on User Interface Software and Technology (UIST)</em>, Detroit, MI, USA, 2026.
+      M. Ohta, R. Ban, H. Nii, <strong>G. Gourmelen</strong>, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa. "Body Sublimation: Designing State-Changing Extended Hand for Out-of-Reach Object Manipulation." <em>ACM Symposium on User Interface Software and Technology (UIST)</em>, Detroit, MI, USA, 2026.
     </div>
     <div class="pub-ref" style="margin-top:10px;">
       <span class="pub-ref-label">Also presented as</span>
-      太田雅啓，伴玲吾，新居英明，Guillaume Gourmelen，鳴海拓志，Mauricio Sousa，吉田貴寿，南澤孝太.「Body Sublimation: XRとロボットによる身体化感覚を保った物体操作のための身体レンダリング手法」<em>第31回日本バーチャルリアリティ学会大会（VRSJ2026）</em>, 富山県立大学 射水キャンパス, 2026年9月. <a href="../assets/pdf/VRSJ2026_BodySublimation_poster.pdf" target="_blank">Poster PDF ↗</a> · <a href="https://conference.vrsj.org/ac2026/index.html" target="_blank">Conference site ↗</a>
+      太田雅啓，伴玲吾，新居英明，<strong>Guillaume Gourmelen</strong>，鳴海拓志，Mauricio Sousa，吉田貴寿，南澤孝太.「Body Sublimation: XRとロボットによる身体化感覚を保った物体操作のための身体レンダリング手法」<em>第31回日本バーチャルリアリティ学会大会（VRSJ2026）</em>, 富山県立大学 射水キャンパス, 2026年9月. <a href="../assets/pdf/VRSJ2026_BodySublimation_poster.pdf" target="_blank">Poster PDF ↗</a> · <a href="https://conference.vrsj.org/ac2026/index.html" target="_blank">Conference site ↗</a>
     </div>
   </section>
   <footer>

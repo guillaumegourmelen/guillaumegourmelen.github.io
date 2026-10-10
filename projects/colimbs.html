@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../assets/css/project.css"/>
+<link rel="stylesheet" href="../assets/css/nav.css"/>
 <style>
 :root{--accent:#4aaa60;--accent2:#c97800;}
 .video-placeholder{background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#0c150c 0%,#121e12 100%);}
@@ -22,14 +23,8 @@
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="../index.html">G. Gourmelen</a>
-  <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
-      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-  </button>
-  <a class="nav-back" href="../index.html#research">All Projects</a>
-</nav>
+<nav data-auto-nav data-root="../"></nav>
+<script src="../assets/js/nav-loader.js"></script>
 
 <div class="project-topbar container">
   <span class="project-topbar-title">Co-Limbs — Wearable Collaborative Robot Arms</span>
@@ -93,7 +88,7 @@
     <div class="section-header"><span class="section-label">Publication</span><h2 class="section-title">Reference</h2></div>
     <div class="pub-ref">
       <span class="pub-ref-label">Cite as</span>
-      G. Gourmelen, A. Verhulst, T. Sasaki, B. Navarro, G. Ganesh, M. Inami. "Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms." <em>SA '19: ACM SIGGRAPH Asia 2019 Emerging Technologies</em>, Brisbane, Australia, pp. 9–10, 2019. <a href="https://doi.org/10.1145/3355049.3360526" target="_blank">doi:10.1145/3355049.3360526 ↗</a> · <a href="https://hal.science/hal-02407032v1/document" target="_blank">PDF via HAL hal-02407032 ↗</a>
+      <strong>G. Gourmelen</strong>, A. Verhulst, T. Sasaki, B. Navarro, G. Ganesh, M. Inami. "Co-Limbs: An Intuitive Collaborative Control for Wearable Robotic Arms." <em>SA '19: ACM SIGGRAPH Asia 2019 Emerging Technologies</em>, Brisbane, Australia, pp. 9–10, 2019. <a href="https://doi.org/10.1145/3355049.3360526" target="_blank">doi:10.1145/3355049.3360526 ↗</a> · <a href="https://hal.science/hal-02407032v1/document" target="_blank">PDF via HAL hal-02407032 ↗</a>
     </div>
   </section>
   <footer>

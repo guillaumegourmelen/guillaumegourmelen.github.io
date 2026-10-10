@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../assets/css/project.css"/>
+<link rel="stylesheet" href="../assets/css/nav.css"/>
 <style>
 :root{--accent:#0099aa;--accent2:#c97800;}
 .video-placeholder{background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#081818 0%,#0c2222 100%);}
@@ -22,14 +23,8 @@
 </head>
 <body>
 
-<nav>
-  <a class="nav-logo" href="../index.html">G. Gourmelen</a>
-  <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
-      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-  </button>
-  <a class="nav-back" href="../index.html#research">All Projects</a>
-</nav>
+<nav data-auto-nav data-root="../"></nav>
+<script src="../assets/js/nav-loader.js"></script>
 
 <div class="project-topbar container">
   <span class="project-topbar-title">Echocardiography Teleoperation Robot</span>
@@ -93,11 +88,11 @@
     <div class="section-header"><span class="section-label">Publication</span><h2 class="section-title">Reference</h2></div>
     <div class="pub-ref">
       <span class="pub-ref-label">Cite as</span>
-      G. Gourmelen, H. Iwata. <em>Learning from Demonstration for Echocardiography Teleoperation Robot.</em> In preparation, Waseda University / Iwata Lab, 2026. Contact: <a href="mailto:guillaume@kmd.keio.ac.jp">guillaume@kmd.keio.ac.jp</a>
+      <strong>G. Gourmelen</strong>, H. Iwata. <em>Learning from Demonstration for Echocardiography Teleoperation Robot.</em> In preparation, Waseda University / Iwata Lab, 2026. Contact: <a href="mailto:guillaume@kmd.keio.ac.jp">guillaume@kmd.keio.ac.jp</a>
     </div>
     <div class="pub-ref" style="margin-top:10px;">
       <span class="pub-ref-label">Related conference paper</span>
-      山内勇輝, 大井啓奨, GOURMELEN Guillaume, 志田優樹, 岩田浩康、"着座式心エコー検査ロボットのビジュアルサーボ戦略―医師による検査断面の品質補正技能を獲得可能な模倣学習モデルの提案―"、<em>日本ロボット学会学術講演会2025（RSJ2025）</em>, paper no. 2M2-02, 2025年9月. <a href="https://jglobal.jst.go.jp/detail?JGLOBAL_ID=202502243047981407" target="_blank">J-GLOBAL record ↗</a> <span style="color:var(--muted);">(RSJ CD-ROM proceedings, members-only — no open-access PDF)</span>
+      山内勇輝, 大井啓奨, <strong>GOURMELEN Guillaume</strong>, 志田優樹, 岩田浩康、"着座式心エコー検査ロボットのビジュアルサーボ戦略―医師による検査断面の品質補正技能を獲得可能な模倣学習モデルの提案―"、<em>日本ロボット学会学術講演会2025（RSJ2025）</em>, paper no. 2M2-02, 2025年9月. <a href="https://jglobal.jst.go.jp/detail?JGLOBAL_ID=202502243047981407" target="_blank">J-GLOBAL record ↗</a> <span style="color:var(--muted);">(RSJ CD-ROM proceedings, members-only — no open-access PDF)</span>
     </div>
   </section>
   <footer>

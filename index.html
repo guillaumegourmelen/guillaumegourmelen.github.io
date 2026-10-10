@@ -59,6 +59,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap&subset=latin" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/nav.css"/>
 <style>
 :root{
   --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
@@ -75,7 +76,6 @@ html[data-theme="dark"]{
 html[data-theme="dark"] body::before{opacity:0.15;}
 html[data-theme="dark"] .pub-thumb,html[data-theme="dark"] .contact-photo-frame{background:#1c2128;}
 html[data-theme="dark"] .tile-placeholder{filter:brightness(0.85);}
-html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);}
 html[data-theme="dark"] #back-top{background:var(--surface);}
 *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
@@ -89,12 +89,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
 /* 13. Focus-visible: keyboard-only outline, doesn't show on mouse click */
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
-.filter-pill:focus-visible,.talk-link:focus-visible,.pub-cite-btn:focus-visible,
-.theme-toggle:focus-visible,.nav-burger:focus-visible{outline-offset:1px;}
-
-/* 9. Active nav indicator */
-.nav-links a.active{color:var(--accent);}
-.nav-links a.active::after{content:'';display:block;height:1px;background:var(--accent);margin-top:2px;}
+.filter-pill:focus-visible,.talk-link:focus-visible,.pub-cite-btn:focus-visible{outline-offset:1px;}
 
 /* 11. Back-to-top button */
 #back-top{position:fixed;bottom:28px;right:28px;z-index:200;width:40px;height:40px;background:var(--surface);border:1px solid var(--border);color:var(--mid);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s,border-color 0.3s,color 0.3s,box-shadow 0.3s;box-shadow:0 2px 12px rgba(13,31,48,0.08);}
@@ -106,29 +101,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .pub-cite-btn:hover{color:var(--accent);border-color:var(--accent);}
 .pub-cite-btn.copied{color:#2d8a4e;border-color:rgba(45,138,78,0.4);}
 .pub-cite-btn svg{flex-shrink:0;}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,153,170,0.15);box-shadow:0 1px 24px var(--shadow);}
-.nav-logo{font-family:'Fraunces',serif;font-size:16px;color:var(--accent);letter-spacing:0.05em;text-decoration:none;}
-.nav-links{display:flex;gap:20px;list-style:none;flex-wrap:wrap;}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
-.nav-links a:hover{color:var(--accent);}
-.nav-burger{display:none;background:none;border:1px solid var(--border);padding:6px 9px;cursor:pointer;flex-direction:column;gap:4px;transition:border-color 0.2s;}
-.nav-burger:hover{border-color:var(--accent);}
-.nav-burger span{display:block;width:18px;height:1px;background:var(--mid);transition:transform 0.25s,opacity 0.25s;}
-
-/* ── Dark mode toggle ── */
-.theme-toggle{
-  display:flex;align-items:center;justify-content:center;
-  width:30px;height:30px;
-  background:none;border:1px solid var(--border);
-  color:var(--mid);cursor:pointer;
-  transition:border-color 0.2s,color 0.2s;
-}
-.theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
-.theme-icon-moon{display:none;}
-html[data-theme="dark"] .theme-icon-sun{display:none;}
-html[data-theme="dark"] .theme-icon-moon{display:block;}
 
 /* LAYOUT */
 .container{max-width:960px;margin:0 auto;padding:0 32px;position:relative;z-index:3;}
@@ -431,6 +403,20 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 .filter-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
 .showcase-tile.hidden{display:none;}
 
+/* ── Category filter pills on Publications (separate from the showcase
+   ones above so clicking one never resets the other) ── */
+.pub-filter-pill{
+  font-size:10px;letter-spacing:0.1em;text-transform:uppercase;
+  padding:5px 12px;border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);
+  cursor:pointer;transition:all 0.2s;user-select:none;
+  display:inline-flex;align-items:center;gap:6px;
+}
+.pub-filter-pill:hover{border-color:var(--accent);color:var(--accent);}
+.pub-filter-pill.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.pub-filter-count{font-size:9px;opacity:0.7;}
+.pub-item.hidden{display:none;}
+
 /* ── Talks section ── */
 .talks-list{display:flex;flex-direction:column;}
 .talk-item{
@@ -623,18 +609,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 ::selection{background:var(--accent);color:#fff;}
 
 @media(max-width:780px){
-  nav{padding:12px 16px;}
   .container{padding:0 16px;}
-  .nav-burger{display:flex;}
-  .nav-links{
-    display:none;flex-direction:column;gap:0;flex-wrap:nowrap;
-    position:fixed;top:52px;left:0;right:0;z-index:99;
-    background:var(--bg);border-bottom:1px solid var(--border);
-    padding:8px 0;box-shadow:0 8px 24px var(--shadow);
-  }
-  .nav-links.open{display:flex;}
-  .nav-links li{border-bottom:1px solid var(--border);}
-  .nav-links a{display:block;padding:12px 20px;font-size:11px;letter-spacing:0.12em;}
   .about-grid{grid-template-columns:1fr;}
   .pub-item{grid-template-columns:68px 1fr;gap:10px;}
   .pub-video-thumb{width:68px;height:51px;}
@@ -661,34 +636,8 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 
 <canvas id="robo-canvas" aria-hidden="true"></canvas>
 
-<nav>
-  <a class="nav-logo" href="index.html">G. Gourmelen</a>
-  <button class="nav-burger" aria-label="Toggle navigation" onclick="toggleNav(this)" aria-expanded="false" aria-controls="nav-links">
-    <span></span><span></span><span></span>
-  </button>
-  <div style="display:flex;align-items:center;gap:14px;">
-    <button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">
-      <svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-      <svg class="theme-icon-moon" width="15" height="15" viewBox="0 0 20 20" fill="none"><path d="M16.5 12.6A7.2 7.2 0 0 1 7.4 3.5a7.2 7.2 0 1 0 9.1 9.1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-    </button>
-    <a href="assets/data/main/CV-Gourmelen.pdf" target="_blank" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">CV ↓</a>
-    <a href="about.html" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">Short Bio ↗</a>
-    <a href="consulting.html" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);text-decoration:none;border:1px solid rgba(201,120,0,0.35);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='var(--accent2)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--accent2)'">Consulting</a>
-    <a href="interprete.html" style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);text-decoration:none;border:1px solid rgba(0,153,170,0.35);padding:5px 10px;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.background='var(--accent)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--accent)'">Interprétariat FR-JP</a>
-  </div>
-  <ul class="nav-links" id="nav-links">
-    <li><a href="#research">Research</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#news">News</a></li>
-    <li><a href="#publications">Publications</a></li>
-    <li><a href="#experience">Experience</a></li>
-    <li><a href="service.html">Teaching, Talks &amp; Service</a></li>
-    <li><a href="#video-lab">Videos</a></li>
-    <li><a href="#wip">WIP</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="about.html">Short Bio ↗</a></li>
-  </ul>
-</nav>
+<nav data-auto-nav data-root=""></nav>
+<script src="assets/js/nav-loader.js"></script>
 
 <div class="container">
 
@@ -998,16 +947,26 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 </section>
 
 <!-- ═══ PUBLICATIONS ════════════════════════════════════════════
-     Source: HAL open archive — 5 documents verified (Jun 2026)
-     2 journals · 7 conference papers/posters · 1 PhD thesis
-     (IEEE Access + Humanoids 2026 accepted; not yet on HAL)
+     Category filter pills above the list read data-pub-filter off
+     each .pub-item and compute their own counts in JS (see
+     filterPubs/initPubFilterCounts below) — never hand-typed here,
+     so adding/removing a publication can't make this comment or the
+     counts drift out of sync.
      ══════════════════════════════════════════════════════════ -->
 <section id="publications">
   <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Publications</h2></div>
+  <div class="filter-row" id="pub-filter-row">
+    <button class="pub-filter-pill active" data-pub-filter="all" onclick="filterPubs(this)" aria-pressed="true">All <span class="pub-filter-count"></span></button>
+    <button class="pub-filter-pill" data-pub-filter="journal" onclick="filterPubs(this)" aria-pressed="false">Journal <span class="pub-filter-count"></span></button>
+    <button class="pub-filter-pill" data-pub-filter="paper" onclick="filterPubs(this)" aria-pressed="false">Conference Paper <span class="pub-filter-count"></span></button>
+    <button class="pub-filter-pill" data-pub-filter="poster" onclick="filterPubs(this)" aria-pressed="false">Poster <span class="pub-filter-count"></span></button>
+    <button class="pub-filter-pill" data-pub-filter="national" onclick="filterPubs(this)" aria-pressed="false">Japan National Conf. <span class="pub-filter-count"></span></button>
+    <button class="pub-filter-pill" data-pub-filter="thesis" onclick="filterPubs(this)" aria-pressed="false">Thesis <span class="pub-filter-count"></span></button>
+  </div>
   <div class="pub-list">
 
     <!-- ── Humanoids 2026 ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="paper">
       <div class="pub-video-thumb" style="cursor:default;">
           <img src="assets/img/projects/3arm-1.jpg" alt="MESSPa" loading="lazy" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png');}else{this.style.display='none';}">
           <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>3arm-1</span></div>
@@ -1022,7 +981,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── IEEE Access 2026 ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="journal">
       <div class="pub-video-thumb" style="cursor:default;">
           <img src="assets/img/projects/soft-grasp-1.jpg" alt="Hybrid Roller–Jamming Gripper" loading="lazy" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png');}else{this.style.display='none';}">
           <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>soft-grasp-1</span></div>
@@ -1038,7 +997,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── UIST 2026 ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="paper">
       <div class="pub-video-thumb">
           <img src="assets/img/projects/body-sublimation-1.png" alt="Body Sublimation" loading="lazy" onerror="this.style.display='none'">
           <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>body-sublimation-1.png</span></div>
@@ -1054,7 +1013,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── Speculative Memory · VRSJ2026 ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="poster national">
       <div class="pub-video-thumb" style="cursor:default;">
           <img src="assets/img/projects/speculative-memory-1.jpg" alt="Speculative Memory" loading="lazy" onerror="this.style.display='none'">
           <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="11" rx="1" stroke="var(--muted)" stroke-width="1.1"/><path d="M9 19h6M12 15v4" stroke="var(--muted)" stroke-width="1.1"/></svg><span>Poster</span></div>
@@ -1069,7 +1028,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── RSJ2025 ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="national">
       <div class="pub-video-thumb">
           <img src="assets/img/projects/echo-1.jpg" alt="Echocardiography Teleoperation Robot" loading="lazy" onerror="this.style.display='none'">
           <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M6 18 Q6 8 16 8 Q26 8 26 18 Q26 26 16 26 Q6 26 6 18 Z" stroke="var(--muted)" stroke-width="1.1" fill="none" transform="scale(0.75) translate(2,1)"/><path d="M9 18 L12 14 L15 20 L18 15 L20 18" stroke="var(--muted)" stroke-width="0.9" fill="none" transform="scale(0.75) translate(2,1)"/></svg><span>echo-1.jpg</span></div>
@@ -1085,7 +1044,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── WHC 2025 (WIP poster) ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="poster">
       <div class="pub-video-thumb" style="cursor:default;">
           <div class="pub-thumb-ph" style="z-index:1;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="10" r="3" stroke="var(--muted)" stroke-width="1.1"/><circle cx="21" cy="10" r="3" stroke="var(--muted)" stroke-width="1.1"/><path d="M8 22 Q16 14 24 22" stroke="var(--muted)" stroke-width="1.1" fill="none"/></svg><span>WHC2025</span></div>
         </div>
@@ -1100,7 +1059,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── SIGGRAPH 2024 ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="paper">
       <div class="pub-video-thumb">
           <img src="assets/img/projects/miruoto-1.jpg" alt="Miruoto" loading="lazy" onerror="this.style.display='none'">
           <!--
@@ -1121,7 +1080,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── RSJ2024 ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="national">
       <div class="pub-video-thumb" style="cursor:default;">
           <div class="pub-thumb-ph" style="z-index:1;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="10" r="3" stroke="var(--muted)" stroke-width="1.1"/><circle cx="21" cy="10" r="3" stroke="var(--muted)" stroke-width="1.1"/><path d="M8 22 Q16 14 24 22" stroke="var(--muted)" stroke-width="1.1" fill="none"/></svg><span>RSJ2024</span></div>
         </div>
@@ -1136,7 +1095,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── JOURNAL ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="journal">
       <div class="pub-video-thumb">
           <img src="assets/img/projects/submarine-1.jpg" alt="AUV" loading="lazy" onerror="this.style.display='none'">
           <!--
@@ -1157,7 +1116,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── PhD THESIS ── -->
-    <div class="pub-item thesis">
+    <div class="pub-item thesis" data-pub-filter="thesis">
       <div class="pub-video-thumb" style="cursor:default;">
           <div class="pub-thumb-ph" style="z-index:1;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="3" y="2" width="14" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><line x1="6" y1="7" x2="14" y2="7" stroke="var(--muted)" stroke-width="1"/><line x1="6" y1="10" x2="14" y2="10" stroke="var(--muted)" stroke-width="1"/><line x1="6" y1="13" x2="11" y2="13" stroke="var(--muted)" stroke-width="1"/></svg><span>thesis</span></div>
         </div>
@@ -1172,7 +1131,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── IROS 2021 ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="paper">
       <div class="pub-video-thumb">
           <img src="assets/img/projects/teleoperation-1.jpg" alt="IROS 2021" loading="lazy" onerror="this.style.display='none'">
           <!--
@@ -1193,7 +1152,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
     </div>
 
     <!-- ── SIGGRAPH Asia 2019 ── -->
-    <div class="pub-item">
+    <div class="pub-item" data-pub-filter="paper">
       <div class="pub-video-thumb">
           <img src="assets/img/projects/colimbs-1.jpg" alt="Co-Limbs" loading="lazy" onerror="this.style.display='none'">
           <!--
@@ -1610,32 +1569,6 @@ const revealObserver = new IntersectionObserver(entries => {
 }, {threshold: 0.08});
 document.querySelectorAll('section, .showcase-section').forEach(s => revealObserver.observe(s));
 
-/* ── Hamburger nav ── */
-function toggleNav(btn) {
-  const links = document.getElementById('nav-links');
-  const open = links.classList.toggle('open');
-  btn.setAttribute('aria-expanded', open);
-  // Animate the three bars: × when open
-  const bars = btn.querySelectorAll('span');
-  if (open) {
-    bars[0].style.transform='translateY(5px) rotate(45deg)';
-    bars[1].style.opacity='0';
-    bars[2].style.transform='translateY(-5px) rotate(-45deg)';
-  } else {
-    bars[0].style.transform='';bars[1].style.opacity='';bars[2].style.transform='';
-  }
-}
-// Close nav when a link is clicked (mobile)
-document.getElementById('nav-links').querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => {
-    const links = document.getElementById('nav-links');
-    links.classList.remove('open');
-    const btn = document.querySelector('.nav-burger');
-    if(btn){ btn.setAttribute('aria-expanded','false'); btn.querySelectorAll('span').forEach(s=>{s.style.transform='';s.style.opacity='';}); }
-  });
-});
-
-
 /* ── Research filter ── */
 function filterTiles(btn) {
   const filter = btn.dataset.filter;
@@ -1648,6 +1581,36 @@ function filterTiles(btn) {
     tile.classList.toggle('hidden', !topics.includes(filter));
   });
 }
+
+/* ── Publications filter: counts are computed from the actual list below,
+   never hand-typed, so they can't drift out of sync as publications are
+   added. ── */
+function filterPubs(btn) {
+  const filter = btn.dataset.pubFilter;
+  document.querySelectorAll('.pub-filter-pill').forEach(p => { p.classList.remove('active'); p.setAttribute('aria-pressed', 'false'); });
+  btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
+  document.querySelectorAll('#publications .pub-item').forEach(item => {
+    if (filter === 'all') { item.classList.remove('hidden'); return; }
+    const cats = item.dataset.pubFilter || '';
+    item.classList.toggle('hidden', !cats.split(' ').includes(filter));
+  });
+}
+(function initPubFilterCounts() {
+  const row = document.getElementById('pub-filter-row');
+  if (!row) return;
+  const items = document.querySelectorAll('#publications .pub-item');
+  row.querySelectorAll('.pub-filter-pill').forEach(pill => {
+    const filter = pill.dataset.pubFilter;
+    let count = 0;
+    items.forEach(item => {
+      const cats = (item.dataset.pubFilter || '').split(' ');
+      if (filter === 'all' || cats.includes(filter)) count++;
+    });
+    const span = pill.querySelector('.pub-filter-count');
+    if (span) span.textContent = '(' + count + ')';
+  });
+})();
 
 function toggleTheme(){
   const html = document.documentElement;
