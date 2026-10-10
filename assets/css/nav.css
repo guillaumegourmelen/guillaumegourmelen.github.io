@@ -48,7 +48,15 @@ html[data-theme="dark"] .theme-icon-moon{display:block;}
 
 @media(max-width:780px){
   nav{padding:12px 16px;}
-  .nav-burger{display:flex;}
+  /* DOM order is logo, burger, tools, links (unchanged, so desktop's
+     layout is untouched) — at mobile the pills are hidden and the links
+     become a dropdown, which would otherwise leave the burger sitting
+     between the logo and the theme toggle instead of on the right.
+     Re-order visually and pin the logo to the left so the toggle and
+     burger sit together at the right edge, as a mobile header expects. */
+  .nav-logo{margin-right:auto;order:1;}
+  .nav-tools{order:2;}
+  .nav-burger{display:flex;order:3;}
   .nav-pills{display:none;}
   .nav-links{
     display:none;flex-direction:column;gap:0;flex-wrap:nowrap;
