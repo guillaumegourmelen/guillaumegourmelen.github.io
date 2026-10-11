@@ -54,7 +54,7 @@
       '<li><a href="' + hashLink('news') + '">News</a></li>' +
       '<li><a href="' + hashLink('publications') + '">Publications</a></li>' +
       '<li><a href="' + hashLink('experience') + '">Experience</a></li>' +
-      '<li><a class="' + (isCurrent('service.html') ? 'active' : '') + '" href="' + root + 'service.html">Teaching, Talks &amp; Service</a></li>' +
+      '<li><a class="' + (isCurrent('service.html') ? 'active' : '') + '" href="' + root + 'service.html">Teaching &amp; Service</a></li>' +
       '<li><a href="' + hashLink('video-lab') + '">Videos</a></li>' +
       '<li><a href="' + hashLink('wip') + '">WIP</a></li>' +
       '<li><a href="' + hashLink('contact') + '">Contact</a></li>' +
