@@ -1,7 +1,7 @@
 /* ═══ Shared site navigation ═════════════════════════════════════
-   Renders the same header (logo, theme toggle, CV/Short Bio/
-   Consulting/Interprete pills, section links, mobile burger menu)
-   into every <nav data-auto-nav> placeholder, on every page.
+   Renders the same header (logo, theme toggle, Short Bio/Consulting/
+   Interprete pills, section links, mobile burger menu) into every
+   <nav data-auto-nav> placeholder, on every page.
 
    This script is loaded WITHOUT `defer`, directly after the <nav>
    placeholder in the page markup, so it runs synchronously during
@@ -41,7 +41,6 @@
     '<div class="nav-tools">' +
       '<button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">' + sunMoon + '</button>' +
       '<div class="nav-pills">' +
-        '<a class="nav-pill" href="' + root + 'assets/data/main/CV-Gourmelen.pdf" target="_blank">CV &#8595;</a>' +
         '<a class="nav-pill' + (isCurrent('about.html') ? ' active' : '') + '" href="' + root + 'about.html">Short Bio &#8599;</a>' +
         '<a class="nav-pill nav-pill-accent2' + (isCurrent('consulting.html') ? ' active' : '') + '" href="' + root + 'consulting.html">Consulting</a>' +
         '<a class="nav-pill nav-pill-accent' + (isCurrent('interprete.html') ? ' active' : '') + '" href="' + root + 'interprete.html">Interpr&#233;tariat FR-JP</a>' +
@@ -59,7 +58,6 @@
       '<li><a href="' + hashLink('wip') + '">WIP</a></li>' +
       '<li><a href="' + hashLink('contact') + '">Contact</a></li>' +
       '<li class="mobile-only"><a class="' + (isCurrent('about.html') ? 'active' : '') + '" href="' + root + 'about.html">Short Bio &#8599;</a></li>' +
-      '<li class="mobile-only"><a href="' + root + 'assets/data/main/CV-Gourmelen.pdf" target="_blank">CV Download</a></li>' +
       '<li class="mobile-only"><a class="' + (isCurrent('consulting.html') ? 'active' : '') + '" href="' + root + 'consulting.html">Consulting</a></li>' +
       '<li class="mobile-only"><a class="' + (isCurrent('interprete.html') ? 'active' : '') + '" href="' + root + 'interprete.html">Interpr&#233;tariat FR-JP</a></li>' +
       (ctaHref ? '<li class="mobile-only"><a href="' + ctaHref + '">' + ctaLabel + '</a></li>' : '') +
