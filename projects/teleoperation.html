@@ -92,10 +92,7 @@
       <strong>G. Gourmelen</strong>, B. Navarro, A. Cherubini, G. Ganesh. "Human Guided Trajectory and Impedance Adaptation for Tele-Operated Physical Assistance." <em>IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)</em>, Prague, Czech Republic, pp. 9276–9282, 2021. <a href="https://doi.org/10.1109/IROS51168.2021.9636418" target="_blank">doi:10.1109/IROS51168.2021.9636418 ↗</a> · <a href="https://hal.science/hal-03324747v1/document" target="_blank">PDF via HAL hal-03324747 ↗</a>
     </div>
   </section>
-  <footer>
-    <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
-    <span>Robotics · Teleoperation · Embodiment</span>
-  </footer>
+  <footer data-auto-footer></footer>
 
 </div><!-- end .page-main -->
 
@@ -105,19 +102,8 @@
 <script src="../assets/js/video-loader.js" defer></script>
 <script src="../assets/js/gallery-loader.js" defer></script>
 <script src="../assets/js/sidebar-loader.js" defer></script>
-<script>
-function toggleTheme(){
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  if (isDark) {
-    html.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'light');
-  } else {
-    html.setAttribute('data-theme', 'dark');
-    localStorage.setItem('theme', 'dark');
-  }
-}
-</script>
+<script src="../assets/js/footer-loader.js" defer></script>
+<script src="../assets/js/theme.js" defer></script>
 <script data-goatcounter="https://gourmelen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
