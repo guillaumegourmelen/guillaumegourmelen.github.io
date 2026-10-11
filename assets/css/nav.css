@@ -23,6 +23,7 @@ html[data-theme="dark"] .nav-logo{color:#22c2d4;}
 html[data-theme="dark"] .theme-icon-sun{display:none;}
 html[data-theme="dark"] .theme-icon-moon{display:block;}
 
+.nav-pills{display:flex;align-items:center;gap:10px;}
 .nav-pill{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;white-space:nowrap;transition:all 0.2s;}
 .nav-pill:hover{border-color:var(--accent);color:var(--accent);}
 .nav-pill.active{border-color:var(--accent);color:var(--accent);}
@@ -46,14 +47,21 @@ html[data-theme="dark"] .theme-icon-moon{display:block;}
 .theme-toggle:focus-visible,.nav-burger:focus-visible{outline-offset:1px;}
 .nav-links .mobile-only{display:none;}
 
-@media(max-width:780px){
+/* Covers phones AND tablets (portrait and most landscape — iPad
+   portrait tops out at 1024px). Above this, the nav has a logo + a
+   theme toggle + 4-5 pills + 9 section links, none of which wrap
+   except the links list, so narrower tablet widths would otherwise
+   either overflow or (combined with the .nav-pills fix above) just
+   look cramped; the burger menu sidesteps that entirely. */
+@media(max-width:1024px){
   nav{padding:12px 16px;}
   /* DOM order is logo, burger, tools, links (unchanged, so desktop's
-     layout is untouched) — at mobile the pills are hidden and the links
-     become a dropdown, which would otherwise leave the burger sitting
-     between the logo and the theme toggle instead of on the right.
-     Re-order visually and pin the logo to the left so the toggle and
-     burger sit together at the right edge, as a mobile header expects. */
+     layout is untouched) — below this breakpoint the pills are hidden
+     and the links become a dropdown, which would otherwise leave the
+     burger sitting between the logo and the theme toggle instead of
+     on the right. Re-order visually and pin the logo to the left so
+     the toggle and burger sit together at the right edge, as a
+     mobile/tablet header expects. */
   .nav-logo{margin-right:auto;order:1;}
   .nav-tools{order:2;}
   .nav-burger{display:flex;order:3;}
