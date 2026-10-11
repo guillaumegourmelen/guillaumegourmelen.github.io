@@ -6,7 +6,7 @@
    the nav never drifts out of sync between pages again.
    ═══════════════════════════════════════════════════════════════ */
 
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 32px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,153,170,0.15);box-shadow:0 1px 24px rgba(13,31,48,0.08);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;gap:10px;background:rgba(247,249,252,0.93);backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,153,170,0.15);box-shadow:0 1px 24px rgba(13,31,48,0.08);}
 html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);box-shadow:0 1px 24px rgba(0,0,0,0.4);}
 
 /* Hardcoded (not var(--accent)) so the logo stays the site's teal brand
@@ -15,7 +15,7 @@ html[data-theme="dark"] nav{background:rgba(13,17,23,0.93);box-shadow:0 1px 24px
 .nav-logo{font-family:'Fraunces',serif;font-size:16px;color:#0099aa;letter-spacing:0.05em;text-decoration:none;flex-shrink:0;}
 html[data-theme="dark"] .nav-logo{color:#22c2d4;}
 
-.nav-tools{display:flex;align-items:center;gap:14px;}
+.nav-tools{display:flex;align-items:center;gap:10px;}
 
 .theme-toggle{display:flex;align-items:center;justify-content:center;width:30px;height:30px;background:none;border:1px solid var(--border);color:var(--mid);cursor:pointer;transition:border-color 0.2s,color 0.2s;flex-shrink:0;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
@@ -23,8 +23,8 @@ html[data-theme="dark"] .nav-logo{color:#22c2d4;}
 html[data-theme="dark"] .theme-icon-sun{display:none;}
 html[data-theme="dark"] .theme-icon-moon{display:block;}
 
-.nav-pills{display:flex;align-items:center;gap:10px;}
-.nav-pill{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 10px;white-space:nowrap;transition:all 0.2s;}
+.nav-pills{display:flex;align-items:center;gap:6px;}
+.nav-pill{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 8px;white-space:nowrap;transition:all 0.2s;}
 .nav-pill:hover{border-color:var(--accent);color:var(--accent);}
 .nav-pill.active{border-color:var(--accent);color:var(--accent);}
 .nav-pill-accent2{color:var(--accent2);border-color:rgba(201,120,0,0.35);}
@@ -35,7 +35,13 @@ html[data-theme="dark"] .theme-icon-moon{display:block;}
 .nav-cta{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 16px;background:var(--accent);color:#fff;text-decoration:none;transition:opacity 0.2s;white-space:nowrap;}
 .nav-cta:hover{opacity:0.85;}
 
-.nav-links{display:flex;gap:18px;list-style:none;flex-wrap:wrap;justify-content:flex-end;}
+/* Gaps/padding across this file are kept tight on purpose: logo + pills +
+   these 9 links need ~1270px in a single row at this spacing. Above, they
+   needed ~1380px, which wrapped to two lines on ordinary 1280/1366px
+   laptop screens — not broken (flex-wrap just does its job), but worth
+   avoiding where a few px of padding can. Loosening the spacing again
+   will bring that wrap back on those common widths. */
+.nav-links{display:flex;gap:12px;list-style:none;flex-wrap:wrap;justify-content:flex-end;}
 .nav-links a{color:var(--muted);text-decoration:none;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
 .nav-links a:hover{color:var(--accent);}
 .nav-links a.active{color:var(--accent);}
