@@ -55,7 +55,7 @@ html[data-theme="dark"] .theme-icon-moon{display:block;}
 
 /* Covers phones AND tablets (portrait and most landscape — iPad
    portrait tops out at 1024px). Above this, the nav has a logo + a
-   theme toggle + 4-5 pills + 9 section links, none of which wrap
+   theme toggle + 3-4 pills + 9 section links, none of which wrap
    except the links list, so narrower tablet widths would otherwise
    either overflow or (combined with the .nav-pills fix above) just
    look cramped; the burger menu sidesteps that entirely. */
