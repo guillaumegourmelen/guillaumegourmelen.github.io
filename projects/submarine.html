@@ -91,10 +91,7 @@
       H.T. Dang, L. Lapierre, R. Zapata, B. Ropars, <strong>G. Gourmelen</strong>. "A Dynamically Reconfigurable Autonomous Underwater Robot for Karst Exploration: Design and Experiment." <em>Sensors</em>, 22(9), 3379, 2022. <a href="https://doi.org/10.3390/s22093379" target="_blank">doi:10.3390/s22093379 ↗</a> · <a href="https://hal.science/hal-03929843v1/document" target="_blank">PDF via HAL hal-03929843 ↗</a>
     </div>
   </section>
-  <footer>
-    <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
-    <span>Robotics · Teleoperation · Embodiment</span>
-  </footer>
+  <footer data-auto-footer></footer>
 
 </div><!-- end .page-main -->
 
@@ -104,19 +101,8 @@
 <script src="../assets/js/video-loader.js" defer></script>
 <script src="../assets/js/gallery-loader.js" defer></script>
 <script src="../assets/js/sidebar-loader.js" defer></script>
-<script>
-function toggleTheme(){
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  if (isDark) {
-    html.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'light');
-  } else {
-    html.setAttribute('data-theme', 'dark');
-    localStorage.setItem('theme', 'dark');
-  }
-}
-</script>
+<script src="../assets/js/footer-loader.js" defer></script>
+<script src="../assets/js/theme.js" defer></script>
 <script data-goatcounter="https://gourmelen.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

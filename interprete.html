@@ -767,18 +767,6 @@ footer a{color:var(--accent);text-decoration:none;}
 </div><!-- end .container -->
 
 <script>
-function toggleTheme(){
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  if (isDark) {
-    html.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'light');
-  } else {
-    html.setAttribute('data-theme', 'dark');
-    localStorage.setItem('theme', 'dark');
-  }
-}
-
 // TODO: définir l'adresse e-mail dédiée à l'interprétariat une fois décidée.
 const CONTACT_EMAIL = '';
 
@@ -813,5 +801,6 @@ function handleSubmit(e) {
   setTimeout(() => { btn.textContent = 'Envoyer ma demande →'; btn.style.opacity = '1'; }, 3000);
 }
 </script>
+<script src="assets/js/theme.js" defer></script>
 </body>
 </html>

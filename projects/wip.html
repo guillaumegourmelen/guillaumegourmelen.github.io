@@ -219,10 +219,7 @@ footer a{color:var(--accent);text-decoration:none;}
     </div>
   </div>
 
-  <footer>
-    <span>Guillaume Gourmelen · <a href="../index.html">Back to home</a></span>
-    <span>Robotics · Teleoperation · Embodiment</span>
-  </footer>
+  <footer data-auto-footer></footer>
 
   </div><!-- end .page-main -->
 </div><!-- end .container.page-layout -->
@@ -234,18 +231,9 @@ footer a{color:var(--accent);text-decoration:none;}
 <script src="../assets/js/videos.js" defer></script>
 <script src="../assets/js/video-loader.js" defer></script>
 <script src="../assets/js/sidebar-loader.js" defer></script>
+<script src="../assets/js/footer-loader.js" defer></script>
+<script src="../assets/js/theme.js" defer></script>
 <script>
-function toggleTheme(){
-  const html = document.documentElement;
-  const isDark = html.getAttribute('data-theme') === 'dark';
-  if (isDark) {
-    html.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'light');
-  } else {
-    html.setAttribute('data-theme', 'dark');
-    localStorage.setItem('theme', 'dark');
-  }
-}
 function openLightbox(src){
   const lb = document.getElementById('wip-lightbox');
   const img = document.getElementById('wip-lightbox-img');
