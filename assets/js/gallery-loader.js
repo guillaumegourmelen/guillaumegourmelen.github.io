@@ -46,7 +46,8 @@
     const leads = document.querySelectorAll('[data-role="lead"][data-prefix]');
     await Promise.all([...leads].map(async (el) => {
       const prefix = el.dataset.prefix;
-      const url = await findImage(prefix, 1);
+      // data-lead="N" picks which numbered image is the lead (default 1)
+      const url = await findImage(prefix, parseInt(el.dataset.lead, 10) || 1);
       if (url) {
         const img = new Image();
         img.onload = () => {

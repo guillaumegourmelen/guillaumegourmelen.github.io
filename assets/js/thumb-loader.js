@@ -25,10 +25,10 @@
   // at a time, so any prefix not saved as .jpg (e.g. body-sublimation's
   // .png) paid for 1-2 full failed round-trips before finding the real
   // file. Now all candidates fire at once; whichever resolves first wins.
-  async function findThumb(prefix) {
+  async function findThumb(prefix, n) {
     const exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
     const results = await Promise.all(
-      exts.map((ext) => tryLoad(`assets/img/projects/${prefix}-1.${ext}`))
+      exts.map((ext) => tryLoad(`assets/img/projects/${prefix}-${n || 1}.${ext}`))
     );
     return results.find((url) => url !== null) || null;
   }
@@ -40,7 +40,7 @@
     // tile 2 even started probing.
     Promise.all([...tiles].map(async (tile) => {
       const prefix = tile.dataset.prefix;
-      const url = await findThumb(prefix);
+      const url = await findThumb(prefix, parseInt(tile.dataset.lead, 10) || 1);
       if (url) {
         const img = document.createElement('img');
         img.src = url;
