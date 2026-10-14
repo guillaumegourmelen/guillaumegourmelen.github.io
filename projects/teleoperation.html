@@ -74,7 +74,7 @@
 <p class="prose">The setup couples a <strong>Virtuose 3D haptic device</strong> (human input) to a <strong>7-DoF Franka Panda robot arm</strong> (slave), with a real-time pipeline that estimates the operator's <strong>arm impedance online during task execution</strong>, using only data already available from the haptic device — no EMG or extra instrumentation. We exploit the perturbations inherent to the assistance task (simulating an elderly or stroke patient being guided) to identify the operator's stiffness and damping, while a low/high-pass split of the operator's motion separates the intended reference trajectory from the impedance signal. Those parameters then modulate the robot's admittance controller in real time.</p>
 <p class="prose">We validated the impedance estimation against EMG ground truth, then tested the full controller in a maze-guidance task (1D and 2D perturbations) and a blind-guidance task where the operator had to react to forces from a simulated patient. Adaptive impedance significantly reduced jerk compared to a fixed-impedance robot (p &lt; 0.045).</p>
 <div class="highlight-box"><strong>Key result:</strong> Human impedance during task execution is not constant — operators vary it deliberately to guide and to be guided. By estimating this variation online, from perturbations alone, and mirroring it on the robot, the controller produced teleoperation that felt more natural and measurably reduced jerk during disturbance recovery.</div>
-        <div class="tag-row"><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Teleoperation</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Haptic Control</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Impedance Estimation</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">7-DoF Robot Arm</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Physical Assistance</span><span class="tag" style="border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;">Human-in-the-Loop</span></div>
+        <div class="tag-row"><span class="tag tag-teal">Teleoperation</span><span class="tag tag-teal">Haptic Control</span><span class="tag tag-teal">Impedance Estimation</span><span class="tag tag-teal">7-DoF Robot Arm</span><span class="tag tag-teal">Physical Assistance</span><span class="tag tag-teal">Human-in-the-Loop</span></div>
       </div>
     </div>
   </section>
@@ -112,6 +112,7 @@
 
 <script src="../assets/js/videos.js" defer></script>
 <script src="../assets/js/video-loader.js" defer></script>
+<script src="../assets/js/img-probe.js" defer></script>
 <script src="../assets/js/gallery-loader.js" defer></script>
 <script src="../assets/js/sidebar-loader.js" defer></script>
 <script src="../assets/js/footer-loader.js" defer></script>

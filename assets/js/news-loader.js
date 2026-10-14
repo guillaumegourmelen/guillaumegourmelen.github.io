@@ -21,9 +21,12 @@
 
   function parseDate(dateStr) {
     const parts = dateStr.trim().split(/\s+/);
-    if (parts.length !== 2) return new Date(0);
-    const month = MONTHS[parts[0].slice(0, 3).toLowerCase()] ?? 0;
-    const year = parseInt(parts[1], 10) || 0;
+    const month = parts.length === 2 ? MONTHS[parts[0].slice(0, 3).toLowerCase()] : undefined;
+    const year = parts.length === 2 ? parseInt(parts[1], 10) : NaN;
+    if (parts.length !== 2 || month === undefined || Number.isNaN(year)) {
+      console.warn(`[news-loader] Unparseable date "${dateStr}" (expected "Mon YYYY") — sorting as oldest.`);
+      return new Date(0);
+    }
     return new Date(year, month, 1);
   }
 

@@ -17,6 +17,14 @@ html[data-theme="dark"] .nav-logo{color:#22c2d4;}
 
 .nav-tools{display:flex;align-items:center;gap:10px;}
 
+/* Shared inline-text link accents — this file loads on every page, so
+   these replace the same "color:var(--accent);[text-decoration:none;]"
+   strings that used to be retyped on dozens of individual <a> tags in
+   page content (Experience, About, footers, etc.). */
+.link-accent{color:var(--accent);}
+.link-accent-plain{color:var(--accent);text-decoration:none;}
+.link-accent2{color:var(--accent2);}
+
 .theme-toggle{display:flex;align-items:center;justify-content:center;width:30px;height:30px;background:none;border:1px solid var(--border);color:var(--mid);cursor:pointer;transition:border-color 0.2s,color 0.2s;flex-shrink:0;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
 .theme-icon-moon{display:none;}
@@ -53,13 +61,13 @@ html[data-theme="dark"] .theme-icon-moon{display:block;}
 .theme-toggle:focus-visible,.nav-burger:focus-visible{outline-offset:1px;}
 .nav-links .mobile-only{display:none;}
 
-/* Covers phones AND tablets (portrait and most landscape — iPad
-   portrait tops out at 1024px). Above this, the nav has a logo + a
-   theme toggle + 3-4 pills + 9 section links, none of which wrap
-   except the links list, so narrower tablet widths would otherwise
-   either overflow or (combined with the .nav-pills fix above) just
-   look cramped; the burger menu sidesteps that entirely. */
-@media(max-width:1024px){
+/* Covers phones, tablets, and ordinary laptop windows. The full row
+   (logo + theme toggle + 3-4 pills + 9 section links) needs ~1270px
+   to fit without wrapping (see .nav-links comment above), so the
+   burger breakpoint is set above that — otherwise 1024-1270px widths
+   (common laptop viewports, especially with a scrollbar or not
+   maximized) would show the nav visibly wrap to two lines. */
+@media(max-width:1300px){
   nav{padding:12px 16px;}
   /* DOM order is logo, burger, tools, links (unchanged, so desktop's
      layout is untouched) — below this breakpoint the pills are hidden

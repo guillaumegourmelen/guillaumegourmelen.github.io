@@ -59,6 +59,11 @@ footer a{color:var(--accent);text-decoration:none;}
   .overview-layout{grid-template-columns:1fr;}
   .overview-lead{aspect-ratio:16/9;}
   .overview-lead.is-portrait{aspect-ratio:3/4;}
+  /* Raise the smallest uppercase labels to an 11px floor on phones —
+     the 9-10px desktop size is tight but fine on a laptop at normal
+     viewing distance; on a phone screen it's a real legibility risk. */
+  .section-label,.overview-lead-placeholder span,.project-topbar-tag,
+  .meta-label,.pub-ref-label,.tag,.project-nav-dir,.sidebar-label{font-size:11px;}
 }
 
 /* ═══ TOP CAPTION BAR (replaces old full-bleed hero) ════════════ */
@@ -174,6 +179,14 @@ footer a{color:var(--accent);text-decoration:none;}
   font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
   padding:4px 10px;border:1px solid var(--border);color:var(--mid);
 }
+/* Color variants — replaces the same six color-mix() strings that used
+   to be retyped inline on every .tag span across every project page. */
+.tag-teal{border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;}
+.tag-amber{border-color:color-mix(in srgb,#c97800 40%,transparent);color:#c97800;}
+.tag-green{border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;}
+.tag-violet{border-color:color-mix(in srgb,#6d4fc4 40%,transparent);color:#6d4fc4;}
+.tag-blue{border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;}
+.tag-purple{border-color:color-mix(in srgb,#9d6fc4 40%,transparent);color:#9d6fc4;}
 
 /* ── Nav between projects ── */
 .project-nav{

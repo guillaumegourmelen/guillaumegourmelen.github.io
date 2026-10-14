@@ -9,35 +9,19 @@
  *   <div class="tile-static" data-prefix="colimbs">
  *     <div class="tile-placeholder">...</div>  <!-- stays as fallback -->
  *   </div>
+ *
+ * Requires img-probe.js to be loaded first (same-order <script defer> tag).
  */
 (function () {
-  function tryLoad(url) {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve(url);
-      img.onerror = () => resolve(null);
-      img.src = url;
-    });
-  }
-
-  // Probe every extension for this tile IN PARALLEL — same fix already
-  // applied in gallery-loader.js. Previously this awaited one extension
-  // at a time, so any prefix not saved as .jpg (e.g. body-sublimation's
-  // .png) paid for 1-2 full failed round-trips before finding the real
-  // file. Now all candidates fire at once; whichever resolves first wins.
-  async function findThumb(prefix, n) {
-    const exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-    const results = await Promise.all(
-      exts.map((ext) => tryLoad(`assets/img/projects/${prefix}-${n || 1}.${ext}`))
-    );
-    return results.find((url) => url !== null) || null;
+  function findThumb(prefix, n) {
+    return window.ImgProbe.findImage(`assets/img/projects/${prefix}-${n || 1}`);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     const tiles = document.querySelectorAll('.tile-static[data-prefix]');
-    // Also run every tile's lookup in parallel instead of one-by-one —
-    // previously the whole grid waited on tile 1 to fully resolve before
-    // tile 2 even started probing.
+    // Run every tile's lookup in parallel instead of one-by-one — otherwise
+    // the whole grid would wait on tile 1 to fully resolve before tile 2
+    // even started probing.
     Promise.all([...tiles].map(async (tile) => {
       const prefix = tile.dataset.prefix;
       const url = await findThumb(prefix, parseInt(tile.dataset.lead, 10) || 1);

@@ -19,27 +19,12 @@
  * The very first image found (e.g. colimbs-1.jpg) is also used as the
  * "lead" image next to the intro text, via data-role="lead" elements
  * that share the same data-prefix.
+ *
+ * Requires img-probe.js to be loaded first (same-order <script defer> tag).
  */
 (function () {
-  function tryLoad(url) {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve(url);
-      img.onerror = () => resolve(null);
-      img.src = url;
-    });
-  }
-
-  // Probe every extension for a given number IN PARALLEL (not one at a
-  // time) — whichever resolves first wins. This is the fix for slow page
-  // loads: previously each missing extension was a full sequential
-  // round-trip before trying the next, so a single number with no real
-  // image could cost 5 wasted round-trips before moving on.
-  async function findImage(prefix, n) {
-    const base = `../assets/img/projects/${prefix}-${n}`;
-    const exts = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
-    const results = await Promise.all(exts.map((ext) => tryLoad(`${base}.${ext}`)));
-    return results.find((r) => r !== null) || null;
+  function findImage(prefix, n) {
+    return window.ImgProbe.findImage(`../assets/img/projects/${prefix}-${n}`);
   }
 
   async function initLeadImages() {
