@@ -255,7 +255,7 @@ html[data-theme="dark"] .affil-item:hover,html[data-theme="dark"] .affil-item.cu
 
 /* PUBLICATIONS */
 .pub-list{display:flex;flex-direction:column;}
-.pub-item{padding:22px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:86px 70px 1fr;gap:18px;align-items:start;}
+.pub-item{padding:22px 0;border-bottom:1px solid var(--border);display:grid;grid-template-columns:140px 70px 1fr;gap:18px;align-items:start;}
 .pub-item:hover .pub-title{color:var(--accent);}
 .pub-title a{color:inherit;text-decoration:none;transition:color 0.2s;}
 .pub-link{display:inline-block;margin-top:7px;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(0,153,170,0.35);padding-bottom:1px;}
@@ -542,7 +542,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 }
 /* Per-paper video thumbnail in pub list */
 .pub-video-thumb{
-  position:relative;width:86px;height:64px;
+  position:relative;width:140px;height:104px;
   border:1px solid var(--border);
   background:#0d1f30;flex-shrink:0;
   overflow:hidden;cursor:pointer;
@@ -588,8 +588,8 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
 @media(max-width:780px){
   .container{padding:0 16px;}
   .about-grid{grid-template-columns:1fr;}
-  .pub-item{grid-template-columns:68px 1fr;gap:10px;}
-  .pub-video-thumb{width:68px;height:51px;}
+  .pub-item{grid-template-columns:100px 1fr;gap:10px;}
+  .pub-video-thumb{width:100px;height:75px;}
   .pub-item .pub-year{display:none;}
   .exp-item{grid-template-columns:1fr;gap:4px;}
   .contact-grid{grid-template-columns:1fr;}
@@ -965,6 +965,7 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         <div class="pub-venue"><span class="pub-cat pub-cat-paper">Paper</span>IEEE-RAS Humanoids 2026 — Santa Clara, CA, USA</div>
         <div class="pub-title"><a href="projects/3arm.html">MESSPa: A Multi-modal Embodiment Stimulation Shoulder Pad for Preserving the Sense of Agency in a Detachable Robotic Arm</a></div>
         <div class="pub-authors">V. Vimolmongkolporn, <strong>G. Gourmelen</strong>, Y. Iwasaki, H. Iwata · Waseda University</div>
+        <a href="https://2025.worldhaptics.org/work-in-progress-papers/" target="_blank" class="pub-link">Also presented as a poster at IEEE World Haptics 2025 (WHC 2025), Suwon, no. WP1.25 ↗</a> <a href="https://ac.rsj-web.org/2024/" target="_blank" class="pub-link">Also presented at RSJ2024 (national conference, Japan), no. 2G2-02 ↗</a> <span style="color:var(--muted);font-size:11px;">(RSJ proceedings, members-only)</span>
         <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{vimolmongkolporn2026messpa,\n  author={Vimolmongkolporn, V. and Gourmelen, G. and Iwasaki, Y. and Iwata, H.},\n  title={MESSPa: A Multi-modal Embodiment Stimulation Shoulder Pad for Preserving the Sense of Agency in a Detachable Robotic Arm},\n  booktitle={IEEE-RAS International Conference on Humanoid Robots (Humanoids)},\n  year={2026}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
       </div>
     </div>
@@ -995,24 +996,9 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       <div>
         <div class="pub-venue"><span class="pub-cat pub-cat-paper">Paper</span>ACM UIST 2026 — Detroit, MI, USA</div>
         <div class="pub-title"><a href="projects/body-sublimation.html">Body Sublimation: Designing State-Changing Extended Hand for Out-of-Reach Object Manipulation</a></div>
-        <div class="pub-authors">M. Ohta, R. Ban (co-first), H. Nii, <strong>G. Gourmelen</strong>, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa · Keio University</div>
-        <a href="assets/pdf/VRSJ2026_BodySublimation_poster.pdf" target="_blank" class="pub-link">Also presented as a poster at VRSJ2026, Toyama ↗</a>
+        <div class="pub-authors">M. Ohta, R. Ban (co-first), H. Nii, <strong>G. Gourmelen</strong>, T. Narumi, M. Sousa, T. Yoshida, K. Minamizawa · Keio University · <em style="font-style:normal;color:var(--muted);">VRSJ2026 Japanese title: Body Sublimation: XRとロボットによる身体化感覚を保った物体操作のための身体レンダリング手法</em></div>
+        <a href="assets/pdf/VRSJ2026_BodySublimation_poster.pdf" target="_blank" class="pub-link">Also presented as a poster at VRSJ2026, Toyama ↗</a> <a href="https://conference.vrsj.org/ac2026/index.html" target="_blank" class="pub-link">Conference site ↗</a>
         <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{ohta2026bodysublimation,\n  author={Ohta, M. and Ban, R. and Nii, H. and Gourmelen, G. and Narumi, T. and Sousa, M. and Yoshida, T. and Minamizawa, K.},\n  title={Body Sublimation: Designing State-Changing Extended Hand for Out-of-Reach Object Manipulation},\n  booktitle={ACM Symposium on User Interface Software and Technology (UIST)},\n  year={2026}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
-      </div>
-    </div>
-
-    <!-- ── Body Sublimation · VRSJ2026 poster ── -->
-    <div class="pub-item" data-pub-filter="poster national">
-      <div class="pub-video-thumb">
-          <img src="assets/img/projects/body-sublimation-1.png" alt="Body Sublimation" loading="lazy" onerror="this.style.display='none'">
-          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="1" stroke="var(--muted)" stroke-width="1.2"/><path d="M2 17L6 12L10 15L15 9L22 17" stroke="var(--muted)" stroke-width="1" fill="none"/></svg><span>body-sublimation-1.png</span></div>
-        </div>
-      <div class="pub-year">2026</div>
-      <div>
-        <div class="pub-venue"><span class="pub-cat pub-cat-poster">Poster</span><span class="pub-cat pub-cat-national">National Conf.</span>第31回日本バーチャルリアリティ学会大会（VRSJ2026）· Toyama, Japan</div>
-        <div class="pub-title"><a href="projects/body-sublimation.html">Body Sublimation: XRとロボットによる身体化感覚を保った物体操作のための身体レンダリング手法</a></div>
-        <div class="pub-authors">太田雅啓, 伴玲吾, 新居英明, <strong>Guillaume Gourmelen</strong>, 鳴海拓志, Mauricio Sousa, 吉田貴寿, 南澤孝太 · Keio University</div>
-        <a href="assets/pdf/VRSJ2026_BodySublimation_poster.pdf" target="_blank" class="pub-link">Poster PDF ↗</a> <a href="https://conference.vrsj.org/ac2026/index.html" target="_blank" class="pub-link">Conference site ↗</a>
       </div>
     </div>
 
@@ -1047,22 +1033,6 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
       </div>
     </div>
 
-    <!-- ── WHC 2025 (WIP poster) ── -->
-    <div class="pub-item" data-pub-filter="poster">
-      <div class="pub-video-thumb" style="cursor:default;">
-          <img src="assets/img/projects/3arm-1.jpg" alt="MESSPa" loading="lazy" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png');}else{this.style.display='none';}">
-          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="10" r="3" stroke="var(--muted)" stroke-width="1.1"/><circle cx="21" cy="10" r="3" stroke="var(--muted)" stroke-width="1.1"/><path d="M8 22 Q16 14 24 22" stroke="var(--muted)" stroke-width="1.1" fill="none"/></svg><span>WHC2025</span></div>
-        </div>
-      <div class="pub-year">2025</div>
-      <div>
-        <div class="pub-venue"><span class="pub-cat pub-cat-poster">Poster</span>IEEE World Haptics Conference 2025 (WHC 2025) · Suwon, South Korea</div>
-        <div class="pub-title"><a href="projects/3arm.html">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</a></div>
-        <div class="pub-authors">Vitvasin Vimolmongkolporn, <strong>Guillaume Gourmelen</strong>, Yukiko Iwasaki, Hiroyasu Iwata · Waseda University</div>
-        <a href="https://2025.worldhaptics.org/work-in-progress-papers/" target="_blank" class="pub-link">Conference program · paper no. WP1.25 ↗</a>
-        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{vimolmongkolporn2025messpa,\n  author={Vimolmongkolporn, V. and Gourmelen, G. and Iwasaki, Y. and Iwata, H.},\n  title={MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad},\n  booktitle={IEEE World Haptics Conference (WHC) — Work-in-Progress Papers},\n  number={WP1.25},\n  year={2025}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
-      </div>
-    </div>
-
     <!-- ── SIGGRAPH 2024 ── -->
     <div class="pub-item" data-pub-filter="paper">
       <div class="pub-video-thumb">
@@ -1081,22 +1051,6 @@ footer{padding:26px 0;border-top:1px solid var(--border);display:flex;justify-co
         <div class="pub-authors"><strong>G. Gourmelen</strong>, S. Toriya, E. Miya, N. Shioura, H. Iwata · Waseda University</div>
         <a href="https://miruoto.jp/en/top" target="_blank" class="pub-link">Official project site, miruoto.jp ↗</a> <a href="https://conference.vrsj.org/ac2024/program/doc/2B2-08.pdf" target="_blank" class="pub-link">Also presented at VRSJ2024 (national conference, Japan), no. 2B2-08 ↗</a>
         <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2024miruoto,\n  author={Gourmelen, G. and Toriya, S. and Miya, E. and Shioura, N. and Iwata, H.},\n  title={Miruoto: Sports Event Atmosphere Visual Rendering through Real-Time Image and Sound Processing},\n  booktitle={ACM SIGGRAPH 2024 Emerging Technologies},\n  year={2024},\n  doi={10.1145/3641517.3664393}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
-      </div>
-    </div>
-
-    <!-- ── RSJ2024 ── -->
-    <div class="pub-item" data-pub-filter="national">
-      <div class="pub-video-thumb" style="cursor:default;">
-          <img src="assets/img/projects/3arm-1.jpg" alt="MESSPa" loading="lazy" onerror="if(!this.dataset.t){this.dataset.t=1;this.src=this.src.replace('.jpg','.png');}else{this.style.display='none';}">
-          <div class="pub-thumb-ph" style="z-index:0;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="10" r="3" stroke="var(--muted)" stroke-width="1.1"/><circle cx="21" cy="10" r="3" stroke="var(--muted)" stroke-width="1.1"/><path d="M8 22 Q16 14 24 22" stroke="var(--muted)" stroke-width="1.1" fill="none"/></svg><span>RSJ2024</span></div>
-        </div>
-      <div class="pub-year">2024</div>
-      <div>
-        <div class="pub-venue"><span class="pub-cat pub-cat-national">National Conf.</span>第42回日本ロボット学会学術講演会（RSJ2024）· Osaka</div>
-        <div class="pub-title"><a href="projects/3arm.html">MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad</a></div>
-        <div class="pub-authors"><strong>Guillaume Gourmelen</strong>, Vitvasin Vimolmongkolporn, Yukiko Iwasaki, Hiroyasu Iwata · Waseda University</div>
-        <a href="https://ac.rsj-web.org/2024/" target="_blank" class="pub-link">Conference site · paper no. 2G2-02 ↗</a> <span style="color:var(--muted);font-size:11px;">(RSJ proceedings, members-only)</span>
-        <button class="pub-cite-btn" onclick="copyCite(this,'@inproceedings{gourmelen2024messpa,\n  author={Gourmelen, G. and Vimolmongkolporn, V. and Iwasaki, Y. and Iwata, H.},\n  title={MESSPa: Multi-modal Embodiment Stimulation Shoulder Pad},\n  booktitle={Proceedings of the 42nd Annual Conference of the Robotics Society of Japan (RSJ2024)},\n  number={2G2-02},\n  year={2024}\n}')"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><rect x="1" y="4" width="9" height="9" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M4 4V2a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-2" stroke="currentColor" stroke-width="1.2"/></svg>BibTeX</button>
       </div>
     </div>
 
