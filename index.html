@@ -330,23 +330,25 @@ html[data-theme="dark"] .affil-item:hover,html[data-theme="dark"] .affil-item.cu
 .teaching-quote{margin-top:36px;padding:20px 24px;border-left:3px solid var(--accent);background:rgba(0,153,170,0.03);font-size:13px;color:var(--mid);line-height:1.9;font-style:italic;max-width:640px;}
 .teaching-quote cite{display:block;margin-top:10px;font-size:11px;font-style:normal;color:var(--muted);letter-spacing:0.05em;}
 
-/* Scroll-reveal: an enhancement, not a requirement for reading the page.
-   Content only starts invisible when html[data-js] is present (set by the
-   inline script in <head>, before paint) — so if JS is disabled, or the
-   reveal observer never attaches (see the script split near the end of
-   <body>), nothing here is ever hidden; it's visible by default. */
-html[data-js] section, html[data-js] .showcase-section{
-  opacity:0;
-  transform:translateY(24px);
+/* Scroll-reveal: content is visible by default, unconditionally — this is
+   NOT gated behind JS/data-js any more. It caused a live outage (page
+   rendering blank) when the reveal observer didn't mark sections
+   .revealed for some visitors, leaving them stuck at opacity:0 with no
+   way to recover. The .revealed class (added by JS below) now only
+   plays a one-time entrance transition on top of already-visible
+   content — if that JS never runs, nothing is ever hidden. */
+section, .showcase-section{
   transition:opacity 0.6s ease, transform 0.6s ease;
+}
+section:not(.revealed), .showcase-section:not(.revealed){
+  opacity:1;
 }
 section.revealed, .showcase-section.revealed{
   opacity:1;
   transform:translateY(0);
 }
 /* Stagger pub/exp items inside revealed sections */
-html[data-js] .pub-item, html[data-js] .exp-item, html[data-js] .news-item, html[data-js] .review-item, html[data-js] .course-item{
-  opacity:0;transform:translateY(12px);
+.pub-item, .exp-item, .news-item, .review-item, .course-item{
   transition:opacity 0.45s ease,transform 0.45s ease;
 }
 .revealed .pub-item, .revealed .exp-item,
