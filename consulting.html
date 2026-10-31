@@ -26,8 +26,7 @@
 /* ═══ VARIABLES ════════════════════════════════════════════════ */
 :root{
   --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
-  --accent:#0099aa;--accent2:#c97800;
-  --text:#0d1f30;--muted:#547790;--mid:#3d6880;
+  --accent:#0099aa;--accent2:#c97800;--accent-ink:#007f8d;--accent2-ink:#a56200;  --text:#0d1f30;--muted:#547790;--mid:#3d6880;
   --shadow:rgba(13,31,48,0.07);
 }
 html[data-theme="dark"]{
@@ -37,7 +36,7 @@ html[data-theme="dark"]{
   --shadow:rgba(0,0,0,0.35);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth;}}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
 ::selection{background:var(--accent);color:#fff;}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
@@ -47,7 +46,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
 /* ═══ LAYOUT ═══════════════════════════════════════════════════ */
 .container{max-width:960px;margin:0 auto;padding:0 32px;}
 section{padding:72px 0;border-top:1px solid var(--border);}
-.section-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent2);margin-bottom:12px;display:block;}
+.section-label{font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--accent2-ink, var(--accent2));margin-bottom:12px;display:block;}
 .section-title{font-family:'Fraunces',serif;font-size:clamp(26px,4vw,40px);font-weight:300;letter-spacing:-0.01em;color:var(--text);margin-bottom:32px;}
 
 /* ═══ HERO ══════════════════════════════════════════════════════
@@ -70,7 +69,7 @@ section{padding:72px 0;border-top:1px solid var(--border);}
 /* Left: headline + problems */
 .c-hero-label{
   font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
-  color:var(--accent);margin-bottom:24px;
+  color:var(--accent-ink, var(--accent));margin-bottom:24px;
   display:flex;align-items:center;gap:12px;
 }
 .c-hero-label::before{content:'';display:block;width:32px;height:1px;background:var(--accent);}
@@ -114,7 +113,7 @@ section{padding:72px 0;border-top:1px solid var(--border);}
   text-decoration:none;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
   transition:border-color 0.2s,color 0.2s;background:var(--surface);
 }
-.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent-ink, var(--accent));}
 
 /* Right: credential card */
 .credential-card{
@@ -218,13 +217,13 @@ section{padding:72px 0;border-top:1px solid var(--border);}
   padding:20px;background:var(--surface);border:1px solid var(--border);
   display:flex;flex-direction:column;gap:6px;
 }
-.proof-org{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);}
+.proof-org{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent-ink, var(--accent));}
 .proof-what{font-family:'Fraunces',serif;font-size:15px;font-weight:300;color:var(--text);line-height:1.3;}
 .proof-outcome{font-size:11px;color:var(--mid);line-height:1.7;margin-top:4px;}
 .proof-tag{
   display:inline-block;margin-top:8px;
   font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
-  padding:2px 8px;border:1px solid rgba(0,153,170,0.3);color:var(--accent);
+  padding:2px 8px;border:1px solid rgba(0,153,170,0.3);color:var(--accent-ink, var(--accent));
   align-self:flex-start;
 }
 
@@ -278,11 +277,16 @@ section{padding:72px 0;border-top:1px solid var(--border);}
   background:var(--surface);
   transition:border-color 0.3s,color 0.3s,box-shadow 0.3s;
 }
-.contact-channel:hover{border-color:var(--accent);color:var(--accent);box-shadow:0 2px 16px rgba(0,153,170,0.1);}
+.contact-channel:hover{border-color:var(--accent);color:var(--accent-ink, var(--accent));box-shadow:0 2px 16px rgba(0,153,170,0.1);}
 .contact-channel-label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-left:auto;}
 
-/* Inquiry form */
+/* Inquiry form — hidden by default (see HTML) until CONTACT_EMAIL is set;
+   [hidden] is overridden by the display:flex below without this rule. */
 .inquiry-form{display:flex;flex-direction:column;gap:14px;}
+.inquiry-form[hidden]{display:none!important;}
+.contact-fallback{padding:18px;border:1px solid var(--border);background:var(--surface);}
+.contact-fallback p{font-size:13px;color:var(--mid);line-height:1.8;margin-bottom:14px;}
+.contact-fallback .contact-channel{margin:0;}
 .form-field{display:flex;flex-direction:column;gap:6px;}
 .form-label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);}
 .form-input,.form-select,.form-textarea{
@@ -310,7 +314,7 @@ section{padding:72px 0;border-top:1px solid var(--border);}
 
 /* ═══ FOOTER ═════════════════════════════════════════════════== */
 footer{padding:28px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;}
-footer a{color:var(--accent);text-decoration:none;}
+footer a{color:var(--accent-ink, var(--accent));text-decoration:none;}
 
 /* ═══ RESPONSIVE ════════════════════════════════════════════════ */
 @media(max-width:860px){
@@ -830,11 +834,11 @@ footer a{color:var(--accent);text-decoration:none;}
       <p>The more specific you are about what you're trying to build and where you're stuck, the better I can tell you whether I can help — and how.</p>
       <p>If you prefer a direct message, reach me through any of these channels:</p>
       <div class="contact-channels">
-        <a class="contact-channel" href="#" onclick="revealEmail(this);return false;">
-          Click to reveal email<span class="contact-channel-label">Email</span>
-        </a>
         <a class="contact-channel" href="https://www.linkedin.com/in/guillaume-gourmelen-71b655161/" target="_blank">
           LinkedIn<span class="contact-channel-label">Message</span>
+        </a>
+        <a class="contact-channel" href="#" onclick="return revealEmail(this);">
+          Click to reveal email<span class="contact-channel-label">Email</span>
         </a>
         <a class="contact-channel" href="index.html" target="_blank">
           Full research profile &amp; publications<span class="contact-channel-label">Research site</span>
@@ -842,8 +846,18 @@ footer a{color:var(--accent);text-decoration:none;}
       </div>
     </div>
 
+    <!-- The inquiry form below is hidden until a consulting contact email
+         is configured (CONTACT_EMAIL, in the script at the bottom of this
+         page) — this fallback is the visible contact path until then. -->
+    <div class="contact-fallback" id="contact-fallback">
+      <p>The inquiry form isn't connected to an inbox yet. For now, please reach out on LinkedIn — I read every message personally.</p>
+      <a class="contact-channel" href="https://www.linkedin.com/in/guillaume-gourmelen-71b655161/" target="_blank">
+        Message me on LinkedIn<span class="contact-channel-label">LinkedIn</span>
+      </a>
+    </div>
+
     <!-- Pre-qualifying inquiry form -->
-    <form class="inquiry-form" name="consulting-inquiry" method="POST" onsubmit="handleSubmit(event)">
+    <form class="inquiry-form" name="consulting-inquiry" method="POST" onsubmit="handleSubmit(event)" hidden>
       <div class="form-field">
         <label class="form-label" for="company">Company / Organisation</label>
         <input class="form-input" id="company" name="company" type="text" placeholder="e.g. Acme Robotics Inc." required/>
@@ -886,15 +900,21 @@ footer a{color:var(--accent);text-decoration:none;}
 
 <script>
 // TODO: set the dedicated consulting contact email here once decided.
+// When it is: remove the `hidden` attribute from .inquiry-form (and hide
+// #contact-fallback), and update handleSubmit to label its action "Open
+// email draft" rather than implying the message is sent (mailto: only
+// opens a draft — it can't confirm delivery).
 const CONTACT_EMAIL = '';
 
 function revealEmail(el){
   if (!CONTACT_EMAIL) {
     el.childNodes[0].textContent = 'Email address coming soon — use LinkedIn for now';
-    return;
+    return false;
   }
   el.href = 'mailto:' + CONTACT_EMAIL;
   el.childNodes[0].textContent = CONTACT_EMAIL;
+  el.removeAttribute('onclick');
+  return false;
 }
 
 function handleSubmit(e) {

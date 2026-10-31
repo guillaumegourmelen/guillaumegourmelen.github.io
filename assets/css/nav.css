@@ -20,10 +20,16 @@ html[data-theme="dark"] .nav-logo{color:#22c2d4;}
 /* Shared inline-text link accents — this file loads on every page, so
    these replace the same "color:var(--accent);[text-decoration:none;]"
    strings that used to be retyped on dozens of individual <a> tags in
-   page content (Experience, About, footers, etc.). */
-.link-accent{color:var(--accent);}
-.link-accent-plain{color:var(--accent);text-decoration:none;}
-.link-accent2{color:var(--accent2);}
+   page content (Experience, About, footers, etc.).
+   --accent-ink/--accent2-ink are darker, WCAG-AA (4.5:1) text-safe
+   variants of --accent/--accent2 against the light-theme background —
+   defined in :root on pages that need the contrast fix (index.html,
+   about.html, etc). The var() fallback keeps pages that don't define
+   them (project pages with their own per-project accent colors)
+   working exactly as before. */
+.link-accent{color:var(--accent-ink, var(--accent));}
+.link-accent-plain{color:var(--accent-ink, var(--accent));text-decoration:none;}
+.link-accent2{color:var(--accent2-ink, var(--accent2));}
 
 .theme-toggle{display:flex;align-items:center;justify-content:center;width:30px;height:30px;background:none;border:1px solid var(--border);color:var(--mid);cursor:pointer;transition:border-color 0.2s,color 0.2s;flex-shrink:0;}
 .theme-toggle:hover{border-color:var(--accent);color:var(--accent);}
@@ -32,27 +38,27 @@ html[data-theme="dark"] .theme-icon-sun{display:none;}
 html[data-theme="dark"] .theme-icon-moon{display:block;}
 
 .nav-pills{display:flex;align-items:center;gap:6px;}
-.nav-pill{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 8px;white-space:nowrap;transition:all 0.2s;}
-.nav-pill:hover{border-color:var(--accent);color:var(--accent);}
-.nav-pill.active{border-color:var(--accent);color:var(--accent);}
-.nav-pill-accent2{color:var(--accent2);border-color:rgba(201,120,0,0.35);}
+.nav-pill{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);text-decoration:none;border:1px solid var(--border);padding:5px 8px;white-space:nowrap;transition:all 0.2s;}
+.nav-pill:hover{border-color:var(--accent);color:var(--accent-ink, var(--accent));}
+.nav-pill.active{border-color:var(--accent);color:var(--accent-ink, var(--accent));}
+.nav-pill-accent2{color:var(--accent2-ink, var(--accent2));border-color:rgba(201,120,0,0.35);}
 .nav-pill-accent2:hover{background:var(--accent2);color:#fff;}
-.nav-pill-accent{color:var(--accent);border-color:rgba(0,153,170,0.35);}
+.nav-pill-accent{color:var(--accent-ink, var(--accent));border-color:rgba(0,153,170,0.35);}
 .nav-pill-accent:hover{background:var(--accent);color:#fff;}
 
-.nav-cta{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 16px;background:var(--accent);color:#fff;text-decoration:none;transition:opacity 0.2s;white-space:nowrap;}
+.nav-cta{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:7px 16px;background:var(--accent);color:#fff;text-decoration:none;transition:opacity 0.2s;white-space:nowrap;}
 .nav-cta:hover{opacity:0.85;}
 
 /* Gaps/padding across this file are kept tight on purpose: logo + pills +
-   these 9 links need ~1270px in a single row at this spacing. Above, they
-   needed ~1380px, which wrapped to two lines on ordinary 1280/1366px
-   laptop screens — not broken (flex-wrap just does its job), but worth
-   avoiding where a few px of padding can. Loosening the spacing again
-   will bring that wrap back on those common widths. */
+   these 9 links need ~1270px in a single row at 10px text. Raised to 11px
+   (2026-10-31, readability) which needs more room — the burger breakpoint
+   below is widened to match so this doesn't reintroduce the two-line wrap
+   it was raised to fix. Loosening the spacing further will bring that wrap
+   back at these widths. */
 .nav-links{display:flex;gap:12px;list-style:none;flex-wrap:wrap;justify-content:flex-end;}
-.nav-links a{color:var(--muted);text-decoration:none;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
-.nav-links a:hover{color:var(--accent);}
-.nav-links a.active{color:var(--accent);}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+.nav-links a:hover{color:var(--accent-ink, var(--accent));}
+.nav-links a.active{color:var(--accent-ink, var(--accent));}
 .nav-links a.active::after{content:'';display:block;height:1px;background:var(--accent);margin-top:2px;}
 
 .nav-burger{display:none;background:none;border:1px solid var(--border);padding:6px 9px;cursor:pointer;flex-direction:column;gap:4px;transition:border-color 0.2s;}
@@ -62,12 +68,11 @@ html[data-theme="dark"] .theme-icon-moon{display:block;}
 .nav-links .mobile-only{display:none;}
 
 /* Covers phones, tablets, and ordinary laptop windows. The full row
-   (logo + theme toggle + 3-4 pills + 9 section links) needs ~1270px
-   to fit without wrapping (see .nav-links comment above), so the
-   burger breakpoint is set above that — otherwise 1024-1270px widths
-   (common laptop viewports, especially with a scrollbar or not
-   maximized) would show the nav visibly wrap to two lines. */
-@media(max-width:1300px){
+   (logo + theme toggle + 3-4 pills + 9 section links) needs ~1270px to
+   fit without wrapping at 10px nav text; now 11px (2026-10-31), it needs
+   more, so the breakpoint moved from 1300 to 1450px — otherwise
+   1300-1450px widths would show the nav visibly wrap to two lines. */
+@media(max-width:1450px){
   nav{padding:12px 16px;}
   /* DOM order is logo, burger, tools, links (unchanged, so desktop's
      layout is untouched) — below this breakpoint the pills are hidden

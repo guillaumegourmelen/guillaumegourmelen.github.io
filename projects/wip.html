@@ -102,6 +102,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
   transition:transform 0.4s;
 }
 .image-wrap:hover img{transform:scale(1.02);}
+.image-wrap img:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
 
 /* ── Lightbox (click any .image-wrap image to open, full-size,
    uncropped; click anywhere or press Escape to close) ── */
@@ -122,6 +123,16 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
   transition:transform 0.25s ease;
 }
 .wip-lightbox.open img{transform:scale(1);}
+.gallery-lightbox-close{
+  position:absolute;top:16px;right:20px;z-index:1;
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(255,255,255,0.3);background:rgba(13,31,48,0.6);
+  color:#fff;font-size:22px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.2s,border-color 0.2s;
+}
+.gallery-lightbox-close:hover{background:rgba(13,31,48,0.9);border-color:rgba(255,255,255,0.6);}
+.gallery-lightbox-close:focus-visible{outline:2px solid #fff;outline-offset:2px;}
 
 /* ── Multi-video grid within one month ── */
 .month-video-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:8px;}
@@ -197,7 +208,7 @@ footer a{color:var(--accent);text-decoration:none;}
     </div>
     <p class="month-note">A side project born out of my own AcroYoga practice: real-time multi-person pose tracking that automatically identifies who's base and who's flyer, counts and times pops (launches), and tracks full-body motion and player identity across the whole session — turning a hobby into something I can actually look at afterward.</p>
     <div class="image-wrap">
-      <img src="../assets/img/projects/wip-2.png" alt="AcroYoga motion tracking dashboard showing base/flyer roles, pop counting, and multi-person pose tracking" loading="lazy" onclick="openLightbox(this.src)"/>
+      <img src="../assets/img/projects/wip-2.webp" alt="AcroYoga motion tracking dashboard showing base/flyer roles, pop counting, and multi-person pose tracking" loading="lazy" decoding="async" role="button" tabindex="0" aria-label="Enlarge photo" onclick="openLightbox(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLightbox(this);}"/>
     </div>
   </div>
 
@@ -234,7 +245,8 @@ footer a{color:var(--accent);text-decoration:none;}
   </div><!-- end .page-main -->
 </div><!-- end .container.page-layout -->
 
-<div id="wip-lightbox" class="wip-lightbox" onclick="closeLightbox()" role="dialog" aria-modal="true" aria-hidden="true">
+<div id="wip-lightbox" class="wip-lightbox" onclick="closeLightbox()" role="dialog" aria-modal="true" aria-label="Enlarged photo" aria-hidden="true">
+  <button type="button" class="gallery-lightbox-close" aria-label="Close" onclick="event.stopPropagation();closeLightbox()">&times;</button>
   <img id="wip-lightbox-img" src="" alt=""/>
 </div>
 
@@ -244,19 +256,25 @@ footer a{color:var(--accent);text-decoration:none;}
 <script src="../assets/js/footer-loader.js" defer></script>
 <script src="../assets/js/theme.js" defer></script>
 <script>
-function openLightbox(src){
+let lightboxOpener = null;
+function openLightbox(triggerEl){
   const lb = document.getElementById('wip-lightbox');
   const img = document.getElementById('wip-lightbox-img');
-  img.src = src;
+  img.src = triggerEl.src || triggerEl;
+  img.alt = triggerEl.alt || '';
   lb.classList.add('open');
   lb.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  lightboxOpener = triggerEl;
+  lb.querySelector('.gallery-lightbox-close').focus();
 }
 function closeLightbox(){
   const lb = document.getElementById('wip-lightbox');
   lb.classList.remove('open');
   lb.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
+  if (lightboxOpener && typeof lightboxOpener.focus === 'function') lightboxOpener.focus();
+  lightboxOpener = null;
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 </script>

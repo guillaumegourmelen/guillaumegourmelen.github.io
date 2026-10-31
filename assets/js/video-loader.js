@@ -12,13 +12,36 @@
  *   2. Gets a click handler that swaps in the live embedded player.
  * No inline onclick / hardcoded URL needed in the HTML.
  */
-function loadVid(el, url) {
+// Standard YouTube video ID shape — anything else is rejected rather than
+// used to build an embed URL, however unlikely a bad value is here (IDs
+// come from the repo-controlled VIDEO_LIBRARY in videos.js, not user input).
+const YOUTUBE_ID_RE = /^[A-Za-z0-9_-]{11}$/;
+
+function videoTitleFor(el) {
+  const card = el.closest('.video-card');
+  const label = card && card.querySelector('.video-card-title');
+  if (label && label.textContent.trim()) return label.textContent.trim();
+  const pageTitle = document.title.split('—')[0].trim();
+  return (pageTitle || 'Project') + ' — demo video';
+}
+
+function loadVid(el, id) {
+  if (!YOUTUBE_ID_RE.test(id)) {
+    console.warn(`[video-loader] Rejected malformed video id "${id}"`);
+    return;
+  }
   const wrap = el.parentElement;
+  const iframe = document.createElement('iframe');
   // referrerpolicy + youtube-nocookie.com avoid the "Error 153: Video player
   // configuration error" that YouTube throws when it can't see a valid
   // referrer/origin header (common on static sites with strict referrer
   // policies). Nothing to change on the YouTube/Studio side for this.
-  wrap.innerHTML = `<iframe src="${url}?autoplay=1" allow="autoplay;fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+  iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1`;
+  iframe.title = videoTitleFor(el);
+  iframe.allow = 'autoplay;fullscreen';
+  iframe.allowFullscreen = true;
+  iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+  wrap.replaceChildren(iframe);
 }
 
 function setThumbnail(el, id) {
@@ -52,6 +75,18 @@ document.addEventListener('DOMContentLoaded', () => {
     el.style.backgroundSize = 'cover';
     el.style.backgroundPosition = 'center';
     setThumbnail(el, id);
-    el.addEventListener('click', () => loadVid(el, `https://www.youtube-nocookie.com/embed/${id}`));
+
+    // Keyboard-operable launcher: a <button> would be the simplest way to
+    // get this for free, but these placeholders are styled/positioned divs
+    // across many pages — role+tabindex+key handling gets the same Tab/
+    // Enter/Space behavior without restructuring every page's markup.
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'Play ' + videoTitleFor(el));
+    const activate = () => loadVid(el, id);
+    el.addEventListener('click', activate);
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+    });
   });
 });

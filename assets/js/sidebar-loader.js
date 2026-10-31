@@ -22,10 +22,13 @@
     container.appendChild(label);
 
     projects.forEach(function (p) {
+      // Expect a plain relative filename (e.g. "honda.html") — reject
+      // anything that looks like a protocol or a different origin.
+      if (typeof p.file !== 'string' || /:|^\/\//.test(p.file)) return;
       var a = document.createElement('a');
       a.href = p.file;
       a.className = 'sidebar-link' + (p.file === here ? ' current' : '');
-      a.innerHTML = p.title;
+      a.textContent = p.title;
       container.appendChild(a);
     });
   }

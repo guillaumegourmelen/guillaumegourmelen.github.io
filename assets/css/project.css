@@ -9,16 +9,26 @@
 /* ═══ VARIABLES ═══════════════════════════════════════════════ */
 :root{
   --bg:#f7f9fc;--surface:#ffffff;--border:#dde6f0;
-  --accent:#0099aa;--accent2:#c97800;
-  --text:#0d1f30;--muted:#547790;--mid:#3d6880;
+  --accent:#0099aa;--accent2:#c97800;--accent-ink:#007f8d;--accent2-ink:#a56200;  --text:#0d1f30;--muted:#547790;--mid:#3d6880;
+  /* Tag-chip text colors — WCAG-AA (4.5:1) against the light bg. The
+     chip border keeps the brighter original color (color-mix() below);
+     only the text itself needs the darker variant. */
+  --tag-teal:#007f8d;--tag-amber:#a56200;--tag-green:#388149;
+  --tag-violet:#6d4fc4;--tag-blue:#4870bd;--tag-purple:#905bbc;
 }
 html[data-theme="dark"]{
   --bg:#0d1117;--surface:#161b22;--border:#21262d;
   --text:#e6edf3;--muted:#7590a0;--mid:#8baabb;
+  /* The light-theme darkened tag colors above fail 4.5:1 against this
+     dark bg — revert to the original brighter hues here, which already
+     pass (violet alone needed a lighter swap; the rest reuse their
+     original bright value, see border-colors in the .tag-* rules). */
+  --tag-teal:#0099aa;--tag-amber:#c97800;--tag-green:#4aaa60;
+  --tag-violet:#866dce;--tag-blue:#5b7fc4;--tag-purple:#9d6fc4;
 }
 html[data-theme="dark"] .tile-placeholder{filter:brightness(0.85);}
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
+@media(prefers-reduced-motion:no-preference){html{scroll-behavior:smooth;}}
 body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;overflow-x:hidden;}
 
 /* NAV: see assets/css/nav.css (shared across every page via nav-loader.js) */
@@ -27,10 +37,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;font
 .container{max-width:960px;margin:0 auto;padding:0 32px;position:relative;}
 section{padding:64px 0;border-top:1px solid var(--border);}
 .section-header{display:flex;align-items:baseline;gap:16px;margin-bottom:36px;}
-.section-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent2);}
+.section-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent2-ink, var(--accent2));}
 .section-title{font-family:'Fraunces',serif;font-size:clamp(22px,3vw,32px);font-weight:300;letter-spacing:-0.01em;color:var(--text);}
 footer{padding:28px 0;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;}
-footer a{color:var(--accent);text-decoration:none;}
+footer a{color:var(--accent-ink, var(--accent));text-decoration:none;}
 ::selection{background:var(--accent);color:#fff;}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 
@@ -75,7 +85,7 @@ footer a{color:var(--accent);text-decoration:none;}
 .project-topbar-title{font-family:'Fraunces',serif;font-size:15px;color:var(--text);}
 .project-topbar-tag{
   font-size:9px;letter-spacing:0.15em;text-transform:uppercase;
-  padding:3px 9px;border:1px solid var(--accent);color:var(--accent);
+  padding:3px 9px;border:1px solid var(--accent);color:var(--accent-ink, var(--accent));
 }
 
 /* ═══ META STRIP ══════════════════════════════════════════════ */
@@ -93,13 +103,13 @@ footer a{color:var(--accent);text-decoration:none;}
 }
 .meta-label{font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);}
 .meta-value{font-size:12px;color:var(--text);}
-.meta-value a{color:var(--accent);text-decoration:none;}
+.meta-value a{color:var(--accent-ink, var(--accent));text-decoration:none;}
 
 /* ═══ CONTENT SECTIONS ════════════════════════════════════════ */
 .prose{font-size:13px;color:var(--mid);line-height:1.95;max-width:680px;}
 .prose+.prose{margin-top:18px;}
 .prose strong{color:var(--text);font-weight:500;}
-.prose a{color:var(--accent);}
+.prose a{color:var(--accent-ink, var(--accent));}
 
 .highlight-box{
   margin-top:28px;padding:20px 24px;
@@ -122,6 +132,7 @@ footer a{color:var(--accent);text-decoration:none;}
   cursor:pointer;transition:opacity 0.2s;
 }
 .video-placeholder:hover{opacity:0.85;}
+.video-placeholder:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
 .play-btn{
   width:60px;height:60px;border-radius:50%;
   border:1.5px solid rgba(255,255,255,0.4);
@@ -148,10 +159,20 @@ footer a{color:var(--accent);text-decoration:none;}
 .auto-gallery-scrolling .gallery-track{
   animation:gallery-scroll 32s linear infinite;
 }
-.auto-gallery-scrolling:hover .gallery-track{animation-play-state:paused;}
+.auto-gallery-scrolling:hover .gallery-track,
+.auto-gallery-scrolling:focus-within .gallery-track{animation-play-state:paused;}
+.auto-gallery-scrolling:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
 @keyframes gallery-scroll{
   from{transform:translateX(0);}
   to{transform:translateX(var(--scroll-distance));}
+}
+/* Set by gallery-loader.js instead of the animated ticker when the visitor
+   has requested reduced motion — same images, no auto-duplication, plain
+   horizontal scroll (keyboard arrow keys work once focused). */
+.auto-gallery-manual{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.auto-gallery-manual:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+@media(prefers-reduced-motion:reduce){
+  .auto-gallery-scrolling .gallery-track{animation:none;}
 }
 .gallery-item{
   aspect-ratio:4/3;overflow:hidden;
@@ -169,9 +190,9 @@ footer a{color:var(--accent);text-decoration:none;}
 }
 .pub-ref-label{
   font-size:9px;letter-spacing:0.15em;text-transform:uppercase;
-  color:var(--accent2);display:block;margin-bottom:6px;
+  color:var(--accent2-ink, var(--accent2));display:block;margin-bottom:6px;
 }
-.pub-ref a{color:var(--accent);text-decoration:none;}
+.pub-ref a{color:var(--accent-ink, var(--accent));text-decoration:none;}
 
 /* ── Tags ── */
 .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
@@ -181,12 +202,12 @@ footer a{color:var(--accent);text-decoration:none;}
 }
 /* Color variants — replaces the same six color-mix() strings that used
    to be retyped inline on every .tag span across every project page. */
-.tag-teal{border-color:color-mix(in srgb,#0099aa 40%,transparent);color:#0099aa;}
-.tag-amber{border-color:color-mix(in srgb,#c97800 40%,transparent);color:#c97800;}
-.tag-green{border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:#4aaa60;}
-.tag-violet{border-color:color-mix(in srgb,#6d4fc4 40%,transparent);color:#6d4fc4;}
-.tag-blue{border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:#5b7fc4;}
-.tag-purple{border-color:color-mix(in srgb,#9d6fc4 40%,transparent);color:#9d6fc4;}
+.tag-teal{border-color:color-mix(in srgb,#0099aa 40%,transparent);color:var(--tag-teal);}
+.tag-amber{border-color:color-mix(in srgb,#c97800 40%,transparent);color:var(--tag-amber);}
+.tag-green{border-color:color-mix(in srgb,#4aaa60 40%,transparent);color:var(--tag-green);}
+.tag-violet{border-color:color-mix(in srgb,#6d4fc4 40%,transparent);color:var(--tag-violet);}
+.tag-blue{border-color:color-mix(in srgb,#5b7fc4 40%,transparent);color:var(--tag-blue);}
+.tag-purple{border-color:color-mix(in srgb,#9d6fc4 40%,transparent);color:var(--tag-purple);}
 
 /* ── Nav between projects ── */
 .project-nav{
@@ -237,6 +258,17 @@ footer a{color:var(--accent);text-decoration:none;}
   transition:transform 0.25s ease;
 }
 .gallery-lightbox.open img{transform:scale(1);}
+.gallery-lightbox-close{
+  position:absolute;top:16px;right:20px;z-index:1;
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid rgba(255,255,255,0.3);background:rgba(13,31,48,0.6);
+  color:#fff;font-size:22px;line-height:1;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background 0.2s,border-color 0.2s;
+}
+.gallery-lightbox-close:hover{background:rgba(13,31,48,0.9);border-color:rgba(255,255,255,0.6);}
+.gallery-lightbox-close:focus-visible{outline:2px solid #fff;outline-offset:2px;}
+.gallery-item:focus-visible,.overview-lead:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;}
 
 /* ═══ PROJECT SIDEBAR ════════════════════════════════════════════
    Persistent list of all projects, same on every project page.

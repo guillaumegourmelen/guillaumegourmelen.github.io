@@ -90,4 +90,13 @@
   links.querySelectorAll('a').forEach(function (a) {
     a.addEventListener('click', closeMenu);
   });
+
+  // Escape closes the mobile dropdown and returns focus to the toggle
+  // that opened it, same as any other disclosure widget.
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && links.classList.contains('open')) {
+      closeMenu();
+      burger.focus();
+    }
+  });
 })();

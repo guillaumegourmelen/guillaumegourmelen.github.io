@@ -44,9 +44,20 @@
           const isPortrait = img.naturalHeight > img.naturalWidth * 1.05;
           el.classList.add('has-image');
           if (isPortrait) el.classList.add('is-portrait');
-          el.innerHTML = `<img src="${url}" alt="${el.dataset.alt || prefix}" style="width:100%;height:100%;object-fit:contain;display:block;">`;
+          const leadImg = document.createElement('img');
+          leadImg.src = url;
+          leadImg.alt = el.dataset.alt || prefix;
+          leadImg.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
+          el.replaceChildren(leadImg);
           el.style.cursor = 'zoom-in';
-          el.addEventListener('click', () => openLightbox(url, el.dataset.alt || prefix));
+          el.setAttribute('role', 'button');
+          el.setAttribute('tabindex', '0');
+          if (!el.hasAttribute('aria-label')) el.setAttribute('aria-label', `Enlarge ${el.dataset.alt || prefix}`);
+          const activateLead = () => openLightbox(url, el.dataset.alt || prefix, el);
+          el.addEventListener('click', activateLead);
+          el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activateLead(); }
+          });
         };
         img.src = url;
       }
@@ -59,7 +70,7 @@
     // image; portrait tiles get a narrower box + object-fit:contain so
     // nothing gets cropped into a square, instead of every tile being
     // forced into the same wide landscape box.
-    return `<div class="gallery-item" data-full-src="${url}"><img src="${url}" alt="${prefix} project photo" loading="lazy" onload="
+    return `<div class="gallery-item" data-full-src="${url}"><img src="${url}" alt="${prefix} project photo" loading="lazy" decoding="async" onload="
       if (this.naturalHeight > this.naturalWidth * 1.05) {
         this.parentElement.classList.add('is-portrait');
         this.style.objectFit = 'contain';
@@ -69,40 +80,66 @@
   }
 
   // ── Lightbox: click any gallery tile to view it enlarged, click
-  // anywhere on the overlay (or the image itself) again to close. One
-  // shared overlay is created lazily on first use and reused for every
-  // gallery on the page.
+  // anywhere on the overlay (or the image itself), press Escape, or use
+  // the close button to dismiss it. One shared overlay is created lazily
+  // on first use and reused for every gallery on the page. Minimal dialog
+  // semantics: role="dialog", focus moves to the close button on open and
+  // back to whichever tile opened it on close.
   let lightboxEl = null;
+  let lightboxOpener = null;
   function getLightbox() {
     if (lightboxEl) return lightboxEl;
     lightboxEl = document.createElement('div');
     lightboxEl.className = 'gallery-lightbox';
-    lightboxEl.innerHTML = '<img alt="">';
-    lightboxEl.addEventListener('click', closeLightbox);
+    lightboxEl.setAttribute('role', 'dialog');
+    lightboxEl.setAttribute('aria-modal', 'true');
+    lightboxEl.setAttribute('aria-label', 'Enlarged photo');
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'gallery-lightbox-close';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.textContent = '×';
+    closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+
+    const img = document.createElement('img');
+    img.alt = '';
+
+    lightboxEl.append(closeBtn, img);
+    lightboxEl.addEventListener('click', (e) => { if (e.target === lightboxEl) closeLightbox(); });
     document.body.appendChild(lightboxEl);
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'Escape' && lightboxEl.classList.contains('open')) closeLightbox();
     });
     return lightboxEl;
   }
-  function openLightbox(src, alt) {
+  function openLightbox(src, alt, opener) {
     const box = getLightbox();
     box.querySelector('img').src = src;
     box.querySelector('img').alt = alt || '';
     box.classList.add('open');
     document.body.style.overflow = 'hidden';
+    lightboxOpener = opener || document.activeElement;
+    box.querySelector('.gallery-lightbox-close').focus();
   }
   function closeLightbox() {
     if (!lightboxEl) return;
     lightboxEl.classList.remove('open');
     document.body.style.overflow = '';
+    if (lightboxOpener && typeof lightboxOpener.focus === 'function') lightboxOpener.focus();
+    lightboxOpener = null;
   }
 
   function wireLightboxClicks(gallery, prefix) {
     gallery.querySelectorAll('.gallery-item').forEach((tile) => {
       tile.style.cursor = 'zoom-in';
-      tile.addEventListener('click', () => {
-        openLightbox(tile.dataset.fullSrc, `${prefix} project photo`);
+      tile.setAttribute('role', 'button');
+      tile.setAttribute('tabindex', '0');
+      if (!tile.hasAttribute('aria-label')) tile.setAttribute('aria-label', `Enlarge ${prefix} project photo`);
+      const activate = () => openLightbox(tile.dataset.fullSrc, `${prefix} project photo`, tile);
+      tile.addEventListener('click', activate);
+      tile.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
       });
     });
   }
@@ -143,14 +180,30 @@
       // wider than its container — otherwise leave it static.
       requestAnimationFrame(() => {
         const track = gallery.querySelector('.gallery-track');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (track.scrollWidth > gallery.clientWidth + 4) {
-          // Duplicate the tiles once so the loop has a seamless second
-          // copy to scroll into, then size the animation to exactly
-          // the width of one copy for a perfectly seamless loop.
-          track.innerHTML += track.innerHTML;
-          const singleSetWidth = track.scrollWidth / 2;
-          track.style.setProperty('--scroll-distance', `-${singleSetWidth}px`);
-          gallery.classList.add('auto-gallery-scrolling');
+          if (reduceMotion) {
+            // No auto-scroll, no tile duplication — instead a plain
+            // horizontally-scrollable, keyboard-focusable region so every
+            // image stays reachable without relying on motion.
+            gallery.classList.add('auto-gallery-manual');
+            gallery.setAttribute('tabindex', '0');
+            gallery.setAttribute('role', 'region');
+            gallery.setAttribute('aria-label', prefix + ' project gallery, scroll horizontally');
+          } else {
+            // Duplicate the tiles once so the loop has a seamless second
+            // copy to scroll into, then size the animation to exactly
+            // the width of one copy for a perfectly seamless loop.
+            track.innerHTML += track.innerHTML;
+            const singleSetWidth = track.scrollWidth / 2;
+            track.style.setProperty('--scroll-distance', `-${singleSetWidth}px`);
+            gallery.classList.add('auto-gallery-scrolling');
+            // Keyboard-accessible pause to match the existing hover-pause
+            // (see .auto-gallery-scrolling:focus-within in project.css).
+            gallery.setAttribute('tabindex', '0');
+            gallery.setAttribute('role', 'region');
+            gallery.setAttribute('aria-label', prefix + ' project gallery, auto-scrolling — focus to pause');
+          }
         }
         // Wire click-to-enlarge AFTER any duplication above, so both
         // copies of the tiles (original + seamless-loop duplicate) open

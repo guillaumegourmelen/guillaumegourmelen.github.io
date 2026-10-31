@@ -30,8 +30,63 @@
     return new Date(year, month, 1);
   }
 
-  function escapeAttr(str) {
-    return String(str).replace(/"/g, '&quot;');
+  const CATEGORIES = ['talk', 'chair', 'misc'];
+
+  // Only allow a safe http(s) URL through to an href — rejects
+  // javascript:, data:, and anything malformed, by resolving against the
+  // page URL and checking the resulting protocol (not the raw string).
+  function safeUrl(value) {
+    try {
+      const url = new URL(String(value), location.href);
+      return (url.protocol === 'https:' || url.protocol === 'http:') ? url.href : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function buildNewsItem(item) {
+    const category = CATEGORIES.includes(item.category) ? item.category : 'misc';
+
+    const el = document.createElement('div');
+    el.className = 'news-item';
+
+    const date = document.createElement('div');
+    date.className = 'news-date';
+    date.textContent = String(item.date ?? '');
+    el.appendChild(date);
+
+    const dot = document.createElement('div');
+    dot.className = 'news-dot ' + category;
+    el.appendChild(dot);
+
+    const content = document.createElement('div');
+    content.className = 'news-content';
+
+    const tag = document.createElement('span');
+    tag.className = 'news-tag ' + category;
+    tag.textContent = String(item.tag ?? '');
+    content.appendChild(tag);
+
+    const headline = document.createElement('span');
+    headline.className = 'news-headline';
+    headline.textContent = String(item.headline ?? '');
+    content.appendChild(headline);
+
+    const href = item.link_url ? safeUrl(item.link_url) : null;
+    if (href) {
+      const sub = document.createElement('span');
+      sub.className = 'news-sub';
+      const a = document.createElement('a');
+      a.href = href;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.textContent = (item.link_label || 'Link') + ' ↗';
+      sub.appendChild(a);
+      content.appendChild(sub);
+    }
+
+    el.appendChild(content);
+    return el;
   }
 
   async function loadNews() {
@@ -41,25 +96,17 @@
       const res = await fetch('assets/data/main/news.json');
       if (!res.ok) throw new Error('news.json fetch failed: ' + res.status);
       const items = await res.json();
+      if (!Array.isArray(items)) throw new Error('news.json did not contain an array');
       items.sort((a, b) => parseDate(b.date) - parseDate(a.date));
 
-      container.innerHTML = items.map(item => {
-        const linkHtml = item.link_url
-          ? `<span class="news-sub"><a href="${escapeAttr(item.link_url)}" target="_blank">${item.link_label || 'Link'} ↗</a></span>`
-          : '';
-        return `
-    <div class="news-item">
-      <div class="news-date">${item.date}</div><div class="news-dot ${item.category}"></div>
-      <div class="news-content">
-        <span class="news-tag ${item.category}">${item.tag}</span>
-        <span class="news-headline">${item.headline}</span>
-        ${linkHtml}
-      </div>
-    </div>`;
-      }).join('');
+      container.replaceChildren(...items.map(buildNewsItem));
     } catch (err) {
       console.error('[news-loader] Failed to load news.json:', err);
-      container.innerHTML = '<p style="font-size:12px;color:var(--muted);">Updates temporarily unavailable.</p>';
+      const fallback = document.createElement('p');
+      fallback.style.fontSize = '12px';
+      fallback.style.color = 'var(--muted)';
+      fallback.textContent = 'Updates temporarily unavailable.';
+      container.replaceChildren(fallback);
     }
   }
 
