@@ -75,8 +75,9 @@
       <div class="overview-text">
         <a class="project-site-link" href="https://guillaumegourmelen.github.io/hybrid-rolling-jamming-gripper/" target="_blank">Project page: figures, results and BibTeX ↗</a>
         <p class="prose">Developed with Y. Ren and H. Iwata at Waseda University's Iwata Lab, this is a <strong>hybrid grasping end-effector</strong> that combines two mechanisms in the same membrane roller: an active <strong>roller-based intake</strong> for fast, off-centre object acquisition, and <strong>vacuum-induced granular jamming</strong> for post-capture stiffening and shape-conforming hold.</p>
-<p class="prose">The prototype was mounted on a 7-DoF robot arm (xArm7) and tested on eight known objects (pen, marble, gallon jug, plastic cup, paper sheet, T-shirt, pressure gauge, cable) under controlled planar and roll/pitch/yaw orientation offsets, each condition repeated three times: 840 grasp trials in total. It succeeded in 812/840 — 215/216 planar-offset trials and 597/624 orientation-offset trials. Ablation trials on three objects (pen, gallon jug, cable) gave 80/81 for the full hybrid sequence, 54/81 with rolling only and 24/81 with jamming only, showing that rolling and jamming address different failure modes: rolling is what lets the gripper recover from imperfect first contact, jamming is what keeps the grip from slipping during lift and disturbance.</p>
-<div class="highlight-box"><strong>Status:</strong> Accepted at IEEE Access (Sept 2026) — <a href="https://ieeexplore.ieee.org/document/11735371" target="_blank">IEEE Xplore ↗</a> (<a href="https://doi.org/10.1109/ACCESS.2026.3738462" target="_blank">DOI ↗</a>), preprint also available on <a href="https://arxiv.org/abs/2608.20962" target="_blank">arXiv:2608.20962 ↗</a>. First author: Y. Ren (Waseda University, Iwata Lab).</div>
+<p class="prose">The prototype was mounted on a 7-DoF robot arm (xArm7) and tested on eight known objects (pen, marble, gallon jug, plastic cup, paper sheet, T-shirt, pressure gauge, cable) under controlled planar and roll/pitch/yaw orientation offsets, each condition repeated three times: 840 grasp trials in total. It succeeded in 812/840 — 215/216 planar-offset trials and 597/624 orientation-offset trials. Per object, success ranged from 100% (marble, plastic cup, paper sheet, T-shirt) down to 88.6% on the gallon jug, the hardest case for both offset types. Ablation trials on three objects (pen, gallon jug, cable) gave 80/81 for the full hybrid sequence, 54/81 with rolling only and 24/81 with jamming only, showing that rolling and jamming address different failure modes: rolling is what lets the gripper recover from imperfect first contact, jamming is what keeps the grip from slipping during lift and disturbance.</p>
+<p class="prose">Each roller is a single spherical membrane cast from Dragon Skin 30 silicone and filled mainly with ground coffee plus about 50 polypropylene balls; vacuum through two independently controlled solenoid valves stiffens the fill to lock a grasp. A single XM430 actuator drives both fingers through a 1:40 worm-gear transmission, with one XL320 actuator per roller through a 1:20 worm gear; most parts are 3D-printed in ABS, with the finger links in RGD720 resin for dimensional accuracy. A host PC coordinates the arm, the three Dynamixel actuators (via a U2D2 interface), and an Arduino-based valve controller, with vacuum from an external rotary-vane pump (42 L/min free-air displacement). Code and 3D models are planned for release.</p>
+<div class="highlight-box"><strong>Status:</strong> Accepted at IEEE Access (Sept 2026) — <a href="https://guillaumegourmelen.github.io/hybrid-rolling-jamming-gripper/" target="_blank">Project page ↗</a>, <a href="https://ieeexplore.ieee.org/document/11735371" target="_blank">IEEE Xplore ↗</a> (<a href="https://doi.org/10.1109/ACCESS.2026.3738462" target="_blank">DOI ↗</a>), preprint also available on <a href="https://arxiv.org/abs/2608.20962" target="_blank">arXiv:2608.20962 ↗</a>. First author: Y. Ren (Waseda University, Iwata Lab).</div>
         <div class="tag-row"><span class="tag tag-purple">Soft Robotics</span><span class="tag tag-purple">Grasping</span><span class="tag tag-purple">Granular Jamming</span><span class="tag tag-purple">CNC &amp; 3D Print</span><span class="tag tag-purple">End-Effector</span></div>
       </div>
     </div>
@@ -92,11 +93,11 @@
   <section>
     <div class="section-header"><span class="section-label">Video</span><h2 class="section-title">Project Demo</h2></div>
     <div class="video-wrap">
-      <div class="video-placeholder" style="cursor:default;">
-        <div class="play-btn" style="opacity:0.35;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
-        <span class="video-label">Video coming soon</span>
-      </div>
+      <video controls preload="none" poster="../assets/img/projects/soft-grasp-1.jpg">
+        <source src="https://guillaumegourmelen.github.io/hybrid-rolling-jamming-gripper/static/videos/grasping-demo.mp4" type="video/mp4">
+      </video>
     </div>
+    <p class="prose" style="margin-top:12px;">Grasping demo, 3.5&times; speed. Also on the <a href="https://guillaumegourmelen.github.io/hybrid-rolling-jamming-gripper/" target="_blank">project page</a>, along with a membrane-fabrication video.</p>
   </section>
 
   <!-- PUBLICATION REFERENCE -->

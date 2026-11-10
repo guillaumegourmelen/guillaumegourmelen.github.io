@@ -124,7 +124,7 @@ footer a{color:var(--accent-ink, var(--accent));text-decoration:none;}
   position:relative;width:100%;padding-bottom:56.25%;
   background:#0d1f30;margin-top:32px;
 }
-.video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.video-wrap iframe,.video-wrap video{position:absolute;inset:0;width:100%;height:100%;border:none;object-fit:contain;background:#0d1f30;}
 .video-placeholder{
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
