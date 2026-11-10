@@ -31,6 +31,8 @@
 <style>
 :root{--accent:#c97800;--accent2:#c97800;}
 .video-placeholder{background:linear-gradient(rgba(13,31,48,0.55),rgba(13,31,48,0.55)),linear-gradient(135deg,#180c0c 0%,#271010 100%);}
+.project-site-link{display:inline-block;margin:0 0 18px;padding:9px 16px;border:1px solid var(--accent);color:var(--tag-amber);text-decoration:none;font-size:13px;letter-spacing:0.04em;}
+.project-site-link:hover{background:color-mix(in srgb,var(--accent) 12%,transparent);}
 </style>
 </head>
 <body>
@@ -52,7 +54,7 @@
     <div class="meta-cell"><span class="meta-label">Institution</span><span class="meta-value">Waseda University · Iwata Lab</span></div>
     <div class="meta-cell"><span class="meta-label">System</span><span class="meta-value">Detachable supernumerary robotic arm</span></div>
     <div class="meta-cell"><span class="meta-label">Role</span><span class="meta-value">Co-author</span></div>
-    <div class="meta-cell"><span class="meta-label">Study</span><span class="meta-value">Within-subject, N = 12</span></div>
+    <div class="meta-cell"><span class="meta-label">Study</span><span class="meta-value">2×2 mixed: MESSPa N=13, keyboard N=12</span></div>
   </div>
 
   <!-- OVERVIEW -->
@@ -69,10 +71,11 @@
         </div>
       </div>
       <div class="overview-text">
+        <a class="project-site-link" href="https://guillaumegourmelen.github.io/messpa/" target="_blank">Project page: figures, results and BibTeX ↗</a>
         <p class="prose">MESSPa (Multi-modal Embodiment Stimulation Shoulder Pad) addresses a specific problem with <strong>detachable supernumerary robotic arms</strong>: an arm worn on the body gives a strong sense of agency, but once detached and operated remotely — so the user can act in two places at once — that sense of agency, and task performance, both tend to drop.</p>
-    <p class="prose">The shoulder pad combines two things: <strong>one-to-one motion transfer</strong> from an HTC VIVE tracker on the wrist, so the operator drives the detached arm with their own body, and <strong>positional haptic feedback</strong> from four pneumatic balloons on the shoulder (one per task quadrant, 80&nbsp;mm spacing, 0.05&nbsp;MPa / 13&nbsp;N max force), which signal where the remote arm currently is.</p>
-    <p class="prose">We tested it in a 2×2 within-subject study (N = 12) crossing feedback (with/without MESSPa) and attachment (on-shoulder vs. detached), under single- and dual-task load. With the haptic feedback, detached-condition task completion time became statistically indistinguishable from the on-shoulder condition, and the sense of agency improved significantly (p = 0.004). Sense of ownership did not change.</p>
-    <div class="highlight-box"><strong>Result:</strong> Adding positional shoulder haptics to a detached, motion-transferred arm closed the performance gap to wearing the arm on the body, and measurably restored the operator's sense of agency — without changing the sense of ownership.</div>
+    <p class="prose">The shoulder pad combines two things: <strong>one-to-one motion transfer</strong> from an HTC VIVE tracker on the shoulder pad (relative mapping, restricted to the 2-DoF horizontal plane), so the operator drives the detached arm (a MyCobot 280, 850&nbsp;g, on a 3.5&nbsp;kg harness) with their own body, and <strong>positional haptic feedback</strong> from four pneumatic balloons on the shoulder (25&times;25&nbsp;mm, one per workspace quadrant, 80&nbsp;mm spacing, 0.05&nbsp;MPa supply / 13&nbsp;N max force), which signal where the remote arm currently is.</p>
+    <p class="prose">It was tested in a 2&times;2 mixed-design study: interface (MESSPa vs. keyboard control) varied <strong>between</strong> groups — 13 volunteers used MESSPa, compared against 12 participants' keyboard-control data from a prior study (not randomly assigned) — crossed with attachment (on-shoulder vs. detached), varied <strong>within</strong> participants, under single- and dual-task load. Detaching the arm cost 0.6&nbsp;s vs. 2.1&nbsp;s more per target with MESSPa vs. keyboard in the single task, and 0.3&nbsp;s vs. 1.8&nbsp;s in the dual task. In the detached condition, MESSPa significantly improved the sense of agency (t&nbsp;=&nbsp;2.582, df&nbsp;=&nbsp;21, p&nbsp;=&nbsp;0.017); the sense of ownership did not change (p&nbsp;=&nbsp;0.734).</p>
+    <div class="highlight-box"><strong>Result:</strong> Adding positional shoulder haptics to a detached, motion-transferred arm cut most of the performance cost of detaching it, and measurably restored the operator's sense of agency — without changing the sense of ownership.</div>
         <div class="tag-row"><span class="tag tag-amber">Supernumerary Limbs</span><span class="tag tag-amber">Detachable Body</span><span class="tag tag-amber">Haptic Feedback</span><span class="tag tag-amber">Sense of Agency</span><span class="tag tag-amber">Embodiment</span><span class="tag tag-amber">Teleoperation</span></div>
       </div>
     </div>
@@ -88,11 +91,11 @@
   <section>
     <div class="section-header"><span class="section-label">Video</span><h2 class="section-title">Project Demo</h2></div>
     <div class="video-wrap">
-      <div class="video-placeholder" style="cursor:default;">
-        <div class="play-btn" style="opacity:0.35;"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><polygon points="6,3 17,10 6,17" fill="rgba(255,255,255,0.7)"/></svg></div>
-        <span class="video-label">Video coming soon</span>
-      </div>
+      <video controls preload="none" poster="../assets/img/projects/3arm-1.jpg">
+        <source src="https://guillaumegourmelen.github.io/messpa/static/videos/detached-operation.mp4" type="video/mp4">
+      </video>
     </div>
+    <p class="prose" style="margin-top:12px;">Detached-operation demo. The <a href="https://guillaumegourmelen.github.io/messpa/" target="_blank">project page</a> also has a task-screen capture and a balloon-feedback close-up.</p>
   </section>
 
   <!-- PUBLICATION REFERENCE -->
@@ -108,7 +111,7 @@
     </div>
     <div class="pub-ref" style="margin-top:10px;">
       <span class="pub-ref-label">Full paper — accepted</span>
-      Vitvasin Vimolmongkolporn, <strong>Guillaume Gourmelen</strong>, Yukiko Iwasaki, Hiroyasu Iwata. "MESSPa: A Multi-modal Embodiment Stimulation Shoulder Pad for Preserving the Sense of Agency in a Detachable Robotic Arm." <em>2026 IEEE-RAS International Conference on Humanoid Robots (Humanoids 2026)</em>, Santa Clara, CA, USA, Dec 2026.
+      Vitvasin Vimolmongkolporn, <strong>Guillaume Gourmelen</strong>, Yukiko Iwasaki, Hiroyasu Iwata. "MESSPa: A Multi-modal Embodiment Stimulation Shoulder Pad for Preserving the Sense of Agency in a Detachable Robotic Arm." <em>2026 IEEE-RAS International Conference on Humanoid Robots (Humanoids 2026)</em>, Santa Clara, CA, USA, Dec 2026. <a href="https://guillaumegourmelen.github.io/messpa/" target="_blank">Project page ↗</a> · <a href="https://arxiv.org/abs/2611.00509" target="_blank">arXiv:2611.00509 ↗</a> · IEEE Xplore (coming soon)
     </div>
   </section>
   <footer data-auto-footer></footer>
