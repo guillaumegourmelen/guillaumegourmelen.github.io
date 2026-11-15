@@ -30,6 +30,7 @@
   function isCurrent(file) {
     return here === file;
   }
+  var onSidePage = (here === 'consulting.html' || here === 'interprete.html');
 
   var sunMoon =
     '<svg class="theme-icon-sun" width="15" height="15" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="4.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 1.5v2.5M10 16v2.5M2.6 10H5M15 10h2.4M4.5 4.5l1.8 1.8M13.7 13.7l1.8 1.8M15.5 4.5l-1.8 1.8M6.3 13.7l-1.8 1.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>' +
@@ -42,8 +43,8 @@
       '<button class="theme-toggle" aria-label="Toggle dark mode" onclick="toggleTheme()" title="Toggle dark mode">' + sunMoon + '</button>' +
       '<div class="nav-pills">' +
         '<a class="nav-pill' + (isCurrent('about.html') ? ' active' : '') + '" href="' + root + 'about.html">Short Bio &#8599;</a>' +
-        '<a class="nav-pill nav-pill-accent2' + (isCurrent('consulting.html') ? ' active' : '') + '" href="' + root + 'consulting.html">Consulting</a>' +
-        '<a class="nav-pill nav-pill-accent' + (isCurrent('interprete.html') ? ' active' : '') + '" href="' + root + 'interprete.html">Interpr&#233;tariat FR-JP</a>' +
+        (onSidePage ? '<a class="nav-pill nav-pill-accent2' + (isCurrent('consulting.html') ? ' active' : '') + '" href="' + root + 'consulting.html">Consulting</a>' : '') +
+        (onSidePage ? '<a class="nav-pill nav-pill-accent' + (isCurrent('interprete.html') ? ' active' : '') + '" href="' + root + 'interprete.html">Interpr&#233;tariat FR-JP</a>' : '') +
         (ctaHref ? '<a class="nav-cta" href="' + ctaHref + '">' + ctaLabel + '</a>' : '') +
       '</div>' +
     '</div>' +
@@ -58,8 +59,8 @@
       '<li><a href="' + hashLink('wip') + '">WIP</a></li>' +
       '<li><a href="' + hashLink('contact') + '">Contact</a></li>' +
       '<li class="mobile-only"><a class="' + (isCurrent('about.html') ? 'active' : '') + '" href="' + root + 'about.html">Short Bio &#8599;</a></li>' +
-      '<li class="mobile-only"><a class="' + (isCurrent('consulting.html') ? 'active' : '') + '" href="' + root + 'consulting.html">Consulting</a></li>' +
-      '<li class="mobile-only"><a class="' + (isCurrent('interprete.html') ? 'active' : '') + '" href="' + root + 'interprete.html">Interpr&#233;tariat FR-JP</a></li>' +
+      (onSidePage ? '<li class="mobile-only"><a class="' + (isCurrent('consulting.html') ? 'active' : '') + '" href="' + root + 'consulting.html">Consulting</a></li>' : '') +
+      (onSidePage ? '<li class="mobile-only"><a class="' + (isCurrent('interprete.html') ? 'active' : '') + '" href="' + root + 'interprete.html">Interpr&#233;tariat FR-JP</a></li>' : '') +
       (ctaHref ? '<li class="mobile-only"><a href="' + ctaHref + '">' + ctaLabel + '</a></li>' : '') +
     '</ul>';
 
